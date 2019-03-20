@@ -1,0 +1,231 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright 2019 Prologin <info@prologin.org>
+# Copyright 2019 Paul Guénézan
+
+name: prologin2019
+rules_type: turnbased
+
+constant:
+  -
+    cst_name: NB_TOURS
+    cst_val: 100
+    cst_comment: Nombre de tours à jouer avant la fin de la partie.
+
+enum:
+  -
+    enum_name: case_type
+    enum_summary: "Types de cases"
+    enum_field:
+      - [libre, "Case libre"]
+      - [granite, "Granite standard"]
+      - [obsidienne, "Obsidienne"]
+      - [minerai, "Minerai"]
+      - [erreur, "Erreur"]
+  -
+    enum_name: direction
+    enum_summary: "Direction"
+    enum_field:
+      - [haut, "Direction : haut"]
+      - [bas, "Direction : bas"]
+      - [gauche, "Direction : gauche"]
+      - [droite, "Direction : droite"]
+  -
+    enum_name: erreur
+    enum_summary: "Erreurs possibles"
+    enum_field:
+      - [ok, "L'action s'est effectuée avec succès."]
+      - [position_invalide, "La position spécifiée n'est pas sur la banquise."]
+      - [deplacement_hors_limites, "Ce déplacement fait sortir un agent des
+                                    limites de la banquise."]
+      - [direction_invalide, "La direction spécifiée n'existe pas."]
+      - [drapeau_invalide, "Le drapeau spécifié n'existe pas."]
+  -
+    enum_name: debug_drapeau
+    enum_summary: "Types de drapeaux de débug"
+    enum_field:
+      - [aucun_drapeau, "Aucun drapeau, enlève le drapeau présent"]
+      - [drapeau_bleu, "Drapeau bleu"]
+      - [drapeau_vert, "Drapeau vert"]
+      - [drapeau_rouge, "Drapeau rouge"]
+
+struct:
+  -
+    str_name: position
+    str_summary: Position dans la mine, donnée par deux coordonnées.
+    str_tuple: yes
+    str_field:
+      - [ligne, int, "Coordonnée : ligne"]
+      - [colonne, int, "Coordonnée : colonne"]
+  -
+    str_name: minerai
+    str_summary: Minerai à récolter
+    str_tuple: no
+    str_field:
+      - [resistance, int, "Nombre de tours consécutifs de minage nécessaires"]
+      - [rendement, int, "Valeur marchande du bloc de minerai"]
+
+function:
+
+# Actions
+
+  -
+    fct_name: deplacer
+    fct_summary: Déplace le nain ``id_nain`` d'une case dans la direction
+                 choisie.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir, direction, "Direction visée"]
+  -
+    fct_name: escalader
+    fct_summary: Le nain ``id_nain`` s'accroche à la paroi et grimpe dans la
+                 direction choisie.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir, direction, "Direction visée"]
+  -
+    fct_name: grimper
+    fct_summary: Le nain ``id_nain`` s'accroche à la corde et se déplace le
+                 long de la corde.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir, direction, "Direction visée"]
+  -
+    fct_name: lacher
+    fct_summary: Le nain ``id_nain`` lâche la paroi ou la corde.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+  -
+    fct_name: creuser
+    fct_summary: Le nain ``id_nain`` creuse ou mine le bloc dans la direction
+                 indiquée.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir, direction, "Direction visée"]
+  -
+    fct_name: actionner_poulie
+    fct_summary: Le nain ``id_nain`` tire dans un sens sur la corde.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir_corde, direction, "Direction dans laquelle se trouve la corde"]
+      - [sens, direction, "Sens dans lequel le nain tire sur la corde"]
+  -
+    fct_name: poser_corde
+    fct_summary: Le nain ``id_nain`` pose une corde dans la direction indiquée.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain"]
+      - [dir, direction, "Direction visée"]
+
+# Action de débug
+
+  -
+    fct_name: debug_afficher_drapeau
+    fct_summary: Affiche le drapeau spécifié sur la case indiquée.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [pos, position, "Case choisie"]
+      - [drapeau, debug_drapeau, "Drapeau à afficher sur la case"]
+
+# Fonctions de requête de l'état du jeu
+
+  -
+    fct_name: type_case
+    fct_summary: Renvoie le type d'une case donnée.
+    fct_ret_type: case_type
+    fct_arg:
+      - [pos, position, "Case choisie"]
+  -
+    fct_name: nain_sur_case
+    fct_summary: Renvoie le numéro du joueur à qui appartient le nain sur la
+                 case indiquée.
+                 Renvoie -1 s'il n'y a pas de nain ou si la position est
+                 invalide.
+    fct_ret_type: int
+    fct_arg:
+      - [pos, position, "Case choisie"]
+  -
+    fct_name: position_nain
+    fct_summary: Indique la position du nain dans la mine désigné par le
+                 numéro ``id_nain`` appartenant au joueur ``id_joueur``.
+                 Si la description du nain est incorrecte, la position (-1,
+                 -1) est renvoyée.
+    fct_ret_type: position
+    fct_arg:
+      - [id_joueur, int, "Numéro du joueur"]
+      - [id_nain, int, "Numéro du nain"]
+  -
+    fct_name: info_minerrai
+    fct_summary: Renvoie la description d'un minerai en fonction d'une position
+                 donnée.
+                 Si le minerai n'est pas présent sur la carte, ou si la
+                 position est invalide, tous les membres de la structure
+                 ``minerai`` renvoyée sont initialisés à -1.
+    fct_ret_type: minerai
+    fct_arg:
+      - [pos, position, "Case choisie"]
+
+# Historique (actions de l'adversaire durant le tour précédent)
+
+# TODO
+
+# Autres
+
+  -
+    fct_name: score
+    fct_summary: Renvoie le score du joueur ``id_joueur``.
+                 Renvoie -1 si le joueur est invalide.
+    fct_ret_type: int
+    fct_arg:
+        - [id_joueur, int, "Numéro du joueur"]
+  -
+    fct_name: moi
+    fct_summary: Renvoie votre numéro de joueur.
+    fct_ret_type: int
+    fct_arg: []
+  -
+    fct_name: adversaire
+    fct_summary: Renvoie le numéro de joueur de votre adversaire.
+    fct_ret_type: int
+    fct_arg: []
+  -
+    fct_name: annuler
+    fct_summary: Annule la dernière action.
+                 Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
+    fct_ret_type: bool
+    fct_arg: []
+  -
+    fct_name: tour_actuel
+    fct_summary: Retourne le numéro du tour actuel.
+    fct_ret_type: int
+    fct_arg: []
+
+user_function:
+  -
+    fct_name: partie_init
+    fct_summary: Fonction appelée au début de la partie.
+    fct_ret_type: void
+    fct_arg: []
+  -
+    fct_name: jouer_tour
+    fct_summary: Fonction appelée à chaque tour.
+    fct_ret_type: void
+    fct_arg: []
+  -
+    fct_name: partie_fin
+    fct_summary: Fonction appelée à la fin de la partie.
+    fct_ret_type: void
+    fct_arg: []
