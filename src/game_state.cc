@@ -16,8 +16,9 @@
 
 #include "game_state.hh"
 
-GameState::GameState(rules::Players_sptr players)
+GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     : rules::GameState()
+    , map_(new Map(map_stream))
 {
     int id = 0;
     for (auto& player : players->players)
@@ -36,6 +37,7 @@ GameState::GameState(rules::Players_sptr players)
 
 GameState::GameState(const GameState& st)
     : rules::GameState(st)
+    , map_(new Map(*st.map_.get()))
     , player_info_(st.player_info_)
     , player_ids_(st.player_ids_)
 {}

@@ -23,16 +23,17 @@
 #include <rules/game-state.hh>
 #include <rules/player.hh>
 
+#include "map.hh"
 #include "player_info.hh"
 
 class GameState : public rules::GameState
 {
 public:
-    // FIXME
-    // additional parameters? for instance map
-    GameState(rules::Players_sptr players);
+    GameState(std::istream& map_stream, rules::Players_sptr players);
     GameState(const GameState& st);
     rules::GameState* copy() const override;
+
+    case_type get_cell_type(position pos) const;
 
     const auto& get_player_info() const { return player_info_; };
 
@@ -44,6 +45,8 @@ public:
 private:
     std::unordered_map<int, PlayerInfo> player_info_;
     std::array<int, 2> player_ids_;
+
+    std::shared_ptr<Map> map_;
 };
 
 #endif /* !GAME_STATE_HH */
