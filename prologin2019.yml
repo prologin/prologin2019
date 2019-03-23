@@ -7,9 +7,54 @@ rules_type: turnbased
 
 constant:
   -
+    cst_name: TAILLE_MINE
+    cst_val: 31
+    cst_comment: Taille de la mine (longueur et largeur).
+  -
     cst_name: NB_TOURS
     cst_val: 100
     cst_comment: Nombre de tours à jouer avant la fin de la partie.
+  -
+    cst_name: NB_POINTS_DEPLACEMENT
+    cst_val: 5
+    cst_comment: Nombre de points de déplacement par tour par nain (standard).
+  -
+    cst_name: NB_POINTS_ACTION
+    cst_val: 6
+    cst_comment: Nombre de points d'action par tour par nain (standard).
+  -
+    cst_name: VIE_NAIN
+    cst_val: 10
+    cst_comment: Nombre de points de vie d'un nain (standard).
+  -
+    cst_name: NB_NAINS
+    cst_val: 6
+    cst_comment: Nombre de nain (standard) par joueur.
+  -
+    cst_name: COUT_DEPLACEMENT
+    cst_val: 1
+    cst_comment: Nombre de points de déplacement pour qu'un nain (standard) se
+                 déplace d'une case.
+  -
+    cst_name: COUT_ESCALADER
+    cst_val: 1
+    cst_comment: Nombre de points de déplacement pour qu'un nain (standard)
+                 grimpe d'une case.
+  -
+    cst_name: COUT_MINER
+    cst_val: 6
+    cst_comment: Nombre de points d'action pour qu'un nain (standard) mine un
+                 bloc.
+  -
+    cst_name: COUT_TIRER
+    cst_val: 1
+    cst_comment: Nombre de points d'action pour qu'un nain (standard) tire sur
+                 une corde.
+  -
+    cst_name: COUT_LACHER
+    cst_val: 0
+    cst_comment: Nombre de points d'action pour qu'un nain (standard) lâche une
+                 corde ou la paroi.
 
 enum:
   -
@@ -34,9 +79,9 @@ enum:
     enum_summary: "Erreurs possibles"
     enum_field:
       - [ok, "L'action s'est effectuée avec succès."]
-      - [position_invalide, "La position spécifiée n'est pas sur la banquise."]
-      - [deplacement_hors_limites, "Ce déplacement fait sortir un agent des
-                                    limites de la banquise."]
+      - [position_invalide, "La position spécifiée n'est pas sur la mine."]
+      - [deplacement_hors_limites, "Ce déplacement fait sortir un nain
+                                    (standard) des limites de la mine."]
       - [direction_invalide, "La direction spécifiée n'existe pas."]
       - [drapeau_invalide, "Le drapeau spécifié n'existe pas."]
   -
@@ -63,6 +108,16 @@ struct:
     str_field:
       - [resistance, int, "Nombre de tours consécutifs de minage nécessaires"]
       - [rendement, int, "Valeur marchande du bloc de minerai"]
+  -
+    str_name: nain
+    str_summary: Nain (standard)
+    str_tuple: no
+    str_field:
+      - [pos, position, "Position actuelle du nain (standard)"]
+      - [vie, int, "Point(s) de vie restant du nain (standard)"]
+      - [pa, int, "Point(s) d'action restant du nain (standard)"]
+      - [pm, int, "Point(s) de déplacement restant du nain (standard)"]
+      - [butin, int, "Valeur marchande total que le nain (standard) possède"]
 
 function:
 
@@ -70,63 +125,64 @@ function:
 
   -
     fct_name: deplacer
-    fct_summary: Déplace le nain ``id_nain`` d'une case dans la direction
-                 choisie.
-    fct_ret_type: erreur
-    fct_action: yes
-    fct_arg:
-      - [id_nain, int, "Numéro du nain"]
-      - [dir, direction, "Direction visée"]
-  -
-    fct_name: escalader
-    fct_summary: Le nain ``id_nain`` s'accroche à la paroi et grimpe dans la
+    fct_summary: Déplace le nain (standard) ``id_nain`` d'une case dans la
                  direction choisie.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
+      - [dir, direction, "Direction visée"]
+  -
+    fct_name: escalader
+    fct_summary: Le nain (standard) ``id_nain`` s'accroche à la paroi et grimpe
+                 dans la direction choisie.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
   -
     fct_name: grimper
-    fct_summary: Le nain ``id_nain`` s'accroche à la corde et se déplace le
-                 long de la corde.
+    fct_summary: Le nain (standard) ``id_nain`` s'accroche à la corde et se
+                 déplace le long de la corde.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
   -
     fct_name: lacher
-    fct_summary: Le nain ``id_nain`` lâche la paroi ou la corde.
+    fct_summary: Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
   -
-    fct_name: creuser
-    fct_summary: Le nain ``id_nain`` creuse ou mine le bloc dans la direction
-                 indiquée.
+    fct_name: miner
+    fct_summary: Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le
+                 nain (standard) dans la direction indiquée.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
   -
-    fct_name: actionner_poulie
-    fct_summary: Le nain ``id_nain`` tire dans un sens sur la corde.
+    fct_name: tirer
+    fct_summary: Le nain (standard) ``id_nain`` tire dans un sens sur la corde.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
       - [dir_corde, direction, "Direction dans laquelle se trouve la corde"]
       - [sens, direction, "Sens dans lequel le nain tire sur la corde"]
   -
     fct_name: poser_corde
-    fct_summary: Le nain ``id_nain`` pose une corde dans la direction indiquée.
+    fct_summary: Le nain (standard) ``id_nain`` pose une corde dans la
+                 direction indiquée.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
 
 # Action de débug
@@ -149,24 +205,40 @@ function:
     fct_arg:
       - [pos, position, "Case choisie"]
   -
+    fct_name: liste_cordes
+    fct_summary: Renvoie la liste de toutes les corde dans la mine.
+    fct_ret_type: position array
+    fct_arg: []
+  -
+    fct_name: corde_sur_case
+    fct_summary: Indique si une corde se trouve sur une case donnée.
+    fct_ret_type: bool
+    fct_arg:
+      - [pos, position, "Case choisie"]
+  -
     fct_name: nain_sur_case
-    fct_summary: Renvoie le numéro du joueur à qui appartient le nain sur la
-                 case indiquée.
-                 Renvoie -1 s'il n'y a pas de nain ou si la position est
-                 invalide.
+    fct_summary: Renvoie le numéro du joueur à qui appartient le nain
+                 (standard) sur la case indiquée.
+                 Renvoie -1 s'il n'y a pas de nain (standard) ou si la position
+                 est invalide.
     fct_ret_type: int
     fct_arg:
       - [pos, position, "Case choisie"]
   -
-    fct_name: position_nain
-    fct_summary: Indique la position du nain dans la mine désigné par le
+    fct_name: info_nain
+    fct_summary: RenvoieIndique la position du nain (standar) dans la mine désigné par
+                 le numéro ``id_nain`` appartenant au joueur ``id_joueur``.
+                 Si la description du nain (standard) est incorrecte, la
+                 position (-1, -1) est renvoyée.
+    fct_summary: Renvoie la description du nain (standard) désigné par le
                  numéro ``id_nain`` appartenant au joueur ``id_joueur``.
-                 Si la description du nain est incorrecte, la position (-1,
-                 -1) est renvoyée.
-    fct_ret_type: position
+                 Si le nain (standard)  n'est pas présent sur la carte, tous
+                 les membres de la structure ``nain`` renvoyée sont initialisés
+                 à -1.
+    fct_ret_type: nain
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]
-      - [id_nain, int, "Numéro du nain"]
+      - [id_nain, int, "Numéro du nain (standard)"]
   -
     fct_name: info_minerrai
     fct_summary: Renvoie la description d'un minerai en fonction d'une position
