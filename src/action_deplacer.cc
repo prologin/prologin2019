@@ -6,6 +6,8 @@ int ActionDeplacer::check(const GameState* st) const
         return -1; // TODO nain introuvable
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
+
+    
     // FIXME
     return OK;
 }

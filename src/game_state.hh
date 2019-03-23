@@ -24,6 +24,7 @@
 #include <rules/player.hh>
 
 #include "map.hh"
+#include "nain_info.hh"
 #include "player_info.hh"
 
 class GameState : public rules::GameState
@@ -47,6 +48,7 @@ private:
     std::array<int, 2> player_ids_;
 
     std::shared_ptr<Map> map_;
+    std::array<std::array<NainInfo, NB_NAINS>, 2> nain_info_;
 };
 
 #endif /* !GAME_STATE_HH */
