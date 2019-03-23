@@ -47,6 +47,11 @@ rules::GameState* GameState::copy() const
     return new GameState(*this);
 }
 
+case_type GameState::get_cell_type(position pos) const
+{
+    return map_->get_cell_type(pos);
+}
+
 int GameState::opponent(int player) const
 {
     return (player_ids_[0] == player) ? player_ids_[1] : player_ids_[0];
