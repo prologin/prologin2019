@@ -9,3 +9,8 @@ void NainInfo::set_position(const position& pos)
 {
     nain_.pos = pos;
 }
+
+position NainInfo::get_position() const
+{
+    return nain_.pos;
+}

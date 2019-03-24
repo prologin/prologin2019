@@ -19,6 +19,7 @@
 GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     : rules::GameState()
     , map_(new Map(map_stream))
+    , round_(0)
 {
     int id = 0;
     for (auto& player : players->players)
@@ -40,6 +41,7 @@ GameState::GameState(const GameState& st)
     , map_(new Map(*st.map_.get()))
     , player_info_(st.player_info_)
     , player_ids_(st.player_ids_)
+    , round_(st.round_)
 {}
 
 rules::GameState* GameState::copy() const
@@ -50,6 +52,16 @@ rules::GameState* GameState::copy() const
 case_type GameState::get_cell_type(position pos) const
 {
     return map_->get_cell_type(pos);
+}
+
+NainInfo GameState::get_nain_info(int player_id, int nain_id) const
+{
+    return nain_info_[player_id][nain_id];
+}
+
+void GameState::set_nain_position(int player_id, int nain_id, position pos)
+{
+    nain_info_[player_id][nain_id].set_position(pos);
 }
 
 int GameState::opponent(int player) const
@@ -69,4 +81,19 @@ void GameState::increase_score(int player_id, int delta)
     auto player = player_info_.find(player_id);
     assert(player != player_info_.end());
     return player->second.increase_score(delta);
+}
+
+bool GameState::is_finished() const
+{
+    return round_ >= NB_TOURS;
+}
+
+int GameState::get_round() const
+{
+    return round_;
+}
+
+void GameState::increment_round()
+{
+    ++round_;
 }

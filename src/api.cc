@@ -211,8 +211,7 @@ bool Api::annuler()
 /// Retourne le numéro du tour actuel.
 int Api::tour_actuel()
 {
-    // TODO
-    abort();
+    game_state_->get_round();
 }
 
 

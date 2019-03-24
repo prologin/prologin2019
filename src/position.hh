@@ -24,10 +24,29 @@ inline bool operator==(const position& a, const position& b)
     return a.ligne == b.ligne && a.colonne == b.colonne;
 }
 
+inline position& operator+=(position& lhs, position rhs)
+{
+    lhs.colonne += rhs.colonne;
+    lhs.ligne += rhs.ligne;
+    return lhs;
+}
+
+inline position operator+(position lhs, position rhs)
+{
+    return lhs += rhs;
+}
+
 inline bool inside_map(const position& pos)
 {
     return pos.ligne >= 0 && pos.ligne < TAILLE_MINE 
         && pos.colonne >= 0 && pos.colonne < TAILLE_MINE;
+}
+
+static const position offset[4] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+inline position get_position_offset(const position pos, const direction dir)
+{
+    return pos + offset[dir];
 }
 
 #endif

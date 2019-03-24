@@ -38,10 +38,17 @@ public:
 
     const auto& get_player_info() const { return player_info_; };
 
+    NainInfo get_nain_info(int player_id, int nain_id) const;
+    void set_nain_position(int player_id, int nain_id, position pos);
+
     int opponent(int player) const;
 
     int get_score(int player_id) const;
     void increase_score(int player_id, int delta);
+
+    bool is_finished() const;
+    int get_round() const;
+    void increment_round();
 
 private:
     std::unordered_map<int, PlayerInfo> player_info_;
@@ -49,6 +56,7 @@ private:
 
     std::shared_ptr<Map> map_;
     std::array<std::array<NainInfo, NB_NAINS>, 2> nain_info_;
+    int round_;
 };
 
 #endif /* !GAME_STATE_HH */

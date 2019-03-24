@@ -25,6 +25,7 @@ public:
     NainInfo();
 
     void set_position(const position& pos);
+    position get_position() const;
 
 private:
     nain nain_;
