@@ -113,9 +113,12 @@ std::string convert_to_string(erreur in){
   switch (in)
   {
     case OK: return "\"ok\"";
+    case PA_INSUFFISANTS: return "\"pa_insuffisants\"";
+    case PM_INSUFFISANTS: return "\"pm_insuffisants\"";
     case POSITION_INVALIDE: return "\"position_invalide\"";
-    case DEPLACEMENT_HORS_LIMITES: return "\"deplacement_hors_limites\"";
+    case HORS_LIMITES: return "\"hors_limites\"";
     case DIRECTION_INVALIDE: return "\"direction_invalide\"";
+    case ID_NAIN_INVALIDE: return "\"id_nain_invalide\"";
     case DRAPEAU_INVALIDE: return "\"drapeau_invalide\"";
   }
   return "bad value";
@@ -376,9 +379,12 @@ std::ostream& operator<<(std::ostream& os, erreur v)
 {
   switch (v) {
   case OK: os << "OK"; break;
+  case PA_INSUFFISANTS: os << "PA_INSUFFISANTS"; break;
+  case PM_INSUFFISANTS: os << "PM_INSUFFISANTS"; break;
   case POSITION_INVALIDE: os << "POSITION_INVALIDE"; break;
-  case DEPLACEMENT_HORS_LIMITES: os << "DEPLACEMENT_HORS_LIMITES"; break;
+  case HORS_LIMITES: os << "HORS_LIMITES"; break;
   case DIRECTION_INVALIDE: os << "DIRECTION_INVALIDE"; break;
+  case ID_NAIN_INVALIDE: os << "ID_NAIN_INVALIDE"; break;
   case DRAPEAU_INVALIDE: os << "DRAPEAU_INVALIDE"; break;
   }
   return os;

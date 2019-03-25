@@ -141,22 +141,19 @@ erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
 /// Renvoie le type d'une case donnée.
 case_type Api::type_case(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_cell_type(pos);
 }
 
 /// Renvoie la liste de toutes les corde dans la mine.
 std::vector<position> Api::liste_cordes()
 {
-    // TODO
-    abort();
+    return game_state_->get_ropes();
 }
 
 /// Indique si une corde se trouve sur une case donnée.
 bool Api::corde_sur_case(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->is_rope(pos);
 }
 
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
@@ -169,49 +166,53 @@ int Api::nain_sur_case(position pos)
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas présent sur la carte, tous les membres de la structure ``nain`` renvoyée sont initialisés à -1.
 nain Api::info_nain(int id_joueur, int id_nain)
 {
-    // TODO
-    abort();
+    if (id_nain < 0 || id_nain >= NB_NAINS)
+        return { { -1, -1 }, -1, -1, -1, -1 };
+    if (id_joueur != moi() && id_joueur != adversaire())
+        return { { -1, -1 }, -1, -1, -1, -1 };
+    return game_state_->get_nain(id_joueur, id_nain);
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerrai(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_minerrai(pos);
 }
 
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
 int Api::score(int id_joueur)
 {
-    // TODO
-    abort();
+    if (id_joueur != moi() && id_joueur != adversaire())
+        return -1;
+    return game_state_->get_score(id_joueur);
 }
 
 /// Renvoie votre numéro de joueur.
 int Api::moi()
 {
-    // TODO
-    abort();
+    return player_->id;
 }
 
 /// Renvoie le numéro de joueur de votre adversaire.
 int Api::adversaire()
 {
-    // TODO
-    abort();
+    return game_state_->opponent(moi());
 }
 
 /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
 bool Api::annuler()
 {
-    // TODO
-    abort();
+    if (!game_state_->can_cancel())
+        return false;
+    actions_.cancel();
+    game_state_ = rules::cancel(game_state_);
+    return true;
 }
 
 /// Retourne le numéro du tour actuel.
 int Api::tour_actuel()
 {
-    game_state_->get_round();
+    return game_state_->get_round();
 }
 
 

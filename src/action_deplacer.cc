@@ -5,17 +5,19 @@
 int ActionDeplacer::check(const GameState* st) const
 {
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
-        return -1; // TODO nain introuvable
+        return ID_NAIN_INVALIDE;
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
 
-    NainInfo nain = st->get_nain_info(player_id_, id_nain_);
+    const nain& nain = st->get_nain(player_id_, id_nain_);
 
-    position start = nain.get_position();
-    position dest = get_position_offset(start, dir_);
+    if (nain.pm < COUT_DEPLACEMENT)
+        return PM_INSUFFISANTS;
+
+    position dest = get_position_offset(nain.pos, dir_);
 
     if (!inside_map(dest))
-        return DEPLACEMENT_HORS_LIMITES;
+        return HORS_LIMITES;
     if (st->get_cell_type(dest) != LIBRE)
         return -1; //TODO dans un mur
     
@@ -24,10 +26,10 @@ int ActionDeplacer::check(const GameState* st) const
 
 void ActionDeplacer::apply_on(GameState* st) const
 {
-    NainInfo nain = st->get_nain_info(player_id_, id_nain_);
+    const nain& nain = st->get_nain(player_id_, id_nain_);
 
-    position start = nain.get_position();
-    position dest = get_position_offset(start, dir_);
+    position dest = get_position_offset(nain.pos, dir_);
 
     st->set_nain_position(player_id_, id_nain_, dest);
+    st->reduce_pm(player_id_, id_nain_, COUT_DEPLACEMENT);
 }

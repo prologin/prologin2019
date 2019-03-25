@@ -86,9 +86,12 @@ namespace std
 /// Erreurs possibles
 typedef enum erreur {
   OK, /* <- L'action s'est effectuée avec succès. */
+  PA_INSUFFISANTS, /* <- Votre nain (standard) ne possède pas assez de points d'action pour réaliser cette action. */
+  PM_INSUFFISANTS, /* <- Votre nain (standard) ne possède pas assez de points de déplacement pour réaliser ce déplacement. */
   POSITION_INVALIDE, /* <- La position spécifiée n'est pas sur la mine. */
-  DEPLACEMENT_HORS_LIMITES, /* <- Ce déplacement fait sortir un nain (standard) des limites de la mine. */
+  HORS_LIMITES, /* <- L'action est en dehors des limites de la mine. */
   DIRECTION_INVALIDE, /* <- La direction spécifiée n'existe pas. */
+  ID_NAIN_INVALIDE, /* <- Le nain (standard) spécifié n'existe pas. */
   DRAPEAU_INVALIDE, /* <- Le drapeau spécifié n'existe pas. */
 } erreur;
 // This is needed for old compilers

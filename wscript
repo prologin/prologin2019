@@ -26,7 +26,6 @@ def build(bld):
             src/game_state.cc
             src/interface.cc
             src/map.cc
-            src/nain_info.cc
             src/player_info.cc
             src/rules.cc
         ''',

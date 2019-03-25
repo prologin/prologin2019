@@ -24,7 +24,6 @@
 #include <rules/player.hh>
 
 #include "map.hh"
-#include "nain_info.hh"
 #include "player_info.hh"
 
 class GameState : public rules::GameState
@@ -35,11 +34,19 @@ public:
     rules::GameState* copy() const override;
 
     case_type get_cell_type(position pos) const;
+    std::vector<position> get_ropes() const;
+    bool is_rope(position pos) const;
+    minerai get_minerrai(position pos) const;
+    void set_cell_type(position pos, case_type type);
 
     const auto& get_player_info() const { return player_info_; };
 
-    NainInfo get_nain_info(int player_id, int nain_id) const;
+    const nain& get_nain(int player_id, int nain_id) const;
     void set_nain_position(int player_id, int nain_id, position pos);
+    void reduce_pm(int player_id, int nain_id, int pm);
+    void reduce_pa(int player_id, int nain_id, int pa);
+    void reset_pm(unsigned int player_id);
+    void reset_pa(unsigned int player_id);
 
     int opponent(int player) const;
 
@@ -55,7 +62,7 @@ private:
     std::array<int, 2> player_ids_;
 
     std::shared_ptr<Map> map_;
-    std::array<std::array<NainInfo, NB_NAINS>, 2> nain_info_;
+    std::array<std::array<nain, NB_NAINS>, 2> nains_;
     int round_;
 };
 

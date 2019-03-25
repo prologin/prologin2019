@@ -54,14 +54,56 @@ case_type GameState::get_cell_type(position pos) const
     return map_->get_cell_type(pos);
 }
 
-NainInfo GameState::get_nain_info(int player_id, int nain_id) const
+std::vector<position> GameState::get_ropes() const
 {
-    return nain_info_[player_id][nain_id];
+    return map_->get_ropes();
+}
+
+bool GameState::is_rope(position pos) const
+{
+    return map_->is_rope(pos);
+}
+
+minerai GameState::get_minerrai(position pos) const
+{
+    return map_->get_minerrai(pos);
+}
+
+void GameState::set_cell_type(position pos, case_type type)
+{
+    return map_->set_cell_type(pos, type);
+}
+
+const nain& GameState::get_nain(int player_id, int nain_id) const
+{
+    return nains_[player_id][nain_id];
 }
 
 void GameState::set_nain_position(int player_id, int nain_id, position pos)
 {
-    nain_info_[player_id][nain_id].set_position(pos);
+    nains_[player_id][nain_id].pos = pos;
+}
+
+void GameState::reduce_pm(int player_id, int nain_id, int pm)
+{
+    nains_[player_id][nain_id].pm -= pm;
+}
+
+void GameState::reduce_pa(int player_id, int nain_id, int pa)
+{
+    nains_[player_id][nain_id].pa -= pa;
+}
+
+void GameState::reset_pm(unsigned int player_id)
+{
+    for (int i = 0; i < NB_NAINS; ++i)
+        nains_[player_id][i].pm = NB_POINTS_DEPLACEMENT;
+}
+
+void GameState::reset_pa(unsigned int player_id)
+{
+    for (int i = 0; i < NB_NAINS; ++i)
+        nains_[player_id][i].pa = NB_POINTS_ACTION;
 }
 
 int GameState::opponent(int player) const

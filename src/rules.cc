@@ -137,6 +137,8 @@ void Rules::spectator_turn()
 
 void Rules::start_of_player_turn(unsigned int player_id)
 {
+    api_->game_state()->reset_pm(player_id);
+    api_->game_state()->reset_pa(player_id);
 }
 
 void Rules::end_of_player_turn(unsigned int /* player_id */)
