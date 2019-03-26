@@ -1,0 +1,96 @@
+[gd_scene format=2]
+
+[node name="GameState" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+pause_mode = 1
+cell_size = Vector2( 32, 32 )
+cell_quadrant_size = 32
+
+[node name="Select" type="ColorRect" parent="TileMap"]
+visible = false
+modulate = Color( 0, 1, 0, 0.294118 )
+margin_right = 32.0
+margin_bottom = 32.0
+
+[node name="Info" type="Node2D" parent="."]
+
+[node name="Player1" type="Label" parent="Info"]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="Player2" type="Label" parent="Info"]
+margin_left = 100.0
+margin_right = 100.0
+margin_bottom = 14.0
+
+[node name="Turn" type="Label" parent="Info"]
+margin_left = 200.0
+margin_right = 200.0
+margin_bottom = 14.0
+
+[node name="Tile" type="Label" parent="Info"]
+margin_left = 300.0
+margin_right = 100.0
+margin_bottom = 14.0
+
+[node name="Dwarf" type="Label" parent="Info"]
+margin_left = 450.0
+margin_right = 100.0
+margin_bottom = 14.0
+
+[node name="Speed" type="Label" parent="Info"]
+margin_left = 700.0
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="SpeedSlider" type="HSlider" parent="Info"]
+margin_left = 700.0
+margin_top = 14.0
+margin_right = 790.0
+margin_bottom = 16.0
+focus_mode = 0
+max_value = 5.0
+rounded = true
+ticks_on_borders = true
+focus_mode = 0
+
+[node name="FlagsNo" type="CheckBox" parent="Info"]
+margin_left = 550.0
+margin_right = 132.0
+margin_bottom = 24.0
+pressed = true
+text = "Pas de drapeaux"
+
+[node name="FlagsP1" type="CheckBox" parent="Info"]
+margin_left = 550.0
+margin_top = 16.0
+margin_right = 132.0
+margin_bottom = 24.0
+text = "Drapeau joueur 1"
+
+[node name="FlagsP2" type="CheckBox" parent="Info"]
+margin_left = 550.0
+margin_top = 32.0
+margin_right = 132.0
+margin_bottom = 24.0
+text = "Drapeau joueur 2"
+
+[node name="Help" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 256.0
+margin_right = 494.0
+margin_bottom = 440.0
+rect_pivot_offset = Vector2( 820, 0 )
+text = "flèche gauche/droite : passe au tour suivant/précédent (replay uniquement)
+
+flèche haut/bas : augmente/diminue la vitesse du jeu
+
+espace : play/pause et termine le tour dans l'IGUI
+
+molette souris : intéragit sur les barres d'interface (tour et vitesse)
+
+clic gauche : sélectionne case et nain standard (MAJ pour agent uniquement)
+
+clic droit : action du nain standard sélectionné (IGUI uniquement)"
+

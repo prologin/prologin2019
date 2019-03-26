@@ -1,0 +1,8 @@
+[gd_scene format=2]
+
+[node name="Dwarf" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+
