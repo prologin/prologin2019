@@ -1,3 +1,4 @@
+// TODO add rope to the map format
 #include "map.hh"
 
 #include <algorithm>
@@ -28,11 +29,6 @@ void Map::load_map_cells(std::istream& stream)
                 break;
             case '#':
                 map_[l][c] = OBSIDIENNE;
-                break;
-            case '|':
-                map_[l][c] = LIBRE;
-                rope_[l][c] = true;
-                ropes_.push_back({ l, c });
                 break;
             default:
                 FATAL("Invalid cell type '%c' at (%d;%d)", line[c], l, c);
@@ -104,7 +100,7 @@ case_type Map::get_cell_type(position pos) const
 
 std::vector<position> Map::get_ropes() const
 {
-    return ropes_;
+    return ropes_pos_;
 }
 
 bool Map::is_rope(position pos) const
@@ -124,4 +120,21 @@ minerai Map::get_minerrai(position pos) const
 void Map::set_cell_type(position pos, case_type type)
 {
     map_[pos.ligne][pos.colonne] = type;
+}
+
+void Map::add_rope(Rope& rope)
+{
+    ropes_.push_back(rope);
+    position anchor = rope.get_anchor();
+    rope_[anchor.ligne][anchor.colonne] = &rope;
+    ropes_pos_.push_back(anchor);
+}
+
+void Map::extends_rope(position pos)
+{
+    Rope* rope = rope_[pos.ligne][pos.colonne];
+    rope->extends();
+    position bottom = rope->get_bottom();
+    rope_[bottom.ligne][bottom.colonne] = rope;
+    ropes_pos_.push_back(bottom);
 }

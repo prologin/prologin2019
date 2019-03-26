@@ -139,3 +139,8 @@ void GameState::increment_round()
 {
     ++round_;
 }
+
+void GameState::add_rope(Rope rope)
+{
+    map_->add_rope(rope);
+}

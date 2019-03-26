@@ -163,4 +163,3 @@ GameState* Rules::get_game_state() const
 {
     return api_->game_state();
 }
-

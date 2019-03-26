@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "constant.hh"
+#include "rope.hh"
 
 class Map
 {
@@ -35,6 +36,8 @@ public:
     minerai get_minerrai(position pos) const;
 
     void set_cell_type(position pos, case_type type);
+    void add_rope(Rope& rope);
+    void extends_rope(position pos);
 
 private:
     void load_map_cells(std::istream& stream);
@@ -42,11 +45,14 @@ private:
 
     std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
 
-    std::array<std::array<bool, TAILLE_MINE>, TAILLE_MINE> rope_;
-    std::vector<position> ropes_;
+    std::array<std::array<Rope*, TAILLE_MINE>, TAILLE_MINE> rope_;
+    std::vector<Rope> ropes_;
+    std::vector<position> ropes_pos_;
 
     std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
     std::vector<minerai> ores_;
+
+    std::array<std::array<std::vector<nain*>, TAILLE_MINE>, TAILLE_MINE> nains_;
 };
 
 #endif

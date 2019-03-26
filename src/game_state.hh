@@ -48,6 +48,8 @@ public:
     void reset_pm(unsigned int player_id);
     void reset_pa(unsigned int player_id);
 
+    void add_rope(Rope rope);
+
     int opponent(int player) const;
 
     int get_score(int player_id) const;
