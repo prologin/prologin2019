@@ -37,7 +37,7 @@ constant:
                  déplace d'une case.
   -
     cst_name: COUT_ESCALADER
-    cst_val: 1
+    cst_val: 2
     cst_comment: Nombre de points de déplacement pour qu'un nain (standard)
                  grimpe d'une case.
   -
