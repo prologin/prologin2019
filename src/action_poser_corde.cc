@@ -16,6 +16,8 @@ int ActionPoserCorde::check(const GameState* st) const
 
     if (!inside_map(dest))
         return HORS_LIMITES;
+    if (st->get_rope(dest) != nullptr)
+        return -1; // TODO already rope here
     if (st->get_cell_type(dest) != LIBRE)
         return -1; //TODO dans un mur
     

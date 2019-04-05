@@ -153,7 +153,7 @@ std::vector<position> Api::liste_cordes()
 /// Indique si une corde se trouve sur une case donnée.
 bool Api::corde_sur_case(position pos)
 {
-    return game_state_->is_rope(pos);
+    return game_state_->get_rope(pos) != nullptr;
 }
 
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.

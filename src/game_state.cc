@@ -59,9 +59,9 @@ std::vector<position> GameState::get_ropes() const
     return map_->get_ropes();
 }
 
-bool GameState::is_rope(position pos) const
+const Rope* GameState::get_rope(position pos) const
 {
-    return map_->is_rope(pos);
+    return map_->get_rope(pos);
 }
 
 minerai GameState::get_minerrai(position pos) const

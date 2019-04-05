@@ -103,10 +103,10 @@ std::vector<position> Map::get_ropes() const
     return ropes_pos_;
 }
 
-bool Map::is_rope(position pos) const
+const Rope* Map::get_rope(position pos) const
 {
     if (!inside_map(pos))
-        return false;
+        return nullptr;
     return rope_[pos.ligne][pos.colonne];
 }
 
