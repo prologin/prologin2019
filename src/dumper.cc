@@ -173,9 +173,15 @@ static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
         ss << sep;
         sep = COMMA;
 
-        position nain_pos = st.get_nain(player_id, nain_id).pos;
-        ss << "{\"id_nain\": " << nain_id << ", "
-           << "\"pos\": " << nain_pos << "}";
+        const nain& nain = st.get_nain(player_id, nain_id);
+        ss << '{'
+           << "\"id_nain\": " << nain_id << ", "
+           << "\"pos\": " << nain.pos << ", "
+           << "\"vie\": " << nain.vie << ", "
+           << "\"pa\": " << nain.pa << ", "
+           << "\"pm\": " << nain.pm << ", "
+           << "\"butin\": " << nain.butin
+           << '}';
     }
     ss << "]";
 }
