@@ -27,9 +27,13 @@ constant:
     cst_val: 10
     cst_comment: Nombre de points de vie d'un nain (standard).
   -
+    cst_name: NB_JOUEURS
+    cst_val: 2
+    cst_comment: Nombre de joueurs.
+  -
     cst_name: NB_NAINS
     cst_val: 6
-    cst_comment: Nombre de nain (standard) par joueur.
+    cst_comment: Nombre de nains (standard) par joueur.
   -
     cst_name: COUT_DEPLACEMENT
     cst_val: 1
@@ -74,6 +78,7 @@ enum:
       - [bas, "Direction : bas"]
       - [gauche, "Direction : gauche"]
       - [droite, "Direction : droite"]
+      - [erreur, "Erreur"]
   -
     enum_name: erreur
     enum_summary: "Erreurs possibles"
@@ -87,7 +92,19 @@ enum:
       - [hors_limites, "L'action est en dehors des limites de la mine."]
       - [direction_invalide, "La direction spécifiée n'existe pas."]
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
+      - [obstacle_mur, "La position spécifiée est un mur."]
+      - [obstacle_nain, "La position spécifiée est un nain (standard)."]
       - [drapeau_invalide, "Le drapeau spécifié n'existe pas."]
+  -
+    enum_name: action_type
+    enum_summary: "Types d'actions"
+    enum_field:
+      - [action_deplacer, "Action ``deplacer``"]
+      - [action_lacher, "Action ``lacher``"]
+      - [action_miner, "Action ``miner``"]
+      - [action_miner, "Action ``miner``"]
+      - [action_poser_corde, "Action ``poser_corde``"]
+      - [action_tirer, "Action ``tirer``"]
   -
     enum_name: debug_drapeau
     enum_summary: "Types de drapeaux de débug"
@@ -121,7 +138,19 @@ struct:
       - [vie, int, "Point(s) de vie restant du nain (standard)"]
       - [pa, int, "Point(s) d'action restant du nain (standard)"]
       - [pm, int, "Point(s) de déplacement restant du nain (standard)"]
+      - [accroche, bool, "Le nain (standard) est accroché à la paroi ou à la
+                          corde"]
       - [butin, int, "Valeur marchande total que le nain (standard) possède"]
+  -
+    str_name: action_hist
+    str_summary: Action de déplacement représentée dans l'historique.
+    str_tuple: no
+    str_field:
+      - [atype, action_type, "Type de l'action"]
+      - [id_nain, int, "Numéro du nain (standard) concerné par l'action"]
+      - [dir, direction, "Direction visée par le nain (standard) durant le
+                          déplacement"]
+      - [sens, direction, "Sens de l'action"]
 
 function:
 
@@ -131,24 +160,6 @@ function:
     fct_name: deplacer
     fct_summary: Déplace le nain (standard) ``id_nain`` d'une case dans la
                  direction choisie.
-    fct_ret_type: erreur
-    fct_action: yes
-    fct_arg:
-      - [id_nain, int, "Numéro du nain (standard)"]
-      - [dir, direction, "Direction visée"]
-  -
-    fct_name: escalader
-    fct_summary: Le nain (standard) ``id_nain`` s'accroche à la paroi et grimpe
-                 dans la direction choisie.
-    fct_ret_type: erreur
-    fct_action: yes
-    fct_arg:
-      - [id_nain, int, "Numéro du nain (standard)"]
-      - [dir, direction, "Direction visée"]
-  -
-    fct_name: grimper
-    fct_summary: Le nain (standard) ``id_nain`` s'accroche à la corde et se
-                 déplace le long de la corde.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:
@@ -253,10 +264,24 @@ function:
     fct_ret_type: minerai
     fct_arg:
       - [pos, position, "Case choisie"]
+  -
+    fct_name: cout_deplacement
+    fct_summary: Renvoie le nombre de points de déplacement pour le déplacement
+                 d'un nain (standard) dans une direction donnée.
+    fct_ret_type: int
+    fct_arg:
+      - [id_nain, int, "Numéro du nain (standard)"]
+      - [dir, direction, "Direction visée"]
 
 # Historique (actions de l'adversaire durant le tour précédent)
 
-# TODO
+  -
+    fct_name: historique
+    fct_summary: Renvoie la liste des actions effectuées par l’adversaire
+                 durant son tour, dans l'ordre chronologique. Les actions de
+                 débug n'apparaissent pas dans cette liste.
+    fct_ret_type: action_hist array
+    fct_arg: []
 
 # Autres
 
