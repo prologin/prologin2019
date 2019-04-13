@@ -1,8 +1,17 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
 
-[node name="Dwarf" type="Area2D"]
+[ext_resource path="res://scripts/Dwarf.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[node name="Dwarf" type="KinematicBody2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 

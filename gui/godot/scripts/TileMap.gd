@@ -1,23 +1,17 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Martin Huvelle
 
 extends TileMap
 
-var walls = []
-var agents = []
-var agents_pos = []
+var dwarfs = []
+var dwarfs_pos = []
 var flags = [[], []]
 var flagNodes = [null, null]
 
-class Alien:
-	var pos = Vector2()
-	var points = 0
-	var first_turn = 0
-	var duration = 0
-	var capture = 0
-var aliens = []
+#class Ores:
+var ores = []
 
-onready var character_scene = preload("res://scenes/Agent.tscn")
+onready var character_scene = preload("res://scenes/Dwarf.tscn")
 
 func _ready():
 	for i in range(2):
@@ -32,15 +26,15 @@ func get_tile(x, y):
 	var tile = "Wall" if walls[x][y] else "BG"
 	return get_tileset().find_tile_by_name(tile)
 
-func spawn_agents():
-	agents = []
-	var nb_agents = agents_pos.size() / 2
-	for i in range(2 * nb_agents):
+func spawn_dwarfs():
+	dwarfs = []
+	var nb_dwarfs = dwarfs_pos.size() / 2
+	for i in range(2 * nb_dwarfs):
 		var character = character_scene.instance()
-		character.position = world_position(agents_pos[i].x, agents_pos[i].y)
-		character.set_team(i < nb_agents)
+		character.position = world_position(dwarfs_pos[i].x, dwarfs_pos[i].y)
+		character.set_team(i < nb_dwarfs)
 		add_child(character)
-		agents.append(character)
+		dwarfs.append(character)
 
 func set_flag(player, pos, type):
 	var flag = flags[player][pos.x][pos.y]
@@ -65,8 +59,10 @@ func _new_flag(player_id, pos):
 	return sprite
 
 func set_map():
+	#sky on the first 2 lines
+	#dig rock under
 	clear()
-	var size = walls.size()
+	var size = 32
 	flags = [[], []]
 	for x in range(size):
 		flags[0].append([])
@@ -76,24 +72,21 @@ func set_map():
 			flags[0][x].append(_new_flag(0, Vector2(x, y)))
 			flags[1][x].append(_new_flag(1, Vector2(x, y)))
 
-func update_aliens(turn):
-	for alien in aliens:
-		if turn >= alien.first_turn and turn < alien.first_turn + alien.duration \
-				and alien.capture < constants.NB_TOURS_CAPTURE:
-			set_cellv(alien.pos, get_tileset().find_tile_by_name("Alien"))
-		else:
-			set_cellv(alien.pos, get_tileset().find_tile_by_name("BG"))
+func update_ores(turn):
+	for ore in ores:
+		#fixme
+	return true
 
 func is_cell_free(pos):
-	if pos.x < 0 or pos.y < 0 or pos.x >= walls.size() or pos.y >= walls.size():
+	if pos.x < 0 or pos.y < 0 or pos.x >= constants.TAILLE_MINE or pos.y >= constants.TAILLE_MINE:
 		return false
-	if walls[pos.x][pos.y] or agents_pos.has(pos):
+	if agents_pos.has(pos):
 		return false
 	return true
 
-func move_agent(i, dest, dash, pushed):
-	agents[i].move_to(world_position(dest.x, dest.y), dash, pushed)
-	agents_pos[i] = dest
+func move_dwarf(i, dest):
+	dwarfs[i].move_to(world_position(dest.x, dest.y))
+	dwarfs_pos[i] = dest
 	return true
 
 func teleport_agent(i, dest):

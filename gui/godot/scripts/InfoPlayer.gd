@@ -7,6 +7,7 @@ class Player:
 	var name = ""
 	var score = 0
 	var action_points = []
+	var move_points = []
 
 var players = [Player.new(), Player.new()]
 var _turn = 0
@@ -38,20 +39,24 @@ func set_turn(turn, type):
 	for dwarf_id in range(constants.NB_DWARFS):
 		players[0].action_points[dwarf_id] = 0
 		players[1].action_points[dwarf_id] = 0
+		players[0].move_points[dwarf_id] = 0
+		players[1].move_points[dwarf_id] = 0
 		if type != 0:
 			players[type - 1].action_points[dwarf_id] = constants.NB_POINTS_ACTION
+			players[type - 1].move_points[dwarf_id] = constants.NB_POINTS_DEPLACEMENT
 	if _turn_slider:
 		_turn_slider.value = turn
 	redraw()
 
-func set_tile(pos, wall, alien):
+func set_tile(pos, cave, ores):
+	#fixme
 	$Tile.text = "l. " + str(pos.y) + ", c. " + str(pos.x)
-	if wall:
-		$Tile.text += "\nMur"
-	elif alien:
-		$Tile.text += "\nAlien de " + str(alien.points) + " points\ntour " + \
-				str(alien.first_turn) + " (+" + str(alien.duration) + "), " + \
-				str(alien.capture) + "/" + str(constants.NB_TOURS_CAPTURE)
+	#if wall:
+	#	$Tile.text += "\nMur"
+	#elif alien:
+	#	$Tile.text += "\nAlien de " + str(alien.points) + " points\ntour " + \
+	#			str(alien.first_turn) + " (+" + str(alien.duration) + "), " + \
+	#			str(alien.capture) + "/" + str(constants.NB_TOURS_CAPTURE)
 
 func set_dwarf(dwarf):
 	_selected_dwarf = dwarf
@@ -59,12 +64,13 @@ func set_dwarf(dwarf):
 
 func _redraw_dwarf():
 	if _selected_dwarf == -1:
-		$Agent.text = ""
+		$Dwarf.text = ""
 	else:
 		var id = _selected_dwarf % constants.NB_DWARFS
 		var player = (_selected_dwarf - id) / constants.NB_DWARFS
-		var points = players[player].action_points[id]
-		$Agent.text = "Joueur " + str(player + 1) + "\nAgent " + str(id) + "\nPA: " + str(points)
+		var points_ac = players[player].action_points[id]
+		var points_mv = players[player].move_points[id]
+		$Dwarf.text = "Joueur " + str(player + 1) + "\nNain " + str(id) + "\nPA: " + str(points_ac) +"\nPM: " + str(points_mv)
 
 func _speed_slider(value):
 	var v = 1 << int(value)

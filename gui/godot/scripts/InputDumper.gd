@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Martin Huvelle
 
 extends Node
 
@@ -87,19 +87,13 @@ func _create_flags_maps():
 func _ready():
 	dump = _parse_json()
 	var init = DumpReader.parse_turn(dump[0])
-	$GameState.init(init.walls, init.players[0].agents + init.players[1].agents)
-	for agent in $GameState/TileMap.agents:
-		 agent.connect("finished_moving", self, "_finish_animating")
+	$GameState.init(init.walls, init.players[0].dwarfs + init.players[1].dwarfs)
+	for dwarf in $GameState/TileMap.agents:
+		 dwarf.connect("finished_moving", self, "_finish_animating")
 	$GameState/Info.players[0].name = init.players[0].name
 	$GameState/Info.players[1].name = init.players[1].name
-	for alien_input in init.aliens:
-		var alien = $GameState/TileMap.Alien.new()
-		alien.pos = alien_input.pos
-		alien.points = alien_input.points
-		alien.first_turn = alien_input.first_turn
-		alien.duration = alien_input.duration
-		alien.capture = alien_input.capture
-		$GameState/TileMap.aliens.append(alien)
+	#fixme get ready ores
+	#for ores_input in init.ores:
 	$GameState.set_turn(0)
 	$GameState/Info.add_turn_slider().connect("value_changed", self, "_turn_slider")
 	_create_flags_maps()
@@ -121,26 +115,27 @@ func _finish_last_turn(warn_teleport = true):
 	actions_playing = []
 	var state = DumpReader.parse_turn(dump[_dump_index()])
 	var size = state.players[0].agents.size()
-	for agent_id in range(size):
+	for dwarf_id in range(size):
 		for player_id in range(2):
-			var pos = state.players[player_id].agents[agent_id]
-			if $GameState/TileMap.teleport_agent(agent_id + player_id * size, pos):
+			var pos = state.players[player_id].dwarfs[dwarf_id]
+			if $GameState/TileMap.teleport_agent(dwarf_id + player_id * size, pos):
 				if warn_teleport:
 					#print("Had to fix inconsistency in dump agent position")
 					pass
-	for x in range(constants.TAILLE_BANQUISE):
-		for y in range(constants.TAILLE_BANQUISE):
+	for x in range(constants.TAILLE_MINE):
+		for y in range(constants.TAILLE_MINE):
 			for player_id in range(2):
 				$GameState/TileMap.set_flag(player_id, Vector2(x, y), \
 						['AUCUN_DRAPEAU', 'DRAPEAU_ROUGE', 'DRAPEAU_VERT', 'DRAPEAU_BLEU'] \
-						[flags[turn_index][(x * constants.TAILLE_BANQUISE + y) * 2 + player_id]])
+						[flags[turn_index][(x * constants.TAILLE_MINE + y) * 2 + player_id]])
 
-func _update_aliens():
+func _update_ores():
+	#fixme
 	var state = DumpReader.parse_turn(dump[(turn_index - turn_index % 3) / 3 * 2 + 1])
-	for i in range(state.aliens.size()):
-		$GameState/TileMap.aliens[i].capture = state.aliens[i].capture
-	$GameState/Info.players[0].score = state.players[0].score
-	$GameState/Info.players[1].score = state.players[1].score
+	#for i in range(state.aliens.size()):
+	#	$GameState/TileMap.aliens[i].capture = state.aliens[i].capture
+	#$GameState/Info.players[0].score = state.players[0].score
+	#$GameState/Info.players[1].score = state.players[1].score
 	if _tv_show:
 		$Score1.text = str(state.players[0].score)
 		$Score2.text = str(state.players[1].score)
@@ -149,7 +144,7 @@ func _jump(index):
 	turn_index = max(index - 1, 0)
 	_finish_last_turn(false)
 	turn_index = index
-	_update_aliens()
+	_update_ores()
 	$GameState.set_turn(turn_index)
 	playing = false
 	get_tree().paused = false
@@ -165,7 +160,7 @@ func _continue():
 		# We duplicate the array here in case we read it again
 		actions_playing = state.players[turn_index % 3 - 1].history.duplicate()
 	else:
-		_update_aliens()
+		_update_ores()
 	$GameState.set_turn(turn_index)
 
 func _process(delta):

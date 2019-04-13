@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Martin Huvelle
 
 static func parse_dump(filename):
 	var file = File.new()
@@ -21,23 +21,17 @@ static func parse_dump_js():
 class PlayerStats:
 	var name = ""
 	var score = 0
-	var agents = []
-	var history = []
+	var dwarfs = []
+	#var history = []
 
-class Alien:
-	var pos = Vector2()
-	var points = 0
-	var first_turn = 0
-	var duration = 0
-	var capture = 0
+#class Ores:
 
 class Turn:
 	var roundNumber = 0
 	var roundTotal = 0
 	var players = []
 	var map_size = 0
-	var walls = []
-	var aliens = []
+	var ores = []
 
 class CastIntSorter:
 	static func sort(a, b):
@@ -57,25 +51,15 @@ static func parse_turn(json):
 		var player = PlayerStats.new()
 		player.name = node["name"]
 		player.score = node["score"]
-		for i in range(node["agents"].size()):
-			player.agents.append(Vector2(-1, -1))
-		for agent in node["agents"]:
-			player.agents[agent["id_agent"]] = Vector2(agent["pos"]["c"], agent["pos"]["r"])
-		player.history = node["history"]
+		for i in range(node["nains"].size()):
+			player.dwarfs.append(Vector2(-1, -1))
+		for dwarf in node["nains"]:
+			player.dwarfs[dwarf["id_nain"]] = Vector2(dwarf["pos"]["c"], dwarf["pos"]["r"])
+		#player.history = node["history"]
 		result.players.append(player)
 	var cells = json["map"]["cells"]
 	var size = sqrt(cells.size())
 	result.map_size = size
-	for c in range(size):
-		result.walls.append([])
-		for r in range(size):
-			result.walls[c].append(cells[r * size + c] == "MUR")
-	for alien_data in json["map"]["aliens"]:
-		var alien = Alien.new()
-		alien.pos = Vector2(alien_data["pos"]["c"], alien_data["pos"]["r"])
-		alien.points = alien_data["points_capture"]
-		alien.first_turn = alien_data["tour_invasion"]
-		alien.duration = alien_data["duree_invasion"]
-		alien.capture = alien_data["capture_en_cours"]
-		result.aliens.append(alien)
+	#fixme ores
+	#for ores_data in json["map"]["ores"]:
 	return result

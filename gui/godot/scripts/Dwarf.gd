@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Martin Huvelle
 
 extends KinematicBody2D
 
@@ -8,7 +8,6 @@ signal finished_moving
 var modulate_color = Color(1, 1, 1, 1)
 var moving = false
 var _moving_to = Vector2()
-var _dash = false
 
 const SPEED = 100
 
@@ -25,13 +24,12 @@ func focus():
 func unfocus():
 	set_modulate(modulate_color)
 
-func move_to(to, dash, pushed):
+func move_to(to):
 	assert not moving
 	assert not pushed or dash
 	_moving_to = to
-	_dash = dash
 	moving = true
-	var anim = "die" if pushed else ("slide" if dash else "walk")
+	var anim = "walk"
 	$AnimatedSprite.play(anim)
 	var dx = to.x - position.x
 	if dx > 0:
