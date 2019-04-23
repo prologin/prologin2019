@@ -32,3 +32,31 @@ rules::GameState* GameState::copy() const
 {
     return new GameState(*this);
 }
+
+case_type GameState::get_cell_type(position pos) const
+{
+    return map_->get_cell_type(pos);
+}
+
+void GameState::reset_pm(int player_id)
+{
+}
+
+void GameState::reset_pa(int player_id)
+{
+}
+
+bool GameState::is_finished() const
+{
+    return round_ >= NB_TOURS;
+}
+
+int GameState::get_round() const
+{
+    return round_;
+}
+
+void GameState::increment_round()
+{
+    ++round_;
+}

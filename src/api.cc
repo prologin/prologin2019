@@ -113,8 +113,7 @@ erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
 /// Renvoie le type d'une case donnée.
 case_type Api::type_case(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_cell_type(pos);
 }
 
 /// Renvoie la liste de toutes les corde dans la mine.

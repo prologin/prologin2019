@@ -18,6 +18,16 @@ class GameState : public rules::GameState
         GameState(const GameState& st);
         rules::GameState* copy() const override;
 
+        case_type get_cell_type(position pos) const;
+
+        void reset_pm(int player_id);
+        void reset_pa(int player_id);
+
+        bool is_finished() const;
+        int get_round() const;
+        void increment_round();
+
+
     private:
         std::unordered_map<int, PlayerInfo> player_info_;
         std::array<int, 2> player_ids_;
