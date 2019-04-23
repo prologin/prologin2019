@@ -175,15 +175,13 @@ int Api::score(int id_joueur)
 /// Renvoie votre numéro de joueur.
 int Api::moi()
 {
-    // TODO
-    abort();
+    return player_->id;
 }
 
 /// Renvoie le numéro de joueur de votre adversaire.
 int Api::adversaire()
 {
-    // TODO
-    abort();
+    return game_state_->opponent(moi());
 }
 
 /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.

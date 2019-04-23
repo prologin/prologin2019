@@ -33,6 +33,11 @@ rules::GameState* GameState::copy() const
     return new GameState(*this);
 }
 
+int GameState::opponent(int player_id) const
+{
+    return (player_ids_[0] == player_id) ? player_ids_[1] : player_ids_[0];
+}
+
 case_type GameState::get_cell_type(position pos) const
 {
     return map_->get_cell_type(pos);

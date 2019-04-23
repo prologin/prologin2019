@@ -18,6 +18,8 @@ class GameState : public rules::GameState
         GameState(const GameState& st);
         rules::GameState* copy() const override;
 
+        int opponent(int player_id) const;
+
         case_type get_cell_type(position pos) const;
 
         void reset_pm(int player_id);
