@@ -15,19 +15,15 @@ def build(bld):
         source = '''
             src/action_debug_afficher_drapeau.cc
             src/action_deplacer.cc
-            src/action_escalader.cc
-            src/action_grimper.cc
             src/action_lacher.cc
             src/action_miner.cc
             src/action_poser_corde.cc
             src/action_tirer.cc
             src/api.cc
-            src/dumper.cc
             src/entry.cc
             src/game_state.cc
             src/interface.cc
             src/map.cc
-            src/player_info.cc
             src/rope.cc
             src/rules.cc
         ''',

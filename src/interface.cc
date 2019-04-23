@@ -73,7 +73,7 @@ std::string convert_to_string(case_type in){
     case GRANITE: return "\"granite\"";
     case OBSIDIENNE: return "\"obsidienne\"";
     case MINERAI: return "\"minerai\"";
-    case ERREUR: return "\"erreur\"";
+    case ERREUR_CASE: return "\"erreur_case\"";
   }
   return "bad value";
 }
@@ -95,6 +95,7 @@ std::string convert_to_string(direction in){
     case BAS: return "\"bas\"";
     case GAUCHE: return "\"gauche\"";
     case DROITE: return "\"droite\"";
+    case ERREUR_DIRECTION: return "\"erreur_direction\"";
   }
   return "bad value";
 }
@@ -119,11 +120,35 @@ std::string convert_to_string(erreur in){
     case HORS_LIMITES: return "\"hors_limites\"";
     case DIRECTION_INVALIDE: return "\"direction_invalide\"";
     case ID_NAIN_INVALIDE: return "\"id_nain_invalide\"";
+    case OBSTACLE_MUR: return "\"obstacle_mur\"";
+    case OBSTACLE_NAIN: return "\"obstacle_nain\"";
     case DRAPEAU_INVALIDE: return "\"drapeau_invalide\"";
   }
   return "bad value";
 }
 std::string convert_to_string(std::vector<erreur> in){
+  if (in.size()){
+    std::string s = "[" + convert_to_string(in[0]);
+    for (int i = 1, l = in.size(); i < l; i++){
+      s = s + ", " + convert_to_string(in[i]);
+    }
+    return s + "]";
+  }else{
+    return "[]";
+  }
+}
+std::string convert_to_string(action_type in){
+  switch (in)
+  {
+    case ACTION_DEPLACER: return "\"action_deplacer\"";
+    case ACTION_LACHER: return "\"action_lacher\"";
+    case ACTION_MINER: return "\"action_miner\"";
+    case ACTION_POSER_CORDE: return "\"action_poser_corde\"";
+    case ACTION_TIRER: return "\"action_tirer\"";
+  }
+  return "bad value";
+}
+std::string convert_to_string(std::vector<action_type> in){
   if (in.size()){
     std::string s = "[" + convert_to_string(in[0]);
     for (int i = 1, l = in.size(); i < l; i++){
@@ -202,6 +227,7 @@ std::string convert_to_string(nain in){
   std::string vie = convert_to_string(in.vie);
   std::string pa = convert_to_string(in.pa);
   std::string pm = convert_to_string(in.pm);
+  std::string accroche = convert_to_string(in.accroche);
   std::string butin = convert_to_string(in.butin);
   std::string out = "{";
   out += "pos:" + pos;
@@ -211,6 +237,8 @@ std::string convert_to_string(nain in){
   out += "pa:" + pa;
   out += ", ";
   out += "pm:" + pm;
+  out += ", ";
+  out += "accroche:" + accroche;
   out += ", ";
   out += "butin:" + butin;
   return out + "}";
@@ -227,22 +255,37 @@ std::string convert_to_string(std::vector<nain> in){
     return "[]";
   }
 }
+std::string convert_to_string(action_hist in){
+  std::string atype = convert_to_string(in.atype);
+  std::string id_nain = convert_to_string(in.id_nain);
+  std::string dir = convert_to_string(in.dir);
+  std::string sens = convert_to_string(in.sens);
+  std::string out = "{";
+  out += "atype:" + atype;
+  out += ", ";
+  out += "id_nain:" + id_nain;
+  out += ", ";
+  out += "dir:" + dir;
+  out += ", ";
+  out += "sens:" + sens;
+  return out + "}";
+}
+
+std::string convert_to_string(std::vector<action_hist> in){
+  if (in.size()){
+    std::string s = "[" + convert_to_string(in[0]);
+    for (int i = 1, l = in.size(); i < l; i++){
+      s = s + ", " + convert_to_string(in[i]);
+    }
+    return s + "]";
+  }else{
+    return "[]";
+  }
+}
 /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
 extern "C" erreur api_deplacer(int id_nain, direction dir)
 {
   return api->deplacer(id_nain, dir);
-}
-
-/// Le nain (standard) ``id_nain`` s'accroche à la paroi et grimpe dans la direction choisie.
-extern "C" erreur api_escalader(int id_nain, direction dir)
-{
-  return api->escalader(id_nain, dir);
-}
-
-/// Le nain (standard) ``id_nain`` s'accroche à la corde et se déplace le long de la corde.
-extern "C" erreur api_grimper(int id_nain, direction dir)
-{
-  return api->grimper(id_nain, dir);
 }
 
 /// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
@@ -311,6 +354,18 @@ extern "C" minerai api_info_minerrai(position pos)
   return api->info_minerrai(pos);
 }
 
+/// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
+extern "C" int api_cout_deplacement(int id_nain, direction dir)
+{
+  return api->cout_deplacement(id_nain, dir);
+}
+
+/// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
+extern "C" std::vector<action_hist> api_historique()
+{
+  return api->historique();
+}
+
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
 extern "C" int api_score(int id_joueur)
 {
@@ -349,7 +404,7 @@ std::ostream& operator<<(std::ostream& os, case_type v)
   case GRANITE: os << "GRANITE"; break;
   case OBSIDIENNE: os << "OBSIDIENNE"; break;
   case MINERAI: os << "MINERAI"; break;
-  case ERREUR: os << "ERREUR"; break;
+  case ERREUR_CASE: os << "ERREUR_CASE"; break;
   }
   return os;
 }
@@ -366,6 +421,7 @@ std::ostream& operator<<(std::ostream& os, direction v)
   case BAS: os << "BAS"; break;
   case GAUCHE: os << "GAUCHE"; break;
   case DROITE: os << "DROITE"; break;
+  case ERREUR_DIRECTION: os << "ERREUR_DIRECTION"; break;
   }
   return os;
 }
@@ -385,11 +441,30 @@ std::ostream& operator<<(std::ostream& os, erreur v)
   case HORS_LIMITES: os << "HORS_LIMITES"; break;
   case DIRECTION_INVALIDE: os << "DIRECTION_INVALIDE"; break;
   case ID_NAIN_INVALIDE: os << "ID_NAIN_INVALIDE"; break;
+  case OBSTACLE_MUR: os << "OBSTACLE_MUR"; break;
+  case OBSTACLE_NAIN: os << "OBSTACLE_NAIN"; break;
   case DRAPEAU_INVALIDE: os << "DRAPEAU_INVALIDE"; break;
   }
   return os;
 }
 extern "C" void api_afficher_erreur(erreur v)
+{
+  std::cerr << v << std::endl;
+}
+
+/// Affiche le contenu d'une valeur de type action_type
+std::ostream& operator<<(std::ostream& os, action_type v)
+{
+  switch (v) {
+  case ACTION_DEPLACER: os << "ACTION_DEPLACER"; break;
+  case ACTION_LACHER: os << "ACTION_LACHER"; break;
+  case ACTION_MINER: os << "ACTION_MINER"; break;
+  case ACTION_POSER_CORDE: os << "ACTION_POSER_CORDE"; break;
+  case ACTION_TIRER: os << "ACTION_TIRER"; break;
+  }
+  return os;
+}
+extern "C" void api_afficher_action_type(action_type v)
 {
   std::cerr << v << std::endl;
 }
@@ -452,11 +527,32 @@ std::ostream& operator<<(std::ostream& os, nain v)
   os << ", ";
   os << "pm" << "=" << v.pm;
   os << ", ";
+  os << "accroche" << "=" << v.accroche;
+  os << ", ";
   os << "butin" << "=" << v.butin;
   os << " }";
   return os;
 }
 extern "C" void api_afficher_nain(nain v)
+{
+  std::cerr << v << std::endl;
+}
+
+/// Affiche le contenu d'une valeur de type action_hist
+std::ostream& operator<<(std::ostream& os, action_hist v)
+{
+  os << "{ ";
+  os << "atype" << "=" << v.atype;
+  os << ", ";
+  os << "id_nain" << "=" << v.id_nain;
+  os << ", ";
+  os << "dir" << "=" << v.dir;
+  os << ", ";
+  os << "sens" << "=" << v.sens;
+  os << " }";
+  return os;
+}
+extern "C" void api_afficher_action_hist(action_hist v)
 {
   std::cerr << v << std::endl;
 }

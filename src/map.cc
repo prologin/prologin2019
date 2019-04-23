@@ -38,6 +38,16 @@ void Map::load_map_cells(std::istream& stream)
     }
 }
 
+void Map::load_spawn_point(std::istream& stream)
+{
+    for (int player = 0; player < 2; ++player)
+    {
+        int l, c;
+        stream >> l >> c;
+        spawn_point_[player] = { l, c };
+    }
+}
+
 void Map::load_minerai_info(std::istream& stream)
 {
     std::vector<position> seen;
@@ -79,6 +89,7 @@ Map::Map(std::istream& stream)
     INFO("Loading map");
 
     load_map_cells(stream);
+    load_spawn_point(stream);
     load_minerai_info(stream);
 }
 
@@ -88,13 +99,19 @@ Map::Map(const Map& map)
     , ropes_(map.ropes_)
     , ore_(map.ore_)
     , ores_(map.ores_)
+    , spawn_point_(map.spawn_point_)
 {
+}
+
+position Map::get_spawn_point(int player_id) const
+{
+    return spawn_point_[player_id];
 }
 
 case_type Map::get_cell_type(position pos) const
 {
     if (!inside_map(pos))
-        return ERREUR;
+        return ERREUR_CASE;
     return map_[pos.ligne][pos.colonne];
 }
 

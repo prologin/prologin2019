@@ -35,14 +35,6 @@ void Rules::register_actions()
         []() -> rules::IAction* { return new ActionDeplacer(); }
         );
     api_->actions()->register_action(
-        ID_ACTION_ESCALADER,
-        []() -> rules::IAction* { return new ActionEscalader(); }
-        );
-    api_->actions()->register_action(
-        ID_ACTION_GRIMPER,
-        []() -> rules::IAction* { return new ActionGrimper(); }
-        );
-    api_->actions()->register_action(
         ID_ACTION_LACHER,
         []() -> rules::IAction* { return new ActionLacher(); }
         );
@@ -84,82 +76,8 @@ void Rules::apply_action(const rules::IAction_sptr& action)
     api_->game_state_set(action->apply(api_->game_state()));
 }
 
-void Rules::at_player_start(rules::ClientMessenger_sptr)
-{
-    try
-    {
-        sandbox_.execute(champion_partie_init_);
-    }
-    catch (utils::SandboxTimeout)
-    {
-        FATAL("player_start: timeout");
-    }
-}
-
-void Rules::at_spectator_start(rules::ClientMessenger_sptr)
-{
-    champion_partie_init_();
-}
-
-void Rules::at_player_end(rules::ClientMessenger_sptr)
-{
-    try
-    {
-        sandbox_.execute(champion_partie_fin_);
-    }
-    catch (utils::SandboxTimeout)
-    {
-        FATAL("player_end: timeout");
-    }
-}
-
-void Rules::at_spectator_end(rules::ClientMessenger_sptr)
-{
-    champion_partie_fin_();
-}
-
-void Rules::player_turn()
-{
-    try
-    {
-        sandbox_.execute(champion_jouer_tour_);
-    }
-    catch (utils::SandboxTimeout)
-    {
-        FATAL("player_turn: timeout");
-    }
-}
-
-void Rules::spectator_turn()
-{
-    champion_jouer_tour_();
-}
-
-void Rules::start_of_player_turn(unsigned int player_id)
-{
-    api_->game_state()->reset_pm(player_id);
-    api_->game_state()->reset_pa(player_id);
-}
-
-void Rules::end_of_player_turn(unsigned int /* player_id */)
-{
-}
-
-void Rules::start_of_round()
-{
-}
-
-void Rules::end_of_round()
-{
-    api_->game_state()->increment_round();
-}
-
 bool Rules::is_finished()
 {
-    return api_->game_state()->is_finished();
-}
-
-GameState* Rules::get_game_state() const
-{
-    return api_->game_state();
+    // FIXME
+    return true;
 }

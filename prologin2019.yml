@@ -69,7 +69,7 @@ enum:
       - [granite, "Granite standard"]
       - [obsidienne, "Obsidienne"]
       - [minerai, "Minerai"]
-      - [erreur, "Erreur"]
+      - [erreur_case, "Erreur"]
   -
     enum_name: direction
     enum_summary: "Direction"
@@ -78,7 +78,7 @@ enum:
       - [bas, "Direction : bas"]
       - [gauche, "Direction : gauche"]
       - [droite, "Direction : droite"]
-      - [erreur, "Erreur"]
+      - [erreur_direction, "Erreur"]
   -
     enum_name: erreur
     enum_summary: "Erreurs possibles"
@@ -101,7 +101,6 @@ enum:
     enum_field:
       - [action_deplacer, "Action ``deplacer``"]
       - [action_lacher, "Action ``lacher``"]
-      - [action_miner, "Action ``miner``"]
       - [action_miner, "Action ``miner``"]
       - [action_poser_corde, "Action ``poser_corde``"]
       - [action_tirer, "Action ``tirer``"]

@@ -53,12 +53,6 @@ public:
     /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
     erreur deplacer(int id_nain, direction dir);
 
-    /// Le nain (standard) ``id_nain`` s'accroche à la paroi et grimpe dans la direction choisie.
-    erreur escalader(int id_nain, direction dir);
-
-    /// Le nain (standard) ``id_nain`` s'accroche à la corde et se déplace le long de la corde.
-    erreur grimper(int id_nain, direction dir);
-
     /// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
     erreur lacher(int id_nain);
 
@@ -91,6 +85,12 @@ public:
 
     /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
     minerai info_minerrai(position pos);
+
+    /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
+    int cout_deplacement(int id_nain, direction dir);
+
+    /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
+    std::vector<action_hist> historique();
 
     /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
     int score(int id_joueur);

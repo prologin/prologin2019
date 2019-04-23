@@ -30,14 +30,17 @@
 /// Nombre de points de vie d'un nain (standard).
 # define VIE_NAIN                  10
 
-/// Nombre de nain (standard) par joueur.
+/// Nombre de joueurs.
+# define NB_JOUEURS                2
+
+/// Nombre de nains (standard) par joueur.
 # define NB_NAINS                  6
 
 /// Nombre de points de déplacement pour qu'un nain (standard) se déplace d'une case.
 # define COUT_DEPLACEMENT          1
 
 /// Nombre de points de déplacement pour qu'un nain (standard) grimpe d'une case.
-# define COUT_ESCALADER            1
+# define COUT_ESCALADER            2
 
 /// Nombre de points d'action pour qu'un nain (standard) mine un bloc.
 # define COUT_MINER                6
@@ -54,7 +57,7 @@ typedef enum case_type {
   GRANITE, /* <- Granite standard */
   OBSIDIENNE, /* <- Obsidienne */
   MINERAI, /* <- Minerai */
-  ERREUR, /* <- Erreur */
+  ERREUR_CASE, /* <- Erreur */
 } case_type;
 // This is needed for old compilers
 namespace std
@@ -72,6 +75,7 @@ typedef enum direction {
   BAS, /* <- Direction : bas */
   GAUCHE, /* <- Direction : gauche */
   DROITE, /* <- Direction : droite */
+  ERREUR_DIRECTION, /* <- Erreur */
 } direction;
 // This is needed for old compilers
 namespace std
@@ -92,6 +96,8 @@ typedef enum erreur {
   HORS_LIMITES, /* <- L'action est en dehors des limites de la mine. */
   DIRECTION_INVALIDE, /* <- La direction spécifiée n'existe pas. */
   ID_NAIN_INVALIDE, /* <- Le nain (standard) spécifié n'existe pas. */
+  OBSTACLE_MUR, /* <- La position spécifiée est un mur. */
+  OBSTACLE_NAIN, /* <- La position spécifiée est un nain (standard). */
   DRAPEAU_INVALIDE, /* <- Le drapeau spécifié n'existe pas. */
 } erreur;
 // This is needed for old compilers
@@ -99,6 +105,24 @@ namespace std
 {
   template <> struct hash<erreur> {
     size_t operator()(const erreur& v) const {
+      return hash<int>()(static_cast<int>(v));
+    }
+  };
+}
+
+/// Types d'actions
+typedef enum action_type {
+  ACTION_DEPLACER, /* <- Action ``deplacer`` */
+  ACTION_LACHER, /* <- Action ``lacher`` */
+  ACTION_MINER, /* <- Action ``miner`` */
+  ACTION_POSER_CORDE, /* <- Action ``poser_corde`` */
+  ACTION_TIRER, /* <- Action ``tirer`` */
+} action_type;
+// This is needed for old compilers
+namespace std
+{
+  template <> struct hash<action_type> {
+    size_t operator()(const action_type& v) const {
       return hash<int>()(static_cast<int>(v));
     }
   };
@@ -141,8 +165,18 @@ typedef struct nain {
   int vie;  /* <- Point(s) de vie restant du nain (standard) */
   int pa;  /* <- Point(s) d'action restant du nain (standard) */
   int pm;  /* <- Point(s) de déplacement restant du nain (standard) */
+  bool accroche;  /* <- Le nain (standard) est accroché à la paroi ou à la corde */
   int butin;  /* <- Valeur marchande total que le nain (standard) possède */
 } nain;
+
+
+/// Action de déplacement représentée dans l'historique.
+typedef struct action_hist {
+  action_type atype;  /* <- Type de l'action */
+  int id_nain;  /* <- Numéro du nain (standard) concerné par l'action */
+  direction dir;  /* <- Direction visée par le nain (standard) durant le déplacement */
+  direction sens;  /* <- Sens de l'action */
+} action_hist;
 
 
 

@@ -42,7 +42,7 @@ inline bool inside_map(const position& pos)
         && pos.colonne >= 0 && pos.colonne < TAILLE_MINE;
 }
 
-static const position offset[4] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+static const position offset[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
 inline position get_position_offset(const position pos, const direction dir)
 {

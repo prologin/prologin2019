@@ -30,6 +30,8 @@ public:
     Map(std::istream& stream);
     Map(const Map& map);
 
+    position get_spawn_point(int player_id) const;
+
     case_type get_cell_type(position pos) const;
     std::vector<position> get_ropes() const;
     const Rope* get_rope(position pos) const;
@@ -41,18 +43,18 @@ public:
 
 private:
     void load_map_cells(std::istream& stream);
+    void load_spawn_point(std::istream& stream);
     void load_minerai_info(std::istream& stream);
 
     std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
+    std::array<position, 2> spawn_point_;
 
     std::array<std::array<Rope*, TAILLE_MINE>, TAILLE_MINE> rope_;
     std::vector<Rope> ropes_;
     std::vector<position> ropes_pos_;
 
-    std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
     std::vector<minerai> ores_;
-
-    std::array<std::array<std::vector<nain*>, TAILLE_MINE>, TAILLE_MINE> nains_;
+    std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
 };
 
 #endif
