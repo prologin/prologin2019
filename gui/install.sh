@@ -30,7 +30,7 @@ cp "$build_dir/prologin2019.pck" $pwd/../www/static/godot/
 echo "The installer will install 2 files in /usr/bin, and 2 in /opt"
 sudo install "$gui" "$replay" /usr/bin
 sudo install "$build_dir/prologin2019.pck" /opt
-sudo install "$build_dir/cxx/champion.so" /opt/prologin2019-gui.so
+#sudo install "$build_dir/cxx/champion.so" /opt/prologin2019-gui.so
 
 echo "To uninstall:"
 echo "sudo rm /usr/bin/prologin2019-{gui,replay} /opt/prologin2019{.pck,-gui.so}"

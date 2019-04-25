@@ -31,7 +31,7 @@ func redraw():
 	_redraw_player(0, $Player1)
 	_redraw_player(1, $Player2)
 	_redraw_dwarf()
-	$Turn.text = "Tour : " + str(_turn) + "\n" + ["Aliens", "Bleu", "Rouge"][_type]
+	$Turn.text = "Tour : " + str(_turn) + "\n" + ["Nains", "Bleu", "Rouge"][_type]
 
 func set_turn(turn, type):
 	_turn = turn

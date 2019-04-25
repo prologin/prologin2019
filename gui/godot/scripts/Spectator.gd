@@ -133,15 +133,15 @@ func _process(delta):
 	$Waiting.set_visible(waiting)
 
 func _action(pos):
-	var agent_selected = $GameState.selected_agent
-	if agent_selected < constants.NB_AGENTS * my_internal_id or \
-			agent_selected >= constants.NB_AGENTS * (1 + my_internal_id):
+	var dwarf_selected = $GameState.selected_dwarf
+	if dwarf_selected < Constants.NB_NAINS * my_internal_id or \
+			dwarf_selected >= Constants.NB_NAINS * (1 + my_internal_id):
 		return
-	agent_selected -= constants.NB_AGENTS * my_internal_id
-	var offset = my_internal_id * constants.NB_AGENTS
-	var agent_pos = $GameState/TileMap.agents_pos[agent_selected + offset]
-	var dx = pos.x - agent_pos.x
-	var dy = pos.y - agent_pos.y
+	dwarf_selected -= Constants.NB_NAINS * my_internal_id
+	var offset = my_internal_id * constants.NB_NAINS
+	var dwarf_pos = $GameState/TileMap.dwarfs_pos[agent_selected + offset]
+	var dx = pos.x - dwarf_pos.x
+	var dy = pos.y - dwarf_pos.y
 	# One of them must be zero
 	if dx != 0 and dy != 0:
 		return
@@ -154,26 +154,27 @@ func _action(pos):
 		dir = 2
 	elif dy < 0:
 		dir = 3
-	var action_points = $GameState/Info.players[my_internal_id].action_points[agent_selected]
+	var action_points = $GameState/Info.players[my_internal_id].action_points[dwarf_selected]
+	var move_points = $GameState/Info.players[my_internal_id].move_points[dwarf_selected]
 	if abs(dx) == 1 or abs(dy) == 1:
-		if pos in $GameState/TileMap.agents_pos:
-			if action_points < constants.COUT_POUSSER:
+		if pos in $GameState/TileMap.dwarfs_pos:
+			if action_points < Constants.COUT_TIRER:
 				return
-			animating = $GameState.push(agent_selected, dir, my_internal_id)
+			animating = $GameState.pull(dwarf_selected, my_internal_id)
 			if animating:
-				socket.put_utf8_string("PUSH " + str(agent_selected) + " " + str(dir))
+				socket.put_utf8_string("PULL " + str(dwarf_selected))
 		else:
-			if action_points < constants.COUT_DEPLACEMENT:
+			if moving_points < Constants.COUT_DEPLACEMENT:
 				return
-			animating = $GameState.move(agent_selected, dir, my_internal_id)
+			animating = $GameState.move(dwarf_selected, dir, my_internal_id)
 			if animating:
-				socket.put_utf8_string("MOVE " + str(agent_selected) + " " + str(dir))
+				socket.put_utf8_string("MOVE " + str(dwarf_selected) + " " + str(dir))
 	else:
-		if action_points < constants.COUT_GLISSADE:
+		if action_points < Constants.COUT_MINER:
 			return
-		animating = $GameState.slide(agent_selected, dir, my_internal_id)
+		animating = $GameState.mine(dwarf_selected, dir, my_internal_id)
 		if animating:
-			socket.put_utf8_string("SLIDE " + str(agent_selected) + " " + str(dir))
+			socket.put_utf8_string("MINE " + str(dwarf_selected) + " " + str(dir))
 
 func _input(event):
 	if not my_turn:
