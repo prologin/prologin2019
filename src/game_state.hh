@@ -23,6 +23,7 @@ class GameState : public rules::GameState
         case_type get_cell_type(position pos) const;
         minerai get_minerai(position pos) const;
 
+        nain get_nain(int player_id, int nain_id) const;
         void reset_pm(int player_id);
         void reset_pa(int player_id);
 

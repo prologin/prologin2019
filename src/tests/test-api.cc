@@ -39,3 +39,13 @@ TEST_F(ApiTest, Api_info_minerai)
         EXPECT_EQ(minerai.resistance, 10);
     }
 }
+
+TEST_F(ApiTest, Api_nain_sur_case)
+{
+    for (auto& player : players)
+    {
+        int moi = player.api->moi();
+        position spawn = player.api->info_nain(moi, 0).pos;
+        EXPECT_EQ(player.api->nain_sur_case(spawn), moi);
+    }
+}

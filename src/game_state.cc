@@ -20,7 +20,10 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     }
     for (int player = 0; player < 2; ++player)
         for (int nain = 0; nain < NB_NAINS; ++nain)
+        {
             nains_[player][nain].pos = map_->get_spawn_point(player);
+            nains_[player][nain].vie = VIE_NAIN;
+        }
 }
 
 GameState::GameState(const GameState& st)
@@ -52,16 +55,24 @@ minerai GameState::get_minerai(position pos) const
     return map_->get_minerai(pos);
 }
 
+nain GameState::get_nain(int player_id, int nain_id) const
+{
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
+    return nains_[internal_player_id][nain_id];
+}
+
 void GameState::reset_pm(int player_id)
 {
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
     for (int nain = 0; nain < NB_NAINS; ++nain)
-        nains_[player_id][nain].pm = 0;
+        nains_[internal_player_id][nain].pm = NB_POINTS_DEPLACEMENT;
 }
 
 void GameState::reset_pa(int player_id)
 {
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
     for (int nain = 0; nain < NB_NAINS; ++nain)
-        nains_[player_id][nain].pa = 0;
+        nains_[internal_player_id][nain].pa = NB_POINTS_ACTION;
 }
 
 int GameState::get_score(int player_id) const
