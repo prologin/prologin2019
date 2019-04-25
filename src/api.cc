@@ -145,10 +145,9 @@ nain Api::info_nain(int id_joueur, int id_nain)
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
-minerai Api::info_minerrai(position pos)
+minerai Api::info_minerai(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_minerai(pos);
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
@@ -168,8 +167,10 @@ std::vector<action_hist> Api::historique()
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
 int Api::score(int id_joueur)
 {
-    // TODO
-    abort();
+    if (id_joueur == moi() || id_joueur == adversaire())
+        return game_state_->get_score(id_joueur);
+    else
+        return -1;
 }
 
 /// Renvoie votre numéro de joueur.
@@ -194,8 +195,7 @@ bool Api::annuler()
 /// Retourne le numéro du tour actuel.
 int Api::tour_actuel()
 {
-    // TODO
-    abort();
+    return game_state_->get_round();
 }
 
 

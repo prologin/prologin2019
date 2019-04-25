@@ -61,7 +61,7 @@ void Map::load_minerai_info(std::istream& stream)
         position pos = { l, c };
 
         std::string error;
-        if (std::find(seen.cbegin(), seen.cend(), pos) == seen.cend())
+        if (std::find(seen.cbegin(), seen.cend(), pos) != seen.cend())
             error = "already taken";
         if (!inside_map(pos))
             error = "outside of map";
@@ -127,7 +127,7 @@ const Rope* Map::get_rope(position pos) const
     return rope_[pos.ligne][pos.colonne];
 }
 
-minerai Map::get_minerrai(position pos) const
+minerai Map::get_minerai(position pos) const
 {
     if (!inside_map(pos))
         return { -1, -1 };

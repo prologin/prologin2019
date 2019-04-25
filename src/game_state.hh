@@ -21,20 +21,22 @@ class GameState : public rules::GameState
         int opponent(int player_id) const;
 
         case_type get_cell_type(position pos) const;
+        minerai get_minerai(position pos) const;
 
         void reset_pm(int player_id);
         void reset_pa(int player_id);
 
+        int get_score(int player_id) const;
         bool is_finished() const;
         int get_round() const;
         void increment_round();
-
 
     private:
         std::unordered_map<int, PlayerInfo> player_info_;
         std::array<int, 2> player_ids_;
 
         std::shared_ptr<Map> map_;
+        std::array<std::array<nain, NB_NAINS>, 2> nains_;
         int round_;
 };
 

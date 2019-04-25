@@ -35,7 +35,7 @@ public:
     case_type get_cell_type(position pos) const;
     std::vector<position> get_ropes() const;
     const Rope* get_rope(position pos) const;
-    minerai get_minerrai(position pos) const;
+    minerai get_minerai(position pos) const;
 
     void set_cell_type(position pos, case_type type);
     void add_rope(Rope& rope);

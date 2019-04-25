@@ -18,6 +18,9 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
             ++id;
         }
     }
+    for (int player = 0; player < 2; ++player)
+        for (int nain = 0; nain < NB_NAINS; ++nain)
+            nains_[player][nain].pos = map_->get_spawn_point(player);
 }
 
 GameState::GameState(const GameState& st)
@@ -26,6 +29,7 @@ GameState::GameState(const GameState& st)
     , player_info_(st.player_info_)
     , player_ids_(st.player_ids_)
     , round_(st.round_)
+    , nains_(st.nains_)
 {}
 
 rules::GameState* GameState::copy() const
@@ -43,12 +47,27 @@ case_type GameState::get_cell_type(position pos) const
     return map_->get_cell_type(pos);
 }
 
+minerai GameState::get_minerai(position pos) const
+{
+    return map_->get_minerai(pos);
+}
+
 void GameState::reset_pm(int player_id)
 {
+    for (int nain = 0; nain < NB_NAINS; ++nain)
+        nains_[player_id][nain].pm = 0;
 }
 
 void GameState::reset_pa(int player_id)
 {
+    for (int nain = 0; nain < NB_NAINS; ++nain)
+        nains_[player_id][nain].pa = 0;
+}
+
+int GameState::get_score(int player_id) const
+{
+    assert(player_info_.count(player_id) != 0);
+    return player_info_.at(player_id).get_score();
 }
 
 bool GameState::is_finished() const

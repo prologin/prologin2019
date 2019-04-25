@@ -45,7 +45,9 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 1 0
 1 30
-0)";
+1
+10 10 10 10
+)";
 
 static rules::Players_sptr make_players(int id_p1, int id_p2)
 {

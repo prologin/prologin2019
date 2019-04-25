@@ -254,7 +254,7 @@ function:
       - [id_joueur, int, "Numéro du joueur"]
       - [id_nain, int, "Numéro du nain (standard)"]
   -
-    fct_name: info_minerrai
+    fct_name: info_minerai
     fct_summary: Renvoie la description d'un minerai en fonction d'une position
                  donnée.
                  Si le minerai n'est pas présent sur la carte, ou si la

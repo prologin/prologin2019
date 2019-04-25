@@ -3,6 +3,8 @@
 
 #include "test-helpers.hh"
 
+// TODO add test for type_case
+
 TEST_F(ApiTest, Api_Moi)
 {
     for (auto& player : players)
@@ -25,5 +27,15 @@ TEST_F(ApiTest, Api_TourActuel)
         for (auto& player : players)
             EXPECT_EQ(round, player.api->tour_actuel());
         st->increment_round();
+    }
+}
+
+TEST_F(ApiTest, Api_info_minerai)
+{
+    for (auto& player : players)
+    {
+        minerai minerai = player.api->info_minerai({ 10, 10 });
+        EXPECT_EQ(minerai.rendement, 10);
+        EXPECT_EQ(minerai.resistance, 10);
     }
 }

@@ -349,9 +349,9 @@ extern "C" nain api_info_nain(int id_joueur, int id_nain)
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
-extern "C" minerai api_info_minerrai(position pos)
+extern "C" minerai api_info_minerai(position pos)
 {
-  return api->info_minerrai(pos);
+  return api->info_minerai(pos);
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
