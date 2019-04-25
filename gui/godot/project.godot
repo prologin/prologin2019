@@ -15,13 +15,20 @@ _global_script_class_icons={
 
 [application]
 
-config/name="godot"
-config/icon="res://icon.png"
+config/name="Prologin2019"
+run/main_scene="res://scenes/Main.tscn"
+config/icon="res://assets/grass.png"
 
 [autoload]
 
 Global="*res://scripts/Global.gd"
 Constants="*res://scripts/Constants.gd"
+
+[display]
+
+window/size/width=800
+window/size/height=860
+window/size/resizable=false
 
 [rendering]
 

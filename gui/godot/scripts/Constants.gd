@@ -1,22 +1,30 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Martin Huvelle
 
 # This file has been generated, you should not edit it
 
 extends Node
 
-const TAILLE_BANQUISE = 25
+const TAILLE_MINE = 31
 
 const NB_TOURS = 100
 
-const NB_POINTS_ACTION = 8
+const NB_POINTS_DEPLACEMENT = 5
+
+const NB_POINTS_ACTION = 6
+
+const VIE_NAIN = 10
+
+const NB_JOUEURS = 2
+
+const NB_NAINS = 6
 
 const COUT_DEPLACEMENT = 1
 
-const COUT_GLISSADE = 3
+const COUT_ESCALADER = 2
 
-const COUT_POUSSER = 5
+const COUT_MINER = 6
 
-const NB_AGENTS = 4
+const COUT_TIRER = 1
 
-const NB_TOURS_CAPTURE = 3
+const COUT_LACHER = 0

@@ -18,11 +18,11 @@ var _selected_dwarf = -1
 func _ready():
 	$Player1.set("custom_colors/font_color", Color(0, 0.5, 1, 1))
 	$Player2.set("custom_colors/font_color", Color(1, 0.5, 0, 1))
-	$Speed.text = "Vitesse : " + str(global.speed_factor)
+	$Speed.text = "Vitesse : " + str(Global.speed_factor)
 	$SpeedSlider.connect("value_changed", self, "_speed_slider")
 	redraw()
-	players[0].action_points.resize(constants.NB_DWARFS)
-	players[1].action_points.resize(constants.NB_DWARFS)
+	players[0].action_points.resize(Constants.NB_NAINS)
+	players[1].action_points.resize(Constants.NB_NAINS)
 
 func _redraw_player(id, label):
 	label.text = players[id].name + "\nScore : " + str(players[id].score)
@@ -36,14 +36,14 @@ func redraw():
 func set_turn(turn, type):
 	_turn = turn
 	_type = type
-	for dwarf_id in range(constants.NB_DWARFS):
+	for dwarf_id in range(Constants.NB_NAINS):
 		players[0].action_points[dwarf_id] = 0
 		players[1].action_points[dwarf_id] = 0
 		players[0].move_points[dwarf_id] = 0
 		players[1].move_points[dwarf_id] = 0
 		if type != 0:
-			players[type - 1].action_points[dwarf_id] = constants.NB_POINTS_ACTION
-			players[type - 1].move_points[dwarf_id] = constants.NB_POINTS_DEPLACEMENT
+			players[type - 1].action_points[dwarf_id] = Constants.NB_POINTS_ACTION
+			players[type - 1].move_points[dwarf_id] = Constants.NB_POINTS_DEPLACEMENT
 	if _turn_slider:
 		_turn_slider.value = turn
 	redraw()
@@ -66,15 +66,15 @@ func _redraw_dwarf():
 	if _selected_dwarf == -1:
 		$Dwarf.text = ""
 	else:
-		var id = _selected_dwarf % constants.NB_DWARFS
-		var player = (_selected_dwarf - id) / constants.NB_DWARFS
+		var id = _selected_dwarf % Constants.NB_NAINS
+		var player = (_selected_dwarf - id) / Constants.NB_NAINS
 		var points_ac = players[player].action_points[id]
 		var points_mv = players[player].move_points[id]
 		$Dwarf.text = "Joueur " + str(player + 1) + "\nNain " + str(id) + "\nPA: " + str(points_ac) +"\nPM: " + str(points_mv)
 
 func _speed_slider(value):
 	var v = 1 << int(value)
-	global.speed_factor = v
+	Global.speed_factor = v
 	$Speed.text = "Vitesse : " + str(v)
 
 func _process(delta):

@@ -23,8 +23,9 @@ func world_position(x, y):
 	return map_to_world(Vector2(x, y)) + get_cell_size() / 2
 
 func get_tile(x, y):
-	var tile = "Wall" if walls[x][y] else "BG"
-	return get_tileset().find_tile_by_name(tile)
+	#var tile = "Wall" if walls[x][y] else "BG"
+	#return get_tileset().find_tile_by_name(tile)
+	return true
 
 func spawn_dwarfs():
 	dwarfs = []
@@ -73,14 +74,14 @@ func set_map():
 			flags[1][x].append(_new_flag(1, Vector2(x, y)))
 
 func update_ores(turn):
-	for ore in ores:
+	#for ore in ores:
 		#fixme
 	return true
 
 func is_cell_free(pos):
-	if pos.x < 0 or pos.y < 0 or pos.x >= constants.TAILLE_MINE or pos.y >= constants.TAILLE_MINE:
+	if pos.x < 0 or pos.y < 0 or pos.x >= Constants.TAILLE_MINE or pos.y >= Constants.TAILLE_MINE:
 		return false
-	if agents_pos.has(pos):
+	if dwarfs_pos.has(pos):
 		return false
 	return true
 
@@ -89,16 +90,16 @@ func move_dwarf(i, dest):
 	dwarfs_pos[i] = dest
 	return true
 
-func teleport_agent(i, dest):
-	agents[i].stop()
-	if dest == agents_pos[i]:
+func teleport_dwarf(i, dest):
+	dwarfs[i].stop()
+	if dest == dwarfs_pos[i]:
 		return false
-	agents[i].position = world_position(dest.x, dest.y)
-	agents_pos[i] = dest
+	dwarfs[i].position = world_position(dest.x, dest.y)
+	dwarfs_pos[i] = dest
 	return true
 
-func init(walls_grids, agents_positions):
-	walls = walls_grids
-	agents_pos = agents_positions
+func init(walls_grids, dwarfs_positions):
+	#walls = walls_grids
+	dwarfs_pos = dwarfs_positions
 	set_map()
-	spawn_agents()
+	spawn_dwarfs()

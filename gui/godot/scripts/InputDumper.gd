@@ -69,9 +69,9 @@ func _quit():
 
 func _create_flags_maps():
 	"""Go through all the rounds to create maps of debug flags"""
-	flags.resize(constants.NB_TOURS * 3)
+	flags.resize(Constants.NB_TOURS * 3)
 	flags[0] = []
-	for i in range(constants.TAILLE_BANQUISE * constants.TAILLE_BANQUISE * 2):
+	for i in range(Constants.TAILLE_MINE * Constants.TAILLE_MINE * 2):
 		flags[0].append(0)
 	for index in range(1, flags.size()):
 		flags[index] = flags[index - 1].duplicate()
@@ -82,7 +82,7 @@ func _create_flags_maps():
 				for action in state.players[player_id].history:
 					if action['atype'] == 'ID_ACTION_DEBUG_AFFICHER_DRAPEAU':
 						var byte = {'AUCUN_DRAPEAU': 0, 'DRAPEAU_ROUGE': 1, 'DRAPEAU_VERT': 2, 'DRAPEAU_BLEU': 3}[action['drapeau']]
-						flags[index][(action['pos']['c'] * constants.TAILLE_BANQUISE + action['pos']['r']) * 2 + player_id] = byte
+						flags[index][(action['pos']['c'] * Constants.TAILLE_MINE + action['pos']['r']) * 2 + player_id] = byte
 
 func _ready():
 	dump = _parse_json()
@@ -122,12 +122,12 @@ func _finish_last_turn(warn_teleport = true):
 				if warn_teleport:
 					#print("Had to fix inconsistency in dump agent position")
 					pass
-	for x in range(constants.TAILLE_MINE):
-		for y in range(constants.TAILLE_MINE):
+	for x in range(Constants.TAILLE_MINE):
+		for y in range(Constants.TAILLE_MINE):
 			for player_id in range(2):
 				$GameState/TileMap.set_flag(player_id, Vector2(x, y), \
 						['AUCUN_DRAPEAU', 'DRAPEAU_ROUGE', 'DRAPEAU_VERT', 'DRAPEAU_BLEU'] \
-						[flags[turn_index][(x * constants.TAILLE_MINE + y) * 2 + player_id]])
+						[flags[turn_index][(x * Constants.TAILLE_MINE + y) * 2 + player_id]])
 
 func _update_ores():
 	#fixme
@@ -151,7 +151,7 @@ func _jump(index):
 
 func _continue():
 	_finish_last_turn()
-	if turn_index + 1 == constants.NB_TOURS * 3:
+	if turn_index + 1 == Constants.NB_TOURS * 3:
 		_end()
 		return
 	turn_index += 1
@@ -172,7 +172,7 @@ func _process(delta):
 			animating = $GameState.replay_action(actions_playing.pop_front(), turn_index % 3 - 1)
 	if not actions_playing and not animating and playing:
 		_continue()
-	if Input.is_action_just_pressed("ui_right") and turn_index < constants.NB_TOURS * 3:
+	if Input.is_action_just_pressed("ui_right") and turn_index < Constants.NB_TOURS * 3:
 		_jump(turn_index + 1)
 	elif Input.is_action_just_pressed("ui_left") and turn_index > 0:
 		_jump(turn_index - 1)

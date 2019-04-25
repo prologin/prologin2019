@@ -97,7 +97,7 @@ text = "flèche gauche/droite : passe au tour suivant/précédent (replay unique
 
 flèche haut/bas : augmente/diminue la vitesse du jeu
 
-espace : play/pause et termine le tour dans l'IGUI
+espace : play/pause et termine le tour dans le GUI
 
 molette souris : intéragit sur les barres d'interface (tour et vitesse)
 

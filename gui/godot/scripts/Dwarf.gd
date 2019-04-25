@@ -26,7 +26,6 @@ func unfocus():
 
 func move_to(to):
 	assert not moving
-	assert not pushed or dash
 	_moving_to = to
 	moving = true
 	var anim = "walk"
@@ -49,7 +48,7 @@ func _process(delta):
 		if diff == Vector2():
 			stop()
 		else:
-			var speed = (SPEED * 2.5 if _dash else SPEED) * global.speed_factor
+			var speed = SPEED * Global.speed_factor
 			if diff.length() > speed * delta:
 				position += (diff.normalized() * speed * delta)
 			else:
