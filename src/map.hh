@@ -20,6 +20,7 @@
 #include <array>
 #include <istream>
 #include <vector>
+#include <unordered_set>
 
 #include "constant.hh"
 #include "rope.hh"
@@ -41,10 +42,17 @@ public:
     void add_rope(Rope& rope);
     void extends_rope(position pos);
 
+    void add_nain(int nain_id, position pos, int player_id);
+    void move_nain(int nain_id, position from, position to);
+    const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
+
 private:
     void load_map_cells(std::istream& stream);
     void load_spawn_point(std::istream& stream);
     void load_minerai_info(std::istream& stream);
+
+    std::array<std::array<std::pair<int, std::unordered_set<int>>, TAILLE_MINE>,
+               TAILLE_MINE> nains_;
 
     std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
     std::array<position, 2> spawn_point_;

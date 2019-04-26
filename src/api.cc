@@ -15,8 +15,6 @@
 #include "api.hh"
 #include "actions.hh"
 
-#include "position.hh"
-
 // global used in interface.cc
 Api* api;
 
@@ -132,21 +130,10 @@ bool Api::corde_sur_case(position pos)
     abort();
 }
 
-#include <iostream>
-
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
 int Api::nain_sur_case(position pos)
 {
-    for (int n = 0; n < NB_NAINS; ++n)
-    {
-        nain nain = info_nain(moi(), n);
-        if (nain.pos == pos)
-            return moi();
-        nain = info_nain(adversaire(), n);
-        if (nain.pos == pos)
-            return adversaire();
-    }
-    return -1;
+    return game_state_->get_cell_ownership(pos);
 }
 
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas présent sur la carte, tous les membres de la structure ``nain`` renvoyée sont initialisés à -1.

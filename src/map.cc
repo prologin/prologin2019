@@ -94,7 +94,8 @@ Map::Map(std::istream& stream)
 }
 
 Map::Map(const Map& map)
-    : map_(map.map_)
+    : nains_(map.nains_)
+    , map_(map.map_)
     , rope_(map.rope_)
     , ropes_(map.ropes_)
     , ore_(map.ore_)
@@ -154,4 +155,27 @@ void Map::extends_rope(position pos)
     position bottom = rope->get_bottom();
     rope_[bottom.ligne][bottom.colonne] = rope;
     ropes_pos_.push_back(bottom);
+}
+
+void Map::add_nain(int nain_id, position pos, int player_id)
+{
+    if (nains_[pos.ligne][pos.colonne].second.empty())
+        nains_[pos.ligne][pos.colonne].first = player_id;
+    nains_[pos.ligne][pos.colonne].second.insert(nain_id);
+}
+
+void Map::move_nain(int nain_id, position from, position to)
+{
+    if (nains_[to.ligne][to.colonne].second.empty())
+        nains_[to.ligne][to.colonne].first = nains_[from.ligne][from.colonne].first;
+    nains_[from.ligne][from.colonne].second.erase(nain_id);
+
+    if (nains_[from.ligne][from.colonne].second.empty())
+        nains_[from.ligne][from.colonne].first = -1;
+    nains_[to.ligne][to.colonne].second.insert(nain_id);
+}
+
+const std::pair<int, std::unordered_set<int>>& Map::get_nains_at(position pos) const
+{
+    return nains_[pos.ligne][pos.colonne];
 }

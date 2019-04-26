@@ -49,4 +49,12 @@ inline position get_position_offset(const position pos, const direction dir)
     return pos + offset[dir];
 }
 
+inline position operator*(direction dir, int scalar)
+{
+    position pos = offset[dir];
+    pos.ligne *= scalar;
+    pos.colonne *= scalar;
+    return pos;
+}
+
 #endif
