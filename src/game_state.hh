@@ -30,6 +30,7 @@ class GameState : public rules::GameState
         int get_cell_ownership(position pos) const;
 
         void set_nain_position(int player_id, int nain_id, position dest);
+        void set_nain_accroche(int player_id, int nain_id, bool accroche);
         void check_gravity(position pos);
 
         void reduce_pm(int player_id, int nain_id, int pm);

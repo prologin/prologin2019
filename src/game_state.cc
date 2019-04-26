@@ -111,6 +111,12 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
                                nain_id, dest);
 }
 
+void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
+{
+    nains_[player_id][nain_id].accroche = accroche;
+    check_gravity(nains_[player_id][nain_id].pos);
+}
+
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
     if (nains_[player_id][nain_id].accroche)
