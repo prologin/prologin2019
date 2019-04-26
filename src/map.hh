@@ -34,7 +34,7 @@ public:
     position get_spawn_point(int player_id) const;
 
     case_type get_cell_type(position pos) const;
-    std::vector<position> get_ropes() const;
+    const std::vector<position>& get_ropes() const;
     const Rope* get_rope(position pos) const;
     minerai get_minerai(position pos) const;
 

@@ -116,7 +116,7 @@ case_type Map::get_cell_type(position pos) const
     return map_[pos.ligne][pos.colonne];
 }
 
-std::vector<position> Map::get_ropes() const
+const std::vector<position>& Map::get_ropes() const
 {
     return ropes_pos_;
 }

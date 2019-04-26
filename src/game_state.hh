@@ -39,6 +39,10 @@ class GameState : public rules::GameState
         void reset_pa(int player_id);
         void reduce_pv(int player_id, int nain_id, int damage);
 
+        const std::vector<position>& get_ropes() const;
+        const Rope* get_rope(position pos) const;
+        void add_rope(Rope& rope);
+
         int get_score(int player_id) const;
         bool is_finished() const;
         int get_round() const;

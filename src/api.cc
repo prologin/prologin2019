@@ -119,15 +119,13 @@ case_type Api::type_case(position pos)
 /// Renvoie la liste de toutes les corde dans la mine.
 std::vector<position> Api::liste_cordes()
 {
-    // TODO
-    abort();
+    return game_state_->get_ropes();
 }
 
 /// Indique si une corde se trouve sur une case donnée.
 bool Api::corde_sur_case(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_rope(pos) != nullptr;
 }
 
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
