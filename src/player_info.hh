@@ -4,6 +4,7 @@
 **
 ** Copyright (c) 2019 Association Prologin <info@prologin.org>
 ** Copyright (c) 2019 Antoine Martin
+** Copyright (c) 2019 Paul Guénézan
 **
 ** Prologin2018 is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +24,7 @@
 #include <vector>
 
 #include "constant.hh"
+#include "history.hh"
 
 class PlayerInfo
 {
@@ -37,8 +39,13 @@ public:
     const std::string& get_name() const;
     void set_name(const std::string& name);
 
+    const std::vector<internal_action>& get_internal_history() const;
+    void reset_internal_history();
+    void add_internal_action(internal_action action);
+
 private:
     rules::Player_sptr player_;
+    std::vector<internal_action> internal_hist_;
     int internal_id_;
 };
 

@@ -250,3 +250,31 @@ void GameState::increment_round()
 {
     ++round_;
 }
+
+const std::vector<internal_action>& GameState::get_internal_history(int player_id) const
+{
+    assert(player_info_.count(player_id) != 0);
+    return player_info_.at(player_id).get_internal_history();
+}
+
+const std::vector<action_hist> GameState::get_history(int player_id) const
+{
+    std::vector<internal_action> internal_hist = get_internal_history(player_id);
+    std::vector<action_hist> hist;
+    for (auto action : internal_hist)
+        if (!action.internal)
+            hist.push_back(action.action);
+    return hist;
+}
+
+void GameState::reset_internal_history(int player_id)
+{
+    assert(player_info_.count(player_id) != 0);
+    player_info_.at(player_id).reset_internal_history();
+}
+
+void GameState::add_to_internal_history(int player_id, internal_action action)
+{
+    assert(player_info_.count(player_id) != 0);
+    player_info_.at(player_id).add_internal_action(action);
+}

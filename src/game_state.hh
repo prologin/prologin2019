@@ -53,6 +53,11 @@ class GameState : public rules::GameState
 
         const auto& get_player_info() const { return player_info_; };
 
+        const std::vector<internal_action>& get_internal_history(int player_id) const;
+        const std::vector<action_hist> get_history(int player_id) const;
+        void reset_internal_history(int player_id);
+        void add_to_internal_history(int player_id, internal_action action);
+
     private:
         int get_internal_cell_ownership(position pos) const;
         int get_fall_distance(int player_id, int nain_id) const;

@@ -48,3 +48,18 @@ void PlayerInfo::set_name(const std::string& name)
 {
     player_->name = name;
 }
+
+const std::vector<internal_action>& PlayerInfo::get_internal_history() const
+{
+    return internal_hist_;
+}
+
+void PlayerInfo::reset_internal_history()
+{
+    internal_hist_.clear();
+}
+
+void PlayerInfo::add_internal_action(internal_action action)
+{
+    internal_hist_.push_back(action);
+}

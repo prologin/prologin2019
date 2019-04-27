@@ -35,4 +35,9 @@ void ActionDeplacer::apply_on(GameState* st) const
     st->reduce_pm(player_id_, id_nain_, 1); // TODO cout_deplacement
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_gravity(dest);
+
+    internal_action action;
+    action.internal = false;
+    action.action = { ACTION_DEPLACER, id_nain_, dir_, ERREUR_DIRECTION };
+    st->add_to_internal_history(player_id_, action);
 }

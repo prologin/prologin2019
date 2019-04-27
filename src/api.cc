@@ -172,8 +172,7 @@ int Api::cout_deplacement(int id_nain, direction dir)
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 std::vector<action_hist> Api::historique()
 {
-    // TODO
-    abort();
+    return game_state_->get_history(adversaire());
 }
 
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
@@ -199,8 +198,11 @@ int Api::adversaire()
 /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
 bool Api::annuler()
 {
-    // TODO
-    abort();
+    if (!game_state_->can_cancel())
+        return false;
+    actions_.cancel();
+    game_state_ = rules::cancel(game_state_);
+    return true;
 }
 
 /// Retourne le numéro du tour actuel.
