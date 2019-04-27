@@ -42,6 +42,8 @@ public:
     void start_of_round() override;
     void end_of_round() override;
 
+    void dump_state(std::ostream& out) override;
+
     GameState* get_game_state() const;
 
 protected:

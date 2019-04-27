@@ -9,12 +9,14 @@ int ActionDeplacer::check(const GameState* st) const
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
 
-    const nain& nain = st->get_nain(player_id_, id_nain_);
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    if (nain == nullptr)
+        return -1; // TODO le nain (standard) est mort
     
-    if (nain.pm < 1) // TODO cout_deplacement
+    if (nain->pm < 1) // TODO cout_deplacement
         return PM_INSUFFISANTS;
 
-    position dest = get_position_offset(nain.pos, dir_);
+    position dest = get_position_offset(nain->pos, dir_);
     if (!inside_map(dest))
         return HORS_LIMITES;
     if (st->get_cell_type(dest) != LIBRE)
@@ -28,8 +30,8 @@ int ActionDeplacer::check(const GameState* st) const
 
 void ActionDeplacer::apply_on(GameState* st) const
 {
-    const nain& nain = st->get_nain(player_id_, id_nain_);
-    position dest = get_position_offset(nain.pos, dir_);
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    position dest = get_position_offset(nain->pos, dir_);
     st->reduce_pm(player_id_, id_nain_, 1); // TODO cout_deplacement
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_gravity(dest);

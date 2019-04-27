@@ -128,16 +128,32 @@ const Rope* Map::get_rope(position pos) const
     return rope_[pos.ligne][pos.colonne];
 }
 
-minerai Map::get_minerai(position pos) const
+const minerai* Map::get_minerai(position pos) const
 {
     if (!inside_map(pos))
-        return { -1, -1 };
-    return *ore_[pos.ligne][pos.colonne];
+        return nullptr;
+    return ore_[pos.ligne][pos.colonne];
 }
 
 void Map::set_cell_type(position pos, case_type type)
 {
     map_[pos.ligne][pos.colonne] = type;
+}
+
+inline bool operator==(const minerai& a, const minerai& b)
+{
+    return a.resistance == b.resistance && a.rendement == b.rendement;
+}
+
+void Map::remove_minerai(position pos)
+{
+    std::remove(ores_.begin(), ores_.end(), *ore_[pos.ligne][pos.colonne]);
+    ore_[pos.ligne][pos.colonne] = nullptr;
+}
+
+void Map::set_minerai_resistance(position pos, int resistance)
+{
+    ore_[pos.ligne][pos.colonne]->resistance = resistance;
 }
 
 void Map::add_rope(Rope& rope)
@@ -173,6 +189,13 @@ void Map::move_nain(int nain_id, position from, position to)
     if (nains_[from.ligne][from.colonne].second.empty())
         nains_[from.ligne][from.colonne].first = -1;
     nains_[to.ligne][to.colonne].second.insert(nain_id);
+}
+
+void Map::remove_nain(int nain_id, position pos)
+{
+    nains_[pos.ligne][pos.colonne].second.erase(nain_id);
+    if (nains_[pos.ligne][pos.colonne].second.empty())
+        nains_[pos.ligne][pos.colonne].first = -1;
 }
 
 const std::pair<int, std::unordered_set<int>>& Map::get_nains_at(position pos) const

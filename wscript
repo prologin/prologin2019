@@ -20,6 +20,7 @@ def build(bld):
             src/action_poser_corde.cc
             src/action_tirer.cc
             src/api.cc
+            src/dumper.cc
             src/entry.cc
             src/game_state.cc
             src/interface.cc

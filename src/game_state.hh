@@ -3,6 +3,7 @@
 #ifndef GAME_STATE_HH
 #define GAME_STATE_HH
 
+#include <vector>
 #include <unordered_map>
 
 #include <rules/game-state.hh>
@@ -22,10 +23,11 @@ class GameState : public rules::GameState
         int internal_to_external_id(int internal_id) const;
 
         case_type get_cell_type(position pos) const;
-        minerai get_minerai(position pos) const;
+        const minerai* get_minerai(position pos) const;
         void set_cell_type(position pos, case_type type);
+        bool mine_minerai(position pos, int player_id, int nain_id);
 
-        nain get_nain(int player_id, int nain_id) const;
+        const nain* get_nain(int player_id, int nain_id) const;
         const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
         int get_cell_ownership(position pos) const;
 
@@ -48,6 +50,8 @@ class GameState : public rules::GameState
         int get_round() const;
         void increment_round();
 
+        const auto& get_player_info() const { return player_info_; };
+
     private:
         int get_internal_cell_ownership(position pos) const;
         int get_fall_distance(int player_id, int nain_id) const;
@@ -58,6 +62,7 @@ class GameState : public rules::GameState
 
         Map map_;
         std::array<std::array<nain, NB_NAINS>, 2> nains_;
+        std::vector<std::pair<int, int>> nains_respawn_;
         int round_;
 };
 

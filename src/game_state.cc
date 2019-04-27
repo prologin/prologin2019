@@ -37,7 +37,8 @@ GameState::GameState(const GameState& st)
     , player_ids_(st.player_ids_)
     , round_(st.round_)
     , nains_(st.nains_)
-{}
+    , nains_respawn_(st.nains_respawn_)
+{ }
 
 rules::GameState* GameState::copy() const
 {
@@ -62,7 +63,7 @@ case_type GameState::get_cell_type(position pos) const
     return map_.get_cell_type(pos);
 }
 
-minerai GameState::get_minerai(position pos) const
+const minerai* GameState::get_minerai(position pos) const
 {
     return map_.get_minerai(pos);
 }
@@ -72,10 +73,26 @@ void GameState::set_cell_type(position pos, case_type type)
     map_.set_cell_type(pos, type);
 }
 
-nain GameState::get_nain(int player_id, int nain_id) const
+bool GameState::mine_minerai(position pos, int player_id, int nain_id)
+{
+    const minerai* minerai = map_.get_minerai(pos);
+    if (minerai->resistance > 1)
+    {
+        map_.set_minerai_resistance(pos, minerai->resistance - 1);
+        return false;
+    }
+    nains_[player_id][nain_id].butin += map_.get_minerai(pos)->rendement;
+    map_.remove_minerai(pos);
+    return true;
+}
+
+const nain* GameState::get_nain(int player_id, int nain_id) const
 {
     int internal_player_id = player_info_.at(player_id).get_internal_id();
-    return nains_[internal_player_id][nain_id];
+    nain nain = nains_[internal_player_id][nain_id];
+    if (nain.vie <= 0)
+        return nullptr;
+    return &nains_[internal_player_id][nain_id];
 }
 
 const std::pair<int, std::unordered_set<int>>& GameState::get_nains_at(position pos) const
@@ -89,12 +106,12 @@ int GameState::get_internal_cell_ownership(position pos) const
     return nains.second.empty() ? -1 : nains.first;
 }
 
-
 int GameState::get_cell_ownership(position pos) const
 {
     int ownership = get_internal_cell_ownership(pos);
     if (ownership == -1)
         return -1;
+//    return ownership;
     return internal_to_external_id(ownership);
 }
 
@@ -185,8 +202,12 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage)
 {
     int internal_player_id = player_info_.at(player_id).get_internal_id();
     nains_[internal_player_id][nain_id].vie -= damage;
-    if (nains_[internal_player_id][nain_id].vie < 0)
-        nains_[internal_player_id][nain_id].vie = 0; // TODO death
+    if (nains_[internal_player_id][nain_id].vie <= 0)
+    {
+        nains_[internal_player_id][nain_id].vie = 0;
+        map_.remove_nain(nain_id, nains_[internal_player_id][nain_id].pos);
+        nains_respawn_.push_back({ player_id, nain_id });
+    }
 }
 
 const std::vector<position>& GameState::get_ropes() const

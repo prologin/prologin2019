@@ -11,8 +11,10 @@ int ActionPoserCorde::check(const GameState* st) const
     if (st->can_cancel())
         return PA_INSUFFISANTS; // TODO already do something
 
-    const nain& nain = st->get_nain(player_id_, id_nain_);
-    position dest = get_position_offset(nain.pos, dir_);
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    if (nain == nullptr)
+        return -1; // TODO le nain (standard) est mort
+    position dest = get_position_offset(nain->pos, dir_);
     if (!inside_map(dest))
         return HORS_LIMITES;
     if (st->get_rope(dest) != nullptr)
@@ -25,7 +27,7 @@ int ActionPoserCorde::check(const GameState* st) const
 
 void ActionPoserCorde::apply_on(GameState* st) const
 {
-    const nain& nain = st->get_nain(player_id_, id_nain_);
-    Rope rope(get_position_offset(nain.pos, dir_));
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    Rope rope(get_position_offset(nain->pos, dir_));
     st->add_rope(rope);
 }

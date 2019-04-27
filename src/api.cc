@@ -141,13 +141,19 @@ nain Api::info_nain(int id_joueur, int id_nain)
         return { { -1, -1 }, -1, -1, -1, -1, -1 };
     if (id_nain < 0 || id_nain >= NB_NAINS)
         return { { -1, -1 }, -1, -1, -1, -1, -1 };
-    return game_state_->get_nain(id_joueur, id_nain);
+    const nain *nain = game_state_->get_nain(id_joueur, id_nain);
+    if (nain == nullptr)
+        return { { -1, -1 }, -1, -1, -1, -1, -1 };
+    return *nain;
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
-    return game_state_->get_minerai(pos);
+    const minerai* minerai = game_state_->get_minerai(pos);
+    if (minerai == nullptr)
+        return { -1, -1 };
+    return *minerai;
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.

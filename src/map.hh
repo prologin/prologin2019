@@ -36,14 +36,17 @@ public:
     case_type get_cell_type(position pos) const;
     const std::vector<position>& get_ropes() const;
     const Rope* get_rope(position pos) const;
-    minerai get_minerai(position pos) const;
+    const minerai* get_minerai(position pos) const;
 
     void set_cell_type(position pos, case_type type);
+    void remove_minerai(position pos);
+    void set_minerai_resistance(position pos, int resistance);
     void add_rope(Rope& rope);
     void extends_rope(position pos);
 
     void add_nain(int nain_id, position pos, int player_id);
     void move_nain(int nain_id, position from, position to);
+    void remove_nain(int nain_id, position pos);
     const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
 
 private:
