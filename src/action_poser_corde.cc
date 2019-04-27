@@ -13,7 +13,7 @@ int ActionPoserCorde::check(const GameState* st) const
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
-        return -1; // TODO le nain (standard) est mort
+        return NAIN_MORT;
     position dest = get_position_offset(nain->pos, dir_);
     if (!inside_map(dest))
         return HORS_LIMITES;

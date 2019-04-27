@@ -1,5 +1,7 @@
 #include "game_state.hh"
 
+#include <cmath>
+
 #include "position.hh"
 
 GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
@@ -169,8 +171,10 @@ void GameState::check_gravity(position pos)
         int fall = get_fall_distance(nains.first, nain_id);
         if (fall == 0)
             continue;
-        // TODO compute fall damage
         set_nain_position_internal(nains.first, nain_id, pos + (BAS * fall));
+        if (fall < 4)
+            return;
+        reduce_pv(nains.first, nain_id, std::pow(2, 3 - fall));
     }
     position up = get_position_offset(pos, HAUT);
     if (inside_map(up))
