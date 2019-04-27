@@ -45,6 +45,9 @@ void Map::load_spawn_point(std::istream& stream)
         int l, c;
         stream >> l >> c;
         spawn_point_[player] = { l, c };
+        position down = get_position_offset(spawn_point_[player], BAS);
+        if (inside_map(down))
+            map_[l][c] = OBSIDIENNE;
     }
 }
 
