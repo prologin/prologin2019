@@ -13,8 +13,10 @@ class Rope
         Rope(position pos);
 
         void extends();
+        void merge_up(const Rope *rope);
 
         std::vector<std::pair<int, int>> get_nains() const;
         position get_anchor() const;
         position get_bottom() const;
+        const std::vector<position>& get_positions() const;
 };

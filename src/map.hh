@@ -54,6 +54,9 @@ private:
     void load_map_cells(std::istream& stream);
     void load_spawn_point(std::istream& stream);
     void load_minerai_info(std::istream& stream);
+    void load_rope_info(std::istream& stream);
+
+    void check_gravity(const Rope *rope);
 
     std::array<std::array<std::pair<int, std::unordered_set<int>>, TAILLE_MINE>,
                TAILLE_MINE> nains_;

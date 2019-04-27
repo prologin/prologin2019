@@ -1,4 +1,3 @@
-// TODO add rope to the map format
 #include "map.hh"
 
 #include <algorithm>
@@ -89,6 +88,31 @@ void Map::load_minerai_info(std::istream& stream)
     }
 }
 
+void Map::load_rope_info(std::istream& stream)
+{
+    int nb_ropes;
+    stream >> nb_ropes;
+    for (int i = 0; i < nb_ropes; ++i)
+    {
+        int l, c;
+        stream >> l >> c;
+        position pos = { l, c };
+
+        std::string error;
+        if (!inside_map(pos))
+            error = "outside of map";
+        if (map_[l][c] != LIBRE)
+            error = "not in libre";
+
+        if (error != "")
+            FATAL("invalid position (%d;%d) for minerai is %s", l, c,
+                  error.c_str());
+        Rope rope(pos);
+        add_rope(rope);
+        check_gravity(&rope);
+    }
+}
+
 Map::Map(std::istream& stream)
 {
     INFO("Loading map");
@@ -96,6 +120,7 @@ Map::Map(std::istream& stream)
     load_map_cells(stream);
     load_spawn_point(stream);
     load_minerai_info(stream);
+    load_rope_info(stream);
 
     for (int x = 0; x < TAILLE_MINE; ++x)
         for (int y = 0; y < TAILLE_MINE; ++y)
@@ -111,7 +136,7 @@ Map::Map(const Map& map)
     , ropes_pos_(map.ropes_pos_)
     , ore_(map.ore_)
     , ores_(map.ores_)
-    , ores_pos_(map.ropes_pos_)
+    , ores_pos_(map.ores_pos_)
 {
 }
 
@@ -184,6 +209,8 @@ void Map::add_rope(Rope& rope)
 void Map::extends_rope(position pos)
 {
     Rope* rope = rope_[pos.ligne][pos.colonne];
+    if (!inside_map(get_position_offset(rope->get_bottom(), BAS)))
+        return;
     rope->extends();
     position bottom = rope->get_bottom();
     rope_[bottom.ligne][bottom.colonne] = rope;
@@ -218,4 +245,26 @@ void Map::remove_nain(int nain_id, position pos)
 const std::pair<int, std::unordered_set<int>>& Map::get_nains_at(position pos) const
 {
     return nains_[pos.ligne][pos.colonne];
+}
+
+inline bool operator==(const Rope& a, const Rope& b)
+{
+    return a.get_anchor() == b.get_anchor() && a.get_bottom() == b.get_bottom();
+}
+
+void Map::check_gravity(const Rope *rope)
+{
+    position dest = get_position_offset(rope->get_bottom(), BAS);
+    if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
+        return;
+    if (get_rope(dest) == nullptr)
+    {
+        extends_rope(rope->get_bottom());
+        check_gravity(get_rope(dest));
+        return;
+    }
+    rope_[dest.ligne][dest.colonne]->merge_up(rope);
+    for (position pos : rope->get_positions())
+        rope_[pos.ligne][pos.colonne] = rope_[dest.ligne][dest.colonne];
+    std::remove(ropes_.begin(), ropes_.end(), *rope);
 }
