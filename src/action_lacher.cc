@@ -7,7 +7,7 @@ int ActionLacher::check(const GameState* st) const
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
-        return -1; // TODO le nain (standard) est mort
+        return NAIN_MORT;
     if (!nain->accroche)
         return -1; // TODO error le nain (standard) n'est pas accroche
 

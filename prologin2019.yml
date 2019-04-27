@@ -273,7 +273,7 @@ function:
   -
     fct_name: liste_minerais
     fct_summary: Renvoie la liste de touts les minerais dans la mine.
-    fct_ret_type: minerai array
+    fct_ret_type: position array
     fct_arg: []
   -
     fct_name: cout_deplacement

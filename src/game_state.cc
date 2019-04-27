@@ -68,6 +68,11 @@ const minerai* GameState::get_minerai(position pos) const
     return map_.get_minerai(pos);
 }
 
+const std::vector<position>& GameState::get_ores() const
+{
+    return map_.get_ores();
+}
+
 void GameState::set_cell_type(position pos, case_type type)
 {
     map_.set_cell_type(pos, type);

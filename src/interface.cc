@@ -357,7 +357,7 @@ extern "C" minerai api_info_minerai(position pos)
 }
 
 /// Renvoie la liste de touts les minerais dans la mine.
-extern "C" std::vector<minerai> api_liste_minerais()
+extern "C" std::vector<position> api_liste_minerais()
 {
   return api->liste_minerais();
 }

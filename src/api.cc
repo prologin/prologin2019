@@ -157,10 +157,9 @@ minerai Api::info_minerai(position pos)
 }
 
 /// Renvoie la liste de touts les minerais dans la mine.
-std::vector<minerai> Api::liste_minerais()
+std::vector<position> Api::liste_minerais()
 {
-    // TODO
-    abort();
+    return game_state_->get_ores();
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.

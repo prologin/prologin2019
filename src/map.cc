@@ -54,6 +54,7 @@ void Map::load_minerai_info(std::istream& stream)
     int nb_minerai;
     stream >> nb_minerai;
     ores_.resize(nb_minerai);
+    ores_pos_.resize(nb_minerai);
     for (int minerai = 0; minerai < nb_minerai; ++minerai)
     {
         int l, c;
@@ -79,6 +80,7 @@ void Map::load_minerai_info(std::istream& stream)
             FATAL("resistance must be a strictly positif int");
 
         ores_[minerai] = { resistance, rendement };
+        ores_pos_[minerai] = { l, c };
         ore_[l][c] = &ores_[minerai];
         seen.push_back(pos);
     }
@@ -135,6 +137,11 @@ const minerai* Map::get_minerai(position pos) const
     return ore_[pos.ligne][pos.colonne];
 }
 
+const std::vector<position>& Map::get_ores() const
+{
+    return ores_pos_;
+}
+
 void Map::set_cell_type(position pos, case_type type)
 {
     map_[pos.ligne][pos.colonne] = type;
@@ -148,6 +155,7 @@ inline bool operator==(const minerai& a, const minerai& b)
 void Map::remove_minerai(position pos)
 {
     std::remove(ores_.begin(), ores_.end(), *ore_[pos.ligne][pos.colonne]);
+    std::remove(ores_pos_.begin(), ores_pos_.end(), pos);
     ore_[pos.ligne][pos.colonne] = nullptr;
 }
 

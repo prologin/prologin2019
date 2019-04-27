@@ -1,3 +1,4 @@
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -8,8 +9,6 @@
 #include "game_state.hh"
 #include "position.hh"
 #include "rules.hh"
-
-constexpr auto COMMA = ", ";
 
 /// Decodes a UTF-8 string to a list of 32 bit unicode codepoints. Ignores
 /// erroneous characters.
@@ -114,99 +113,73 @@ static std::ostream& operator<<(std::ostream& ss, const position& pos)
     return ss;
 }
 
-static std::ostream& operator<<(std::ostream& ss, action_id action_type)
+template <typename T>
+static void dump_vector(std::vector<T> vector, std::ostream& ss, std::function<void(std::ostream&, T)> func)
 {
-    ss << '"';
-    switch (action_type)
+    bool is_first = true;
+    ss << "[";
+    for (T elem : vector)
     {
-    case ID_ACTION_DEPLACER:
-        ss << "ID_ACTION_DEPLACER";
-        break;
-    case ID_ACTION_LACHER:
-        ss << "ID_ACTION_LACHER";
-        break;
-    case ID_ACTION_MINER:
-        ss << "ID_ACTION_MINER";
-        break;
-    case ID_ACTION_TIRER:
-        ss << "ID_ACTION_TIRER";
-        break;
-    case ID_ACTION_POSER_CORDE:
-        ss << "ID_ACTION_POSER_CORDE";
-        break;
-    case ID_ACTION_DEBUG_AFFICHER_DRAPEAU:
-        ss << "ID_ACTION_DEBUG_AFFICHER_DRAPEAU";
-        break;
+        if (!is_first)
+            ss << ", ";
+        func(ss, elem);
+        is_first = false;
     }
-    ss << '"';
-    return ss;
+    ss << "]";
 }
 
 static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
 {
-    auto sep = "";
-    ss << '[';
-    for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
-    {
-        ss << sep;
-        sep = COMMA;
-
-        const nain* nain = st.get_nain(player_id, nain_id);
-        ss << '{'
-           << "\"id_nain\": " << nain_id << ", "
-           << "\"pos\": " << nain->pos << ", "
-           << "\"vie\": " << nain->vie << ", "
-           << "\"pa\": " << nain->pa << ", "
-           << "\"pm\": " << nain->pm << ", "
-           << "\"accroche\": " << nain->accroche << ", "
-           << "\"butin\": " << nain->butin
-           << '}';
-    }
-    ss << ']';
+    std::vector<std::pair<const nain*, int>> nains;
+    for (int nain_id = 0; nain_id < NB_NAINS; ++nain_id)
+        nains.push_back({ st.get_nain(player_id, nain_id), nain_id });
+    dump_vector<std::pair<const nain*, int>>(nains, ss, [](auto& ss, auto nain)
+        {
+            ss << "{\"id_nain\": " << nain.second << ", ";
+            ss << "\"pos\": " << nain.first->pos << ", ";
+            ss << "\"vie\": " << nain.first->vie << ", ";
+            ss << "\"pa\": " << nain.first->pa << ", ";
+            ss << "\"pm\": " << nain.first->pm << ", ";
+            ss << "\"accroche\": " << nain.first->accroche << ", ";
+            ss << "\"butin\": " << nain.first->butin << "}";
+        });
 }
 
 static void dump_players(std::ostream& ss, const GameState& st)
 {
     const auto& players = st.get_player_info();
-
-    auto sep = "";
-    ss << "{";
-    for (const auto& player_info : players)
-    {
-        ss << sep;
-        sep = COMMA;
-
-        int player_id = player_info.first;
-        const auto& player = player_info.second;
-        ss << "\"" << player_id << "\": {"
-           << "\"name\": ";
-        dump_string(ss, player.get_name());
-        ss << ", \"score\": " << player.get_score();
-
-        ss << ", \"nains\": ";
-        dump_nains(ss, st, player_id);
-
-        ss << "}";
-    }
-    ss << "}";
+    std::vector<std::pair<int, PlayerInfo>> players_vec;
+    for (auto player : players)
+        players_vec.push_back(player);
+    dump_vector<std::pair<int, PlayerInfo>>(players_vec, ss, [&](auto& ss, auto player)
+        {
+            ss << "{ \"id\": " << player.first << ", \"name\": ";
+            dump_string(ss, player.second.get_name());
+            ss << ", \"score\": " << player.second.get_score();
+            ss << ", \"nains\": ";
+            dump_nains(ss, st, player.first);
+            ss << "}";
+        });
 }
 
 static void dump_map(std::ostream& ss, const GameState& st)
 {
-    ss << "{"
-       << "\"cells\": [";
+    ss << "{\"cells\": ";
+    std::vector<case_type> cells;
     for (int l = 0; l < TAILLE_MINE; l++)
-    {
         for (int c = 0; c < TAILLE_MINE; c++)
+            cells.push_back(st.get_cell_type({ l, c }));
+    dump_vector<case_type>(cells, ss, [](auto& ss, case_type cell) { ss << cell; });
+    ss << ", \"ores\": ";
+    dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos)
         {
-            position pos{l, c};
-            ss << st.get_cell_type(pos);
-            if (!(l == TAILLE_MINE - 1 && c == TAILLE_MINE - 1))
-                ss << ", ";
-        }
-    }
-
-    ss << "]";
+            const minerai *ore = st.get_minerai(pos);
+            ss << "{ \"pos\": " << pos;
+            ss << ", \"resistance\": " << ore->resistance;
+            ss << ", \"rendement\": " << ore->rendement << "}";
+        });
+    ss << ", \"ropes\": ";
+    dump_vector<position>(st.get_ropes(), ss, [](auto& ss, position pos) { ss << pos; });
     ss << "}";
 }
 
@@ -214,13 +187,10 @@ static void dump_stream(std::ostream& ss, const GameState& st)
 {
     ss << "{";
     ss << "\"round\": [" << st.get_round() << ", " << NB_TOURS << "] ";
-
     ss << ", \"players\": ";
     dump_players(ss, st);
-
     ss << ", \"map\": ";
     dump_map(ss, st);
-
     ss << "}\n";
 }
 

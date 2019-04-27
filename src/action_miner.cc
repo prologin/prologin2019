@@ -11,7 +11,7 @@ int ActionMiner::check(const GameState* st) const
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
-        return -1; // TODO le nain (standard) est mort
+        return NAIN_MORT;
     position dest = get_position_offset(nain->pos, dir_);
     if (!inside_map(dest))
         return HORS_LIMITES;
@@ -21,7 +21,7 @@ int ActionMiner::check(const GameState* st) const
 
     const auto& nains = st->get_nains_at(dest);
     if (type == LIBRE && nains.second.empty())
-        return -1; // TODO pas de nains a taper
+        return PAS_DE_NAIN;
 
     if (nain->pa < COUT_MINER)
         return PA_INSUFFISANTS;
@@ -38,7 +38,7 @@ void ActionMiner::apply_on(GameState* st) const
     {
         const auto& nains = st->get_nains_at(dest);
         for (int nain_id : nains.second)
-            st->reduce_pv(nains.first, nain_id, 3); // TODO add constant DEGAT_PIOCHE
+            st->reduce_pv(nains.first, nain_id, DEGAT_PIOCHE);
         return;
     }
     const minerai *minerai = st->get_minerai(dest);

@@ -37,6 +37,7 @@ public:
     const std::vector<position>& get_ropes() const;
     const Rope* get_rope(position pos) const;
     const minerai* get_minerai(position pos) const;
+    const std::vector<position>& get_ores() const;
 
     void set_cell_type(position pos, case_type type);
     void remove_minerai(position pos);
@@ -66,6 +67,7 @@ private:
 
     std::vector<minerai> ores_;
     std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
+    std::vector<position> ores_pos_;
 };
 
 #endif

@@ -87,7 +87,7 @@ public:
     minerai info_minerai(position pos);
 
     /// Renvoie la liste de touts les minerais dans la mine.
-    std::vector<minerai> liste_minerais();
+    std::vector<position> liste_minerais();
 
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
     int cout_deplacement(int id_nain, direction dir);

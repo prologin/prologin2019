@@ -24,6 +24,7 @@ class GameState : public rules::GameState
 
         case_type get_cell_type(position pos) const;
         const minerai* get_minerai(position pos) const;
+        const std::vector<position>& get_ores() const;
         void set_cell_type(position pos, case_type type);
         bool mine_minerai(position pos, int player_id, int nain_id);
 
