@@ -44,6 +44,8 @@ public:
     void set_minerai_resistance(position pos, int resistance);
     void add_rope(Rope& rope);
     void extends_rope(position pos);
+    void add_nain_to_rope(position pos, int player_id, int nain_id);
+    void remove_nain_from_rope(position pos, int player_id, int nain_id);
 
     void add_nain(int nain_id, position pos, int player_id);
     void move_nain(int nain_id, position from, position to);

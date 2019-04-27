@@ -1,5 +1,7 @@
 #include "rope.hh"
 
+#include <algorithm>
+
 #include "position.hh"
 
 Rope::Rope(position pos)
@@ -20,6 +22,15 @@ void Rope::merge_up(const Rope *rope)
 {
     for (auto pos = rope->get_positions().cbegin(); pos != rope->get_positions().cend(); ++pos)
         pos_.insert(pos_.begin(), *pos);
+}
+
+void Rope::remove_nain(int player_id, int nain_id)
+{
+    std::remove(nains_.begin(), nains_.end(), std::make_pair(player_id, nain_id));
+}
+void Rope::add_nain(int player_id, int nain_id)
+{
+    nains_.push_back({ player_id, nain_id });
 }
 
 position Rope::get_anchor() const

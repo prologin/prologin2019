@@ -217,6 +217,16 @@ void Map::extends_rope(position pos)
     ropes_pos_.push_back(bottom);
 }
 
+void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
+{
+    rope_[pos.ligne][pos.colonne]->add_nain(player_id, nain_id);
+}
+
+void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
+{
+    rope_[pos.ligne][pos.colonne]->remove_nain(player_id, nain_id);
+}
+
 void Map::add_nain(int nain_id, position pos, int player_id)
 {
     if (nains_[pos.ligne][pos.colonne].second.empty())

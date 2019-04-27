@@ -31,6 +31,8 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
                                      NB_POINTS_DEPLACEMENT, NB_POINTS_ACTION,
                                      false, 0 };
             map_.add_nain(nain, nains_[player][nain].pos, player);
+            if (map_.get_rope(map_.get_spawn_point(player)) != nullptr)
+                map_.add_nain_to_rope(map_.get_spawn_point(player), player, nain);
         }
         check_gravity(map_.get_spawn_point(player));
     }
@@ -128,8 +130,12 @@ int GameState::get_cell_ownership(position pos) const
 void GameState::set_nain_position_internal(int player_id, int nain_id, position dest)
 {
     position from = nains_[player_id][nain_id].pos;
+    if (map_.get_rope(from) != nullptr)
+        map_.remove_nain_from_rope(from, player_id, nain_id);
     nains_[player_id][nain_id].pos = dest;
     map_.move_nain(nain_id, from, dest);
+    if (map_.get_rope(dest) != nullptr)
+        map_.add_nain_to_rope(dest, player_id, nain_id);
     if (map_.get_spawn_point(player_id) == dest)
     {
         increase_score(player_id, nains_[player_id][nain_id].butin);
@@ -239,6 +245,8 @@ void GameState::respawn(int player_id)
                                                NB_POINTS_ACTION, false, 0 };
             map_.add_nain(nain.second, nains_[player_id][nain.second].pos,
                           player_id);
+            if (map_.get_rope(map_.get_spawn_point(player_id)) != nullptr)
+                map_.add_nain_to_rope(map_.get_spawn_point(player_id), player_id, nain.second);
             spawn = true;
         }
     if (spawn)

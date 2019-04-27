@@ -31,8 +31,10 @@ class GameState : public rules::GameState
         const nain* get_nain(int player_id, int nain_id) const;
         const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
         int get_cell_ownership(position pos) const;
+        int get_internal_cell_ownership(position pos) const;
 
         void set_nain_position(int player_id, int nain_id, position dest);
+        void set_nain_position_internal(int player_id, int nain_id, position dest);
         void set_nain_accroche(int player_id, int nain_id, bool accroche);
         void check_gravity(position pos);
 
@@ -60,9 +62,7 @@ class GameState : public rules::GameState
         void add_to_internal_history(int player_id, internal_action action);
 
     private:
-        int get_internal_cell_ownership(position pos) const;
         int get_fall_distance(int player_id, int nain_id) const;
-        void set_nain_position_internal(int player_id, int nain_id, position dest);
         void increase_score(int player_id, int delta);
 
         std::unordered_map<int, PlayerInfo> player_info_;

@@ -14,8 +14,11 @@ class Rope
 
         void extends();
         void merge_up(const Rope *rope);
+        void remove_nain(int player_id, int nain_id);
+        void add_nain(int player_id, int nain_id);
 
         std::vector<std::pair<int, int>> get_nains() const;
+
         position get_anchor() const;
         position get_bottom() const;
         const std::vector<position>& get_positions() const;
