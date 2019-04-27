@@ -93,16 +93,22 @@ Map::Map(std::istream& stream)
     load_map_cells(stream);
     load_spawn_point(stream);
     load_minerai_info(stream);
+
+    for (int x = 0; x < TAILLE_MINE; ++x)
+        for (int y = 0; y < TAILLE_MINE; ++y)
+            nains_[y][x] = { -1, std::unordered_set<int>() };
 }
 
 Map::Map(const Map& map)
     : nains_(map.nains_)
     , map_(map.map_)
+    , spawn_point_(map.spawn_point_)
     , rope_(map.rope_)
     , ropes_(map.ropes_)
+    , ropes_pos_(map.ropes_pos_)
     , ore_(map.ore_)
     , ores_(map.ores_)
-    , spawn_point_(map.spawn_point_)
+    , ores_pos_(map.ropes_pos_)
 {
 }
 

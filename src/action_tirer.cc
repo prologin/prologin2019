@@ -1,6 +1,6 @@
 #include "actions.hh"
 
-int ActionTirer::check(const GameState* st) const
+int ActionTirer::check(const GameState* /* st */) const
 {
     // FIXME
     return 0;

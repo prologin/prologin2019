@@ -65,8 +65,8 @@ private:
     std::vector<Rope> ropes_;
     std::vector<position> ropes_pos_;
 
-    std::vector<minerai> ores_;
     std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
+    std::vector<minerai> ores_;
     std::vector<position> ores_pos_;
 };
 

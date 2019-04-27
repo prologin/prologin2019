@@ -109,7 +109,7 @@ static void dump_string(std::ostream& ss, const std::string& s)
 
 static std::ostream& operator<<(std::ostream& ss, const position& pos)
 {
-    ss << "{\"r\": " << pos.ligne << ", \"c\":" << pos.colonne << "}";
+    ss << "{\"l\": " << pos.ligne << ", \"c\":" << pos.colonne << "}";
     return ss;
 }
 
@@ -126,6 +126,26 @@ static void dump_vector(std::vector<T> vector, std::ostream& ss, std::function<v
         is_first = false;
     }
     ss << "]";
+}
+
+static void dump_history(std::ostream& ss, const GameState& st, int player_id)
+{
+    dump_vector<internal_action>(st.get_internal_history(player_id), ss, [](auto& ss, auto action)
+        {
+            if (action.internal)
+            {
+                ss << "{\"action\": " << -1;
+                ss << ", \"drapeau\": " << action.debug_flag.ftype;
+                ss << ", \"pos\": " << action.debug_flag.pos << "}";
+            }
+            else
+            {
+                ss << "{\"action\": " << action.action.atype;
+                ss << ", \"id_nain\": " << action.action.id_nain;
+                ss << ", \"dir\": " << action.action.dir;
+                ss << ", \"sens\": " << action.action.sens << "}";
+            }
+        });
 }
 
 static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
@@ -158,19 +178,21 @@ static void dump_players(std::ostream& ss, const GameState& st)
             ss << ", \"score\": " << player.second.get_score();
             ss << ", \"nains\": ";
             dump_nains(ss, st, player.first);
+            ss << ", \"historique\": ";
+            dump_history(ss, st, player.first);
             ss << "}";
         });
 }
 
 static void dump_map(std::ostream& ss, const GameState& st)
 {
-    ss << "{\"cells\": ";
+    ss << "{\"cases\": ";
     std::vector<case_type> cells;
     for (int l = 0; l < TAILLE_MINE; l++)
         for (int c = 0; c < TAILLE_MINE; c++)
             cells.push_back(st.get_cell_type({ l, c }));
     dump_vector<case_type>(cells, ss, [](auto& ss, case_type cell) { ss << cell; });
-    ss << ", \"ores\": ";
+    ss << ", \"minerais\": ";
     dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos)
         {
             const minerai *ore = st.get_minerai(pos);
@@ -178,7 +200,7 @@ static void dump_map(std::ostream& ss, const GameState& st)
             ss << ", \"resistance\": " << ore->resistance;
             ss << ", \"rendement\": " << ore->rendement << "}";
         });
-    ss << ", \"ropes\": ";
+    ss << ", \"cordes\": ";
     dump_vector<position>(st.get_ropes(), ss, [](auto& ss, position pos) { ss << pos; });
     ss << "}";
 }
@@ -186,10 +208,10 @@ static void dump_map(std::ostream& ss, const GameState& st)
 static void dump_stream(std::ostream& ss, const GameState& st)
 {
     ss << "{";
-    ss << "\"round\": [" << st.get_round() << ", " << NB_TOURS << "] ";
-    ss << ", \"players\": ";
+    ss << "\"tour\": [" << st.get_round() << ", " << NB_TOURS << "] ";
+    ss << ", \"joueurs\": ";
     dump_players(ss, st);
-    ss << ", \"map\": ";
+    ss << ", \"carte\": ";
     dump_map(ss, st);
     ss << "}\n";
 }

@@ -32,12 +32,12 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
 
 GameState::GameState(const GameState& st)
     : rules::GameState(st)
-    , map_(st.map_)
     , player_info_(st.player_info_)
     , player_ids_(st.player_ids_)
-    , round_(st.round_)
+    , map_(st.map_)
     , nains_(st.nains_)
     , nains_respawn_(st.nains_respawn_)
+    , round_(st.round_)
 { }
 
 rules::GameState* GameState::copy() const
@@ -141,7 +141,7 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
-    if (nains_[player_id][nain_id].accroche)
+    if (player_id == -1 || nains_[player_id][nain_id].accroche)
         return 0;
     position pos = nains_[player_id][nain_id].pos;
     int fall = 0;
