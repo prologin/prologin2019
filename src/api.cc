@@ -156,6 +156,13 @@ minerai Api::info_minerai(position pos)
     return *minerai;
 }
 
+/// Renvoie la liste de touts les minerais dans la mine.
+std::vector<minerai> Api::liste_minerais()
+{
+    // TODO
+    abort();
+}
+
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
 int Api::cout_deplacement(int id_nain, direction dir)
 {

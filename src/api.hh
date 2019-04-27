@@ -86,6 +86,9 @@ public:
     /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
     minerai info_minerai(position pos);
 
+    /// Renvoie la liste de touts les minerais dans la mine.
+    std::vector<minerai> liste_minerais();
+
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
     int cout_deplacement(int id_nain, direction dir);
 

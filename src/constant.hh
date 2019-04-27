@@ -36,6 +36,9 @@
 /// Nombre de nains (standard) par joueur.
 # define NB_NAINS                  6
 
+/// Dégât infligé par un coup de pioche à un nain (standard).
+# define DEGAT_PIOCHE              3
+
 /// Nombre de points de déplacement pour qu'un nain (standard) se déplace d'une case.
 # define COUT_DEPLACEMENT          1
 
@@ -98,6 +101,8 @@ typedef enum erreur {
   ID_NAIN_INVALIDE, /* <- Le nain (standard) spécifié n'existe pas. */
   OBSTACLE_MUR, /* <- La position spécifiée est un mur. */
   OBSTACLE_NAIN, /* <- La position spécifiée est un nain (standard). */
+  PAS_DE_NAIN, /* <- Il n'y a pas de nain (standard) sur la position spécifiée. */
+  NAIN_MORT, /* <- Le nain (standard) spécifié est mort. */
   DRAPEAU_INVALIDE, /* <- Le drapeau spécifié n'existe pas. */
 } erreur;
 // This is needed for old compilers

@@ -35,6 +35,10 @@ constant:
     cst_val: 6
     cst_comment: Nombre de nains (standard) par joueur.
   -
+    cst_name: DEGAT_PIOCHE
+    cst_val: 3
+    cst_comment: Dégât infligé par un coup de pioche à un nain (standard).
+  -
     cst_name: COUT_DEPLACEMENT
     cst_val: 1
     cst_comment: Nombre de points de déplacement pour qu'un nain (standard) se
@@ -94,6 +98,9 @@ enum:
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
       - [obstacle_mur, "La position spécifiée est un mur."]
       - [obstacle_nain, "La position spécifiée est un nain (standard)."]
+      - [pas_de_nain, "Il n'y a pas de nain (standard) sur la position
+                       spécifiée."]
+      - [nain_mort, "Le nain (standard) spécifié est mort."]
       - [drapeau_invalide, "Le drapeau spécifié n'existe pas."]
   -
     enum_name: action_type
@@ -263,6 +270,11 @@ function:
     fct_ret_type: minerai
     fct_arg:
       - [pos, position, "Case choisie"]
+  -
+    fct_name: liste_minerais
+    fct_summary: Renvoie la liste de touts les minerais dans la mine.
+    fct_ret_type: minerai array
+    fct_arg: []
   -
     fct_name: cout_deplacement
     fct_summary: Renvoie le nombre de points de déplacement pour le déplacement

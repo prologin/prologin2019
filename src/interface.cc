@@ -122,6 +122,8 @@ std::string convert_to_string(erreur in){
     case ID_NAIN_INVALIDE: return "\"id_nain_invalide\"";
     case OBSTACLE_MUR: return "\"obstacle_mur\"";
     case OBSTACLE_NAIN: return "\"obstacle_nain\"";
+    case PAS_DE_NAIN: return "\"pas_de_nain\"";
+    case NAIN_MORT: return "\"nain_mort\"";
     case DRAPEAU_INVALIDE: return "\"drapeau_invalide\"";
   }
   return "bad value";
@@ -354,6 +356,12 @@ extern "C" minerai api_info_minerai(position pos)
   return api->info_minerai(pos);
 }
 
+/// Renvoie la liste de touts les minerais dans la mine.
+extern "C" std::vector<minerai> api_liste_minerais()
+{
+  return api->liste_minerais();
+}
+
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
 extern "C" int api_cout_deplacement(int id_nain, direction dir)
 {
@@ -443,6 +451,8 @@ std::ostream& operator<<(std::ostream& os, erreur v)
   case ID_NAIN_INVALIDE: os << "ID_NAIN_INVALIDE"; break;
   case OBSTACLE_MUR: os << "OBSTACLE_MUR"; break;
   case OBSTACLE_NAIN: os << "OBSTACLE_NAIN"; break;
+  case PAS_DE_NAIN: os << "PAS_DE_NAIN"; break;
+  case NAIN_MORT: os << "NAIN_MORT"; break;
   case DRAPEAU_INVALIDE: os << "DRAPEAU_INVALIDE"; break;
   }
   return os;
