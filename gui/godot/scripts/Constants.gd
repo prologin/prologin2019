@@ -19,6 +19,8 @@ const NB_JOUEURS = 2
 
 const NB_NAINS = 6
 
+const DEGAT_PIOCHE = 3
+
 const COUT_DEPLACEMENT = 1
 
 const COUT_ESCALADER = 2
@@ -28,3 +30,5 @@ const COUT_MINER = 6
 const COUT_TIRER = 1
 
 const COUT_LACHER = 0
+
+const COUT_AGRIPPER = 0

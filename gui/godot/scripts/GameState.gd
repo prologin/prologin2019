@@ -12,10 +12,10 @@ var _turn = 0
 var _undo = [] # player, dwarf, AP, MP, dwarf_moved, pos
 
 func dwarf_id_to_internal(dwarf_id, player_id):
-	return dwarf_id + Constants.NB_DWARF * player_id
+	return dwarf_id + Constants.NB_NAINS * player_id
 
 func internal_to_dwarf_id(internal):
-	return internal % Constants.NB_DWARF
+	return internal % Constants.NB_NAINS
 
 func move(dwarf_id, direction, player_id):
 	var internal = dwarf_id_to_internal(dwarf_id, player_id)
@@ -29,7 +29,7 @@ func move(dwarf_id, direction, player_id):
 			$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
 	else:
 		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_DEPLACEMENT
-	_undo.append([player_id, dwarf_id, constants.COUT_DEPLACEMENT, \
+	_undo.append([player_id, dwarf_id, Constants.COUT_DEPLACEMENT, \
 			internal, $TileMap.dwarf_pos[internal]])
 	$TileMap.move_dwarf(internal, destination, false, false)
 	$Info.redraw()
@@ -42,6 +42,7 @@ func drop(dwarf_id, player_id):
 	return true
 
 func mine(dwarf_id, player_id, dir):
+	var internal = dwarf_id_to_internal(dwarf_id, player_id)
 	_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
 			internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_MINER
@@ -49,6 +50,7 @@ func mine(dwarf_id, player_id, dir):
 	return true
 
 func pull(dwarf_id, player_id):
+	var internal = dwarf_id_to_internal(dwarf_id, player_id)
 	_undo.append([player_id, dwarf_id, Constants.COUT_TIRER, \
 			internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_TIRER
@@ -89,8 +91,7 @@ func _update_tile_info():
 	if $TileMap.get_cellv(selected_tile) == $TileMap.get_tileset().find_tile_by_name("Ores"):
 		for a in $TileMap.ores:
 			if a.pos == selected_tile:
-				if _turn >= a.first_turn and _turn < a.first_turn + a.duration \
-						and a.capture < Constants.NB_TOURS_CAPTURE:
+				if a.duration == 0:
 					ores = a
 					break
 	$Info.set_tile(selected_tile, $TileMap.dirt[selected_tile.x][selected_tile.y], ores)

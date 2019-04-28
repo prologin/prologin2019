@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-# Copyright 2018 Sacha Delanoue
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2019 Sacha Delanoue
 
 extends Node2D
 
@@ -54,11 +54,9 @@ func set_tile(pos, block, ores):
 	#fixme
 	$Tile.text = "l. " + str(pos.y) + ", c. " + str(pos.x)
 	if block:
-		$Tile.text += "\nBlock"
+		$Tile.text += "\nDirt"
 	elif ores:
-		$Tile.text += "\nMinerai de " + str(ores.points) + " points\ntour " + \
-				str(ores.first_turn) + " (+" + str(ores.duration) + "), " + \
-				str(ores.capture)
+		$Tile.text += "\nMinerai de valeur " + str(ores.value) + " points\ntour " + str(ores.duration)
 
 func set_dwarf(dwarf):
 	_selected_dwarf = dwarf

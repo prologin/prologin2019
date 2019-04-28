@@ -86,14 +86,18 @@ func _create_flags_maps():
 
 func _ready():
 	dump = _parse_json()
-	var init = DumpReader.parse_turn(dump[0])
-	$GameState.init(init.walls, init.players[0].dwarfs + init.players[1].dwarfs)
-	for dwarf in $GameState/TileMap.agents:
+	var init = DumpReader.parse_turn(0)
+	$GameState.init(init.blocks, init.players[0].dwarfs + init.players[1].dwarfs)
+	for dwarf in $GameState/TileMap.dwarfs:
 		 dwarf.connect("finished_moving", self, "_finish_animating")
 	$GameState/Info.players[0].name = init.players[0].name
 	$GameState/Info.players[1].name = init.players[1].name
-	#fixme get ready ores
-	#for ores_input in init.ores:
+	for ores_input in init.ores:
+		var ore = $GameState/TileMap.Ores.new()
+		ore.pos = ores_input.pos
+		ore.value = ores_input.value
+		ore.duration = ores_input.duration
+		$GameState/TileMap.ores.append(ore)
 	$GameState.set_turn(0)
 	$GameState/Info.add_turn_slider().connect("value_changed", self, "_turn_slider")
 	_create_flags_maps()
@@ -114,13 +118,13 @@ func _finish_last_turn(warn_teleport = true):
 	"""The actions for a turn have been processed; now prepare next"""
 	actions_playing = []
 	var state = DumpReader.parse_turn(dump[_dump_index()])
-	var size = state.players[0].agents.size()
+	var size = state.players[0].dwarfs.size()
 	for dwarf_id in range(size):
 		for player_id in range(2):
 			var pos = state.players[player_id].dwarfs[dwarf_id]
-			if $GameState/TileMap.teleport_agent(dwarf_id + player_id * size, pos):
+			if $GameState/TileMap.teleport_dwarf(dwarf_id + player_id * size, pos):
 				if warn_teleport:
-					#print("Had to fix inconsistency in dump agent position")
+					print("Had to fix inconsistency in dump dwarf position")
 					pass
 	for x in range(Constants.TAILLE_MINE):
 		for y in range(Constants.TAILLE_MINE):
