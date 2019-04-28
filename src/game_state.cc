@@ -150,6 +150,10 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
                                nain_id, dest);
 }
 
+int GameState::get_movement_cost(int player_id, int nain_id, position dest) const
+{
+}
+
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 {
     nains_[player_id][nain_id].accroche = accroche;

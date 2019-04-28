@@ -53,8 +53,11 @@ public:
     /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
     erreur deplacer(int id_nain, direction dir);
 
-    /// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+    /// Le nain (standard) ``id_nain`` lâche la paroi.
     erreur lacher(int id_nain);
+
+    /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
+    erreur agripper(int id_nain);
 
     /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard) dans la direction indiquée.
     erreur miner(int id_nain, direction dir);

@@ -39,6 +39,10 @@ void Rules::register_actions()
         []() -> rules::IAction* { return new ActionLacher(); }
         );
     api_->actions()->register_action(
+        ID_ACTION_AGRIPPER,
+        []() -> rules::IAction* { return new ActionAgripper(); }
+        );
+    api_->actions()->register_action(
         ID_ACTION_MINER,
         []() -> rules::IAction* { return new ActionMiner(); }
         );

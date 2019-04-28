@@ -61,8 +61,13 @@ constant:
   -
     cst_name: COUT_LACHER
     cst_val: 0
-    cst_comment: Nombre de points d'action pour qu'un nain (standard) lâche une
-                 corde ou la paroi.
+    cst_comment: Nombre de points d'action pour qu'un nain (standard) lâche la
+                 paroi.
+  -
+    cst_name: COUT_AGRIPPER
+    cst_val: 0
+    cst_comment: Nombre de points d'action pour qu'un nain (standard) s'agrippe
+                 à la paroi.
 
 enum:
   -
@@ -98,9 +103,13 @@ enum:
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
       - [obstacle_mur, "La position spécifiée est un mur."]
       - [obstacle_nain, "La position spécifiée est un nain (standard)."]
+      - [obstacle_corde, "Il y a déjà une corde dans la direction spécifiée."]
       - [pas_de_nain, "Il n'y a pas de nain (standard) sur la position
                        spécifiée."]
       - [nain_mort, "Le nain (standard) spécifié est mort."]
+      - [pas_accroche, "Le nain (standard) n'est pas accroché."]
+      - [deja_accroche, "Le nain (standard) est déjà accroché."]
+      - [pas_de_corde, "Il n'y a pas de corde dans la direction spécifiée."]
       - [drapeau_invalide, "Le drapeau spécifié n'existe pas."]
   -
     enum_name: action_type
@@ -111,6 +120,7 @@ enum:
       - [action_miner, "Action ``miner``"]
       - [action_poser_corde, "Action ``poser_corde``"]
       - [action_tirer, "Action ``tirer``"]
+      - [action_agripper, "Action ``agripper``"]
   -
     enum_name: debug_drapeau
     enum_summary: "Types de drapeaux de débug"
@@ -173,7 +183,14 @@ function:
       - [dir, direction, "Direction visée"]
   -
     fct_name: lacher
-    fct_summary: Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+    fct_summary: Le nain (standard) ``id_nain`` lâche la paroi.
+    fct_ret_type: erreur
+    fct_action: yes
+    fct_arg:
+      - [id_nain, int, "Numéro du nain (standard)"]
+  -
+    fct_name: agripper
+    fct_summary: Le nain (standard) ``id_nain`` s'agrippe à la paroi.
     fct_ret_type: erreur
     fct_action: yes
     fct_arg:

@@ -4,6 +4,7 @@
 enum action_id {
     ID_ACTION_DEPLACER,
     ID_ACTION_LACHER,
+    ID_ACTION_AGRIPPER,
     ID_ACTION_MINER,
     ID_ACTION_TIRER,
     ID_ACTION_POSER_CORDE,
@@ -12,6 +13,7 @@ enum action_id {
 
 #include "action_deplacer.hh"
 #include "action_lacher.hh"
+#include "action_agripper.hh"
 #include "action_miner.hh"
 #include "action_tirer.hh"
 #include "action_poser_corde.hh"

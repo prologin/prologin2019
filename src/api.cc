@@ -40,10 +40,24 @@ erreur Api::deplacer(int id_nain, direction dir)
     return OK;
 }
 
-/// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+/// Le nain (standard) ``id_nain`` lâche la paroi.
 erreur Api::lacher(int id_nain)
 {
     rules::IAction_sptr action(new ActionLacher(id_nain, player_->id));
+
+    erreur err;
+    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+        return err;
+
+    actions_.add(action);
+    game_state_set(action->apply(game_state_));
+    return OK;
+}
+
+/// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
+erreur Api::agripper(int id_nain)
+{
+    rules::IAction_sptr action(new ActionAgripper(id_nain, player_->id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -162,11 +176,35 @@ std::vector<position> Api::liste_minerais()
     return game_state_->get_ores();
 }
 
+#include "position.hh"
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
-int Api::cout_deplacement(int /* id_nain */, direction /* dir */)
+int Api::cout_deplacement(int id_nain, direction dir)
 {
-    // TODO cout_deplacement
-    abort();
+    if (id_nain < 0 || id_nain >= NB_NAINS)
+        return -1;
+    if (dir < 0 || dir >= 4)
+        return -1;
+
+    const nain* nain = game_state_->get_nain(player_->id, id_nain);
+    if (nain == nullptr)
+        return -1;
+
+    position dest = get_position_offset(nain->pos, dir);
+    if (!inside_map(dest))
+        return -1;
+    if (game_state_->get_cell_type(dest) != LIBRE)
+        return -1;
+    int dest_owner = game_state_->get_cell_ownership(dest);
+    if (dest_owner != -1 && dest_owner != player_->id)
+        return -1;
+
+    bool dest_on_ground = true;
+    if (inside_map(get_position_offset(dest, BAS)))
+        dest_on_ground = game_state_->get_cell_type(get_position_offset(dest, BAS)) != LIBRE;
+    if (!nain->accroche)
+    {
+        
+    }
 }
 
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
