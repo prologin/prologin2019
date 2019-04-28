@@ -32,9 +32,12 @@ void ActionDeplacer::apply_on(GameState* st) const
 {
     const nain* nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain->pos, dir_);
+    position up = get_position_offset(nain->pos, HAUT);
     st->reduce_pm(player_id_, id_nain_, st->get_movement_cost(player_id_, id_nain_, dir_));
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_gravity(dest);
+    if (inside_map(up))
+        st->check_gravity(up);
 
     internal_action action;
     action.internal = false;
