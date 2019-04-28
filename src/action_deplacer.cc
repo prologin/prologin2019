@@ -13,7 +13,7 @@ int ActionDeplacer::check(const GameState* st) const
     if (nain == nullptr)
         return NAIN_MORT;
     
-    if (nain->pm < 1) // TODO cout_deplacement
+    if (nain->pm < st->get_movement_cost(player_id_, id_nain_, dir_))
         return PM_INSUFFISANTS;
 
     position dest = get_position_offset(nain->pos, dir_);
@@ -32,7 +32,7 @@ void ActionDeplacer::apply_on(GameState* st) const
 {
     const nain* nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain->pos, dir_);
-    st->reduce_pm(player_id_, id_nain_, 1); // TODO cout_deplacement
+    st->reduce_pm(player_id_, id_nain_, st->get_movement_cost(player_id_, id_nain_, dir_));
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_gravity(dest);
 

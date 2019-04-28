@@ -36,7 +36,7 @@ class GameState : public rules::GameState
 
         void set_nain_position(int player_id, int nain_id, position dest);
         void set_nain_position_internal(int player_id, int nain_id, position dest);
-        int get_movement_cost(int player_id, int nain_id, position dest) const;
+        int get_movement_cost(int player_id, int nain_id, direction dir) const;
         void set_nain_accroche(int player_id, int nain_id, bool accroche);
         void check_gravity(position pos);
 

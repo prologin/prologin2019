@@ -155,9 +155,29 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
                                nain_id, dest);
 }
 
-int GameState::get_movement_cost(int player_id, int nain_id, position dest) const
+int GameState::get_movement_cost(int player_id, int nain_id, direction dir) const
 {
-    return 0;
+    if (nain_id < 0 || nain_id >= NB_NAINS)
+        return -1;
+    if (dir < 0 || dir >= 4)
+        return -1;
+
+    const nain* nain = get_nain(player_id, nain_id);
+    if (nain == nullptr)
+        return -1;
+
+    position dest = get_position_offset(nain->pos, dir);
+    if (!inside_map(dest))
+        return -1;
+    if (get_cell_type(dest) != LIBRE)
+        return -1;
+    int dest_owner = get_cell_ownership(dest);
+    if (dest_owner != -1 && dest_owner != player_id)
+        return -1;
+
+    if (nain->accroche)
+        return COUT_ESCALADER;
+    return COUT_DEPLACEMENT;
 }
 
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)

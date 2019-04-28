@@ -176,35 +176,10 @@ std::vector<position> Api::liste_minerais()
     return game_state_->get_ores();
 }
 
-#include "position.hh"
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
 int Api::cout_deplacement(int id_nain, direction dir)
 {
-    if (id_nain < 0 || id_nain >= NB_NAINS)
-        return -1;
-    if (dir < 0 || dir >= 4)
-        return -1;
-
-    const nain* nain = game_state_->get_nain(player_->id, id_nain);
-    if (nain == nullptr)
-        return -1;
-
-    position dest = get_position_offset(nain->pos, dir);
-    if (!inside_map(dest))
-        return -1;
-    if (game_state_->get_cell_type(dest) != LIBRE)
-        return -1;
-    int dest_owner = game_state_->get_cell_ownership(dest);
-    if (dest_owner != -1 && dest_owner != player_->id)
-        return -1;
-
-    bool dest_on_ground = true;
-    if (inside_map(get_position_offset(dest, BAS)))
-        dest_on_ground = game_state_->get_cell_type(get_position_offset(dest, BAS)) != LIBRE;
-    if (!nain->accroche)
-    {
-        
-    }
+    return game_state_->get_movement_cost(player_->id, id_nain, dir);
 }
 
 /// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
