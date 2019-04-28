@@ -12,7 +12,7 @@ int ActionDeplacer::check(const GameState* st) const
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
         return NAIN_MORT;
-    
+
     if (nain->pm < st->get_movement_cost(player_id_, id_nain_, dir_))
         return PM_INSUFFISANTS;
 
