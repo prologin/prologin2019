@@ -1,13 +1,7 @@
 all:: subject.pdf
 
-#finale.tex: ../doc/finale.rst
-#	pandoc -o finale.tex ../doc/finale.rst
-
 apidoc.tex useapi.tex: ../prologin2019.yml
 	stechec2-generator apidoc ../prologin2019.yml .
-
-#subject.pdf:: subject.tex subject_content.tex finale.tex prologin2019.pdf
-#	xelatex subject.tex
 
 subject.pdf:: subject.tex subject_content.tex useapi.tex apidoc.tex prologin2019.pdf
 	xelatex subject.tex
