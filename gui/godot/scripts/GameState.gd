@@ -22,15 +22,15 @@ func move(dwarf_id, direction, player_id):
 	var destination = $TileMap.dwarf_pos[internal] + DIR[direction]
 	if not $TileMap.is_cell_free(destination):
 		return false
-	if direction == 'NORD':
+	if direction == 'NORD' or direction == 'SUD':
 		if $TileMap.get_tile() == 'Rope':
 				$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER_CORDE
 		else:
 			$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
 	else:
 		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_DEPLACEMENT
-	#_undo.append([player_id, dwarf_id, constants.COUT_DEPLACEMENT, \
-	#		internal, $TileMap.dwarf_pos[internal]])
+	_undo.append([player_id, dwarf_id, constants.COUT_DEPLACEMENT, \
+			internal, $TileMap.dwarf_pos[internal]])
 	$TileMap.move_dwarf(internal, destination, false, false)
 	$Info.redraw()
 	return true
@@ -42,15 +42,15 @@ func drop(dwarf_id, player_id):
 	return true
 
 func mine(dwarf_id, player_id, dir):
-	#_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
-	#		internal, $TileMap.dwarf_pos[internal]])
+	_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
+			internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_MINER
 	$Info.redraw()
 	return true
 
 func pull(dwarf_id, player_id):
-	#_undo.append([player_id, dwarf_id, Constants.COUT_TIRER, \
-	#		internal, $TileMap.dwarf_pos[internal]])
+	_undo.append([player_id, dwarf_id, Constants.COUT_TIRER, \
+			internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_TIRER
 	return true
 
