@@ -45,7 +45,24 @@ TEST_F(ApiTest, Api_nain_sur_case)
     for (auto& player : players)
     {
         int moi = player.api->moi();
-        position spawn = player.api->info_nain(moi, 0).pos;
+        position spawn = player.api->position_taverne(moi);
         EXPECT_EQ(player.api->nain_sur_case(spawn), moi);
+    }
+}
+
+TEST_F(ApiTest, Api_info_nain)
+{
+    for (auto& player : players)
+    {
+        for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
+        {
+            int moi = player.api->moi();
+            nain nain = player.api->info_nain(moi, nain_id);
+            EXPECT_EQ(nain.vie, VIE_NAIN);
+            EXPECT_EQ(nain.pa, NB_POINTS_ACTION);
+            EXPECT_EQ(nain.pm, NB_POINTS_DEPLACEMENT);
+            EXPECT_EQ(nain.accroche, false);
+            EXPECT_EQ(nain.butin, 0);
+        }
     }
 }
