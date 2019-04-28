@@ -44,23 +44,23 @@ func _ready():
 			if int(id) < my_stechec_id:
 				my_internal_id = 1
 	var init = DumpReader.parse_turn(json)
-	$GameState.init(init.walls, init.players[0].agents + init.players[1].agents)
-	for agent in $GameState/TileMap.agents:
-		 agent.connect("finished_moving", self, "_finish_animating")
+	$GameState.init(init.blocks, init.players[0].dawrfs + init.players[1].dwarfs)
+	for dwarf in $GameState/TileMap.dwarfs:
+		 dwarf.connect("finished_moving", self, "_finish_animating")
 	$GameState/Info.players[0].name = init.players[0].name
 	$GameState/Info.players[1].name = init.players[1].name
-	for alien_input in init.aliens:
-		var alien = $GameState/TileMap.Alien.new()
-		alien.pos = alien_input.pos
-		alien.points = alien_input.points
-		alien.first_turn = alien_input.first_turn
-		alien.duration = alien_input.duration
-		alien.capture = alien_input.capture
-		$GameState/TileMap.aliens.append(alien)
+	for ore_input in init.ores:
+		var ore = $GameState/TileMap.Ores.new()
+		ore.pos = ore_input.pos
+		ore.points = ore_input.points
+		ore.first_turn = ore_input.first_turn
+		ore.duration = ore_input.duration
+		ore.capture = ore_input.capture
+		$GameState/TileMap.ores.append(ore)
 	$GameState.set_turn(0)
 	if interactive:
 		$GameState.set_turn(1)
-		$GameState.select_agent(my_internal_id * constants.NB_AGENTS)
+		$GameState.select_dwarf(my_internal_id * Constants.NB_NAINS)
 		playing = true
 		socket.put_utf8_string("NEXT")
 		waiting = true
@@ -90,10 +90,10 @@ func _next_turn():
 			socket.put_utf8_string("NEXT")
 			waiting = true
 	elif interactive:
-		for i in range(_future_state.aliens.size()):
-			$GameState/TileMap.aliens[i].capture = _future_state.aliens[i].capture
+		for i in range(_future_state.dwarfs.size()):
+			$GameState/TileMap.dwarfs[i].capture = _future_state.dwarfs[i].capture
 			assert((turn_index - turn_index % 3) / 3 == _future_state.roundNumber)
-			$GameState.set_turn(turn_index) # To update the aliens
+			$GameState.set_turn(turn_index) # To update the ores
 			for player_id in range(2):
 				$GameState/Info.players[player_id].score = _future_state.players[player_id].score
 
@@ -105,9 +105,9 @@ func _process(delta):
 			var json = JSON.parse(dump).result
 			var state = DumpReader.parse_turn(json)
 			for i in range(state.aliens.size()):
-				$GameState/TileMap.aliens[i].capture = state.aliens[i].capture
+				$GameState/TileMap.ores[i].capture = state.ores[i].capture
 			assert((turn_index - turn_index % 3) / 3 == state.roundNumber)
-			$GameState.set_turn(turn_index) # To update the aliens
+			$GameState.set_turn(turn_index) # To update the ores
 			actions_playing = state.players[turn_index % 3 - 1].history
 			for player_id in range(2):
 				$GameState/Info.players[player_id].score = state.players[player_id].score
@@ -138,8 +138,8 @@ func _action(pos):
 			dwarf_selected >= Constants.NB_NAINS * (1 + my_internal_id):
 		return
 	dwarf_selected -= Constants.NB_NAINS * my_internal_id
-	var offset = my_internal_id * constants.NB_NAINS
-	var dwarf_pos = $GameState/TileMap.dwarfs_pos[agent_selected + offset]
+	var offset = my_internal_id * Constants.NB_NAINS
+	var dwarf_pos = $GameState/TileMap.dwarfs_pos[dwarf_selected + offset]
 	var dx = pos.x - dwarf_pos.x
 	var dy = pos.y - dwarf_pos.y
 	# One of them must be zero
@@ -164,7 +164,7 @@ func _action(pos):
 			if animating:
 				socket.put_utf8_string("PULL " + str(dwarf_selected))
 		else:
-			if moving_points < Constants.COUT_DEPLACEMENT:
+			if move_points < Constants.COUT_DEPLACEMENT:
 				return
 			animating = $GameState.move(dwarf_selected, dir, my_internal_id)
 			if animating:
@@ -183,5 +183,5 @@ func _input(event):
 		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
 		var pos = $GameState/TileMap.world_to_map(event.position)
-		if pos.x >= 0 and pos.y >= 0 and pos.x < $GameState/TileMap.walls.size() and pos.y < $GameState/TileMap.walls.size():
+		if pos.x >= 0 and pos.y >= 0 and pos.x < $GameState/TileMap.blocks.size() and pos.y < $GameState/TileMap.blocks.size():
 			_action(pos)
