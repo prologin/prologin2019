@@ -203,8 +203,8 @@ static void dump_map(std::ostream& ss, const GameState& st)
     ss << ", \"cordes\": ";
     dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope)
         {
-            ss << "{ \"anchor\": " << rope.get_anchor();
-            ss << ", \"bottom\": " << rope.get_bottom() << "}";
+            ss << "{ \"haut\": " << rope.get_anchor();
+            ss << ", \"bas\": " << rope.get_bottom() << "}";
         });
     ss << "}";
 }
