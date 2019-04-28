@@ -9,13 +9,13 @@ const TAILLE_MINE = 31
 
 const NB_TOURS = 100
 
+const NB_JOUEURS = 2
+
 const NB_POINTS_DEPLACEMENT = 5
 
 const NB_POINTS_ACTION = 6
 
 const VIE_NAIN = 10
-
-const NB_JOUEURS = 2
 
 const NB_NAINS = 6
 

@@ -78,15 +78,15 @@ func _create_flags_maps():
 		if index % 3:
 			var i = (index - index % 3) / 3 * 2 + index % 3
 			var state = DumpReader.parse_turn(dump[i])
-			for player_id in range(2):
-				for action in state.players[player_id].history:
-					if action['atype'] == 'ID_ACTION_DEBUG_AFFICHER_DRAPEAU':
-						var byte = {'AUCUN_DRAPEAU': 0, 'DRAPEAU_ROUGE': 1, 'DRAPEAU_VERT': 2, 'DRAPEAU_BLEU': 3}[action['drapeau']]
-						flags[index][(action['pos']['c'] * Constants.TAILLE_MINE + action['pos']['r']) * 2 + player_id] = byte
+			#for player_id in range(2):
+				#for action in state.players[player_id].history:
+					#if action['atype'] == 'ID_ACTION_DEBUG_AFFICHER_DRAPEAU':
+					#	var byte = {'AUCUN_DRAPEAU': 0, 'DRAPEAU_ROUGE': 1, 'DRAPEAU_VERT': 2, 'DRAPEAU_BLEU': 3}[action['drapeau']]
+					#	flags[index][(action['pos']['c'] * Constants.TAILLE_MINE + action['pos']['r']) * 2 + player_id] = byte
 
 func _ready():
 	dump = _parse_json()
-	var init = DumpReader.parse_turn(0)
+	var init = DumpReader.parse_turn(dump[0])
 	$GameState.init(init.blocks, init.players[0].dwarfs + init.players[1].dwarfs)
 	for dwarf in $GameState/TileMap.dwarfs:
 		 dwarf.connect("finished_moving", self, "_finish_animating")

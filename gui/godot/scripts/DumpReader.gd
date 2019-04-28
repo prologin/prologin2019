@@ -2,12 +2,20 @@
 # Copyright 2019 Martin Huvelle
 
 static func parse_dump(filename):
-	var file = File.new()
-	file.open(filename, file.READ)
 	var rounds = []
-	print("open")
-	while not file.eof_reached():
-		rounds.append(JSON.parse(file.get_line()).result)
+	var file = File.new()
+	if file.open(filename, file.READ) != OK:
+		printerr(file.open(filename, file.READ))
+		return rounds
+	
+	var turn = 0
+	while not file.eof_reached() && turn <= Constants.NB_TOURS * Constants.NB_JOUEURS:
+		var json = JSON.parse(file.get_line())
+		if json.error != OK:
+			printerr("fail to parse round {r} : {e}".format({"r": turn, "e": json.error_string}))
+			return rounds
+		rounds.append(json.result)
+		turn = turn + 1
 	
 	return rounds
 
@@ -48,19 +56,36 @@ class Turn:
 
 class CastIntSorter:
 	static func sort(a, b):
-		if int(a) < int(b):
+		if int(a[0]) < int(b[0]):
 			return true
 		return false
+
+static func parse_map(json, result):
+	var cells = json["carte"]["cases"]
+	var size = sqrt(cells.size())
+	result.map_size = size
+	for c in range(size):
+		result.blocks.append([])
+		for r in range(size):
+			result.blocks[c].append(cells[r * size + c] == 1.0)
+	for ores_data in json["carte"]["minerais"]:
+		var ore = Ores.new()
+		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])
+		ore.value = ores_data["rendement"]
+		ore.duration = ores_data["resistance"]
+		result.ores.append(ore)
 
 static func parse_turn(json):
 	var result = Turn.new()
 	result.roundNumber = int(json["tour"][0])
-	result.roundTotal = 100 #int(json["tour"][1])
+	result.roundTotal = int(json["tour"][1])
 	assert(json["joueurs"].size() == 2)
-	var player_ids = json["joueurs"].keys().duplicate()
-	player_ids.sort_custom(CastIntSorter, "sort")
-	for player_id in player_ids:
-		var node = json["joueurs"][player_id]
+	var players = []
+	for player in json["joueurs"]:
+		players.append([player["id"], player])
+	players.sort_custom(CastIntSorter, "sort")
+	for p in players:
+		var node = p[1]
 		var player = PlayerStats.new()
 		player.name = node["name"]
 		player.score = node["score"]
@@ -73,7 +98,7 @@ static func parse_turn(json):
 			player.dwarfs[dwarf["id_nain"]].stick = dwarf["accroche"]
 			player.dwarfs[dwarf["id_nain"]].vie = dwarf["vie"]
 			player.dwarfs[dwarf["id_nain"]].butin = dwarf["butin"]
-		player.history = node["history"]
+		player.history = node["historique"]
 		result.players.append(player)
 	var cells = json["map"]["cells"]
 	var size = sqrt(cells.size())

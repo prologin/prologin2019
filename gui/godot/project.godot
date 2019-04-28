@@ -30,6 +30,10 @@ window/size/width=800
 window/size/height=860
 window/size/resizable=false
 
+[editor]
+
+main_run_args="-json=/home/bfor/code/prologin/prologin2019/cxx/dump.json"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
