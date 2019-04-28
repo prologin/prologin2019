@@ -107,9 +107,7 @@ void Map::load_rope_info(std::istream& stream)
         if (error != "")
             FATAL("invalid position (%d;%d) for minerai is %s", l, c,
                   error.c_str());
-        Rope rope(pos);
-        add_rope(rope);
-        check_gravity(&rope);
+        add_rope(pos);
     }
 }
 
@@ -152,18 +150,6 @@ case_type Map::get_cell_type(position pos) const
     return map_[pos.ligne][pos.colonne];
 }
 
-const std::vector<position>& Map::get_ropes() const
-{
-    return ropes_pos_;
-}
-
-const Rope* Map::get_rope(position pos) const
-{
-    if (!inside_map(pos))
-        return nullptr;
-    return rope_[pos.ligne][pos.colonne];
-}
-
 const minerai* Map::get_minerai(position pos) const
 {
     if (!inside_map(pos))
@@ -196,35 +182,6 @@ void Map::remove_minerai(position pos)
 void Map::set_minerai_resistance(position pos, int resistance)
 {
     ore_[pos.ligne][pos.colonne]->resistance = resistance;
-}
-
-void Map::add_rope(Rope& rope)
-{
-    ropes_.push_back(rope);
-    position anchor = rope.get_anchor();
-    rope_[anchor.ligne][anchor.colonne] = &rope;
-    ropes_pos_.push_back(anchor);
-}
-
-void Map::extends_rope(position pos)
-{
-    Rope* rope = rope_[pos.ligne][pos.colonne];
-    if (!inside_map(get_position_offset(rope->get_bottom(), BAS)))
-        return;
-    rope->extends();
-    position bottom = rope->get_bottom();
-    rope_[bottom.ligne][bottom.colonne] = rope;
-    ropes_pos_.push_back(bottom);
-}
-
-void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
-{
-    rope_[pos.ligne][pos.colonne]->add_nain(player_id, nain_id);
-}
-
-void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
-{
-    rope_[pos.ligne][pos.colonne]->remove_nain(player_id, nain_id);
 }
 
 void Map::add_nain(int nain_id, position pos, int player_id)
@@ -262,19 +219,50 @@ inline bool operator==(const Rope& a, const Rope& b)
     return a.get_anchor() == b.get_anchor() && a.get_bottom() == b.get_bottom();
 }
 
-void Map::check_gravity(const Rope *rope)
+void Map::add_rope(position pos)
 {
+    ropes_.push_back(Rope(pos));
+    ropes_pos_.push_back(pos);
+    rope_[pos.ligne][pos.colonne] = &ropes_.back();
+    check_gravity(pos);
+}
+
+const Rope* Map::get_rope(position pos) const
+{
+    if (!inside_map(pos))
+        return nullptr;
+    return rope_[pos.ligne][pos.colonne];
+}
+
+void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
+{
+    rope_[pos.ligne][pos.colonne]->add_nain(player_id, nain_id);
+}
+
+void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
+{
+    rope_[pos.ligne][pos.colonne]->remove_nain(player_id, nain_id);
+}
+
+const std::vector<position>& Map::get_ropes() const
+{
+    return ropes_pos_;
+}
+
+void Map::check_gravity(position pos)
+{
+    const Rope *rope = get_rope(pos);
     position dest = get_position_offset(rope->get_bottom(), BAS);
     if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
         return;
-    if (get_rope(dest) == nullptr)
+    const Rope *down = get_rope(dest);
+    if (down == nullptr)
     {
-        extends_rope(rope->get_bottom());
-        check_gravity(get_rope(dest));
+        ropes_pos_.push_back(dest);
+        rope_[pos.ligne][pos.colonne]->extends(dest);
+        rope_[dest.ligne][dest.colonne] = rope_[pos.ligne][pos.colonne];
+        check_gravity(dest);
         return;
     }
-    rope_[dest.ligne][dest.colonne]->merge_up(rope);
-    for (position pos : rope->get_positions())
-        rope_[pos.ligne][pos.colonne] = rope_[dest.ligne][dest.colonne];
-    std::remove(ropes_.begin(), ropes_.end(), *rope);
+    INFO("merge");
 }

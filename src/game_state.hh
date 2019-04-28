@@ -48,7 +48,7 @@ class GameState : public rules::GameState
 
         const std::vector<position>& get_ropes() const;
         const Rope* get_rope(position pos) const;
-        void add_rope(Rope& rope);
+        void add_rope(position pos);
 
         int get_score(int player_id) const;
         bool is_finished() const;

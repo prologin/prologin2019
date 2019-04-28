@@ -34,31 +34,30 @@ public:
     position get_spawn_point(int player_id) const;
 
     case_type get_cell_type(position pos) const;
-    const std::vector<position>& get_ropes() const;
-    const Rope* get_rope(position pos) const;
     const minerai* get_minerai(position pos) const;
     const std::vector<position>& get_ores() const;
 
     void set_cell_type(position pos, case_type type);
     void remove_minerai(position pos);
     void set_minerai_resistance(position pos, int resistance);
-    void add_rope(Rope& rope);
-    void extends_rope(position pos);
-    void add_nain_to_rope(position pos, int player_id, int nain_id);
-    void remove_nain_from_rope(position pos, int player_id, int nain_id);
 
     void add_nain(int nain_id, position pos, int player_id);
     void move_nain(int nain_id, position from, position to);
     void remove_nain(int nain_id, position pos);
     const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
 
+    void add_rope(position pos);
+    const Rope* get_rope(position pos) const;
+    void add_nain_to_rope(position pos, int player_id, int nain_id);
+    void remove_nain_from_rope(position pos, int player_id, int nain_id);
+    const std::vector<position>& get_ropes() const;
+    void check_gravity(position pos);
+
 private:
     void load_map_cells(std::istream& stream);
     void load_spawn_point(std::istream& stream);
     void load_minerai_info(std::istream& stream);
     void load_rope_info(std::istream& stream);
-
-    void check_gravity(const Rope *rope);
 
     std::array<std::array<std::pair<int, std::unordered_set<int>>, TAILLE_MINE>,
                TAILLE_MINE> nains_;

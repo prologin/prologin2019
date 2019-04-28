@@ -152,6 +152,7 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
 
 int GameState::get_movement_cost(int player_id, int nain_id, position dest) const
 {
+    return 0;
 }
 
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
@@ -269,9 +270,9 @@ const Rope* GameState::get_rope(position pos) const
     return map_.get_rope(pos);
 }
 
-void GameState::add_rope(Rope& rope)
+void GameState::add_rope(position pos)
 {
-    map_.add_rope(rope);
+    map_.add_rope(pos);
 }
 
 int GameState::get_score(int player_id) const

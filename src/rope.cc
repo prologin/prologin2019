@@ -5,17 +5,18 @@
 #include "position.hh"
 
 Rope::Rope(position pos)
-    : pos_(1, pos)
-{ }
+{
+    pos_.push_back(pos);
+}
 
 std::vector<std::pair<int, int>> Rope::get_nains() const
 {
     return nains_;
 }
 
-void Rope::extends()
+void Rope::extends(position pos)
 {
-    pos_.push_back(get_position_offset(pos_.back(), BAS));
+    pos_.push_back(pos);
 }
 
 void Rope::merge_up(const Rope *rope)
@@ -43,7 +44,7 @@ position Rope::get_bottom() const
     return pos_.back();
 }
 
-const std::vector<position>& Rope::get_positions() const
+std::vector<position> Rope::get_positions() const
 {
     return pos_;
 }
