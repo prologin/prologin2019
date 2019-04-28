@@ -6,7 +6,7 @@ extends KinematicBody2D
 signal finished_moving
 
 var modulate_color = Color(1, 1, 1, 1)
-var moving = false
+var moving = true
 var mining = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
@@ -32,7 +32,7 @@ func move_to(to):
 	moving = true
 	var anim = null
 	if (to == "EAST" or to == "WEST"):
-		anim = "walk"
+		anim = "move"
 	#else if $TileMap.getTile():
 	else:
 		anim = "climb"

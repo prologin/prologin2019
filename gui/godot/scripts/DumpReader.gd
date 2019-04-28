@@ -100,14 +100,14 @@ static func parse_turn(json):
 			player.dwarfs[dwarf["id_nain"]].butin = dwarf["butin"]
 		player.history = node["historique"]
 		result.players.append(player)
-	var cells = json["map"]["cells"]
+	var cells = json["carte"]["cases"]
 	var size = sqrt(cells.size())
 	result.map_size = size
 	for c in range(size):
 		result.blocks.append([])
 		for r in range(size):
 			result.blocks[c].append(cells[r * size + c] == "BLOCK")
-	for ores_data in json["maps"]["ores"]:
+	for ores_data in json["carte"]["minerai"]:
 		var ore = Ores.new()
 		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])
 		ore.value = ores_data["rendement"]

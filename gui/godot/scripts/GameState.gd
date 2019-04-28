@@ -69,7 +69,7 @@ func undo():
 
 func init(dirt, dwarfs):
 	$TileMap.init(dirt, dwarfs)
-	$Info.position.y = $TileMap.block.size() * $TileMap.cell_size.y * $TileMap.scale.y
+	$Info.position.y = $TileMap.blocks.size() * $TileMap.cell_size.y * $TileMap.scale.y
 
 func set_turn(turn_index):
 	var type = turn_index % 3
