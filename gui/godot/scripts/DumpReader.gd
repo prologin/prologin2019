@@ -24,7 +24,14 @@ class PlayerStats:
 	var dwarfs = []
 	#var history = []
 
-#class Ores:
+class Ores:
+	var pos = Vector2()
+	var value = 0
+	var duration = 0
+
+class Map:
+	var blocks = []
+	var dwarfs = []
 
 class Turn:
 	var roundNumber = 0
@@ -32,12 +39,28 @@ class Turn:
 	var players = []
 	var map_size = 0
 	var ores = []
+	var blocks = []
 
 class CastIntSorter:
 	static func sort(a, b):
 		if int(a) < int(b):
 			return true
 		return false
+
+static func parse_map(json, result):
+	var cells = json["map"]["cells"]
+	var size = sqrt(cells.size())
+	result.map_size = size
+	for c in range(size):
+		result.blocks.append([])
+		for r in range(size):
+			result.block[c].append(cells[r * size + c] == "BLOCK")
+	for ores_data in json["maps"]["ores"]:
+		var ore = Ores.new()
+		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["r"])
+		ore.value = ores_data["something"]
+		ore.duration = ores_data["something"]
+		result.ores.append(ore)
 
 static func parse_turn(json):
 	var result = Turn.new()
@@ -51,15 +74,11 @@ static func parse_turn(json):
 		var player = PlayerStats.new()
 		player.name = node["name"]
 		player.score = node["score"]
-		for i in range(node["nains"].size()):
+		for i in range(node["agents"].size()):
 			player.dwarfs.append(Vector2(-1, -1))
-		for dwarf in node["nains"]:
+		for dwarf in node["agents"]:
 			player.dwarfs[dwarf["id_nain"]] = Vector2(dwarf["pos"]["c"], dwarf["pos"]["r"])
 		#player.history = node["history"]
 		result.players.append(player)
-	var cells = json["map"]["cells"]
-	var size = sqrt(cells.size())
-	result.map_size = size
-	#fixme ores
-	#for ores_data in json["map"]["ores"]:
+	parse_map(json,result)
 	return result

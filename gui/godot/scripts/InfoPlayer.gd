@@ -23,6 +23,8 @@ func _ready():
 	redraw()
 	players[0].action_points.resize(Constants.NB_NAINS)
 	players[1].action_points.resize(Constants.NB_NAINS)
+	players[0].move_points.resize(Constants.NB_NAINS)
+	players[1].move_points.resize(Constants.NB_NAINS)
 
 func _redraw_player(id, label):
 	label.text = players[id].name + "\nScore : " + str(players[id].score)
@@ -48,15 +50,15 @@ func set_turn(turn, type):
 		_turn_slider.value = turn
 	redraw()
 
-func set_tile(pos, cave, ores):
+func set_tile(pos, block, ores):
 	#fixme
 	$Tile.text = "l. " + str(pos.y) + ", c. " + str(pos.x)
-	#if wall:
-	#	$Tile.text += "\nMur"
-	#elif alien:
-	#	$Tile.text += "\nAlien de " + str(alien.points) + " points\ntour " + \
-	#			str(alien.first_turn) + " (+" + str(alien.duration) + "), " + \
-	#			str(alien.capture) + "/" + str(constants.NB_TOURS_CAPTURE)
+	if block:
+		$Tile.text += "\nBlock"
+	elif ores:
+		$Tile.text += "\nMinerai de " + str(ores.points) + " points\ntour " + \
+				str(ores.first_turn) + " (+" + str(ores.duration) + "), " + \
+				str(ores.capture)
 
 func set_dwarf(dwarf):
 	_selected_dwarf = dwarf

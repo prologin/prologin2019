@@ -3,12 +3,16 @@
 
 extends TileMap
 
+var block = []
 var dwarfs = []
 var dwarfs_pos = []
 var flags = [[], []]
 var flagNodes = [null, null]
 
-#class Ores:
+class Ores:
+	var pos = Vector2()
+	var value = 0;
+	var duration = 0;
 var ores = []
 
 onready var character_scene = preload("res://scenes/Dwarf.tscn")
@@ -23,9 +27,8 @@ func world_position(x, y):
 	return map_to_world(Vector2(x, y)) + get_cell_size() / 2
 
 func get_tile(x, y):
-	#var tile = "Wall" if walls[x][y] else "BG"
-	#return get_tileset().find_tile_by_name(tile)
-	return true
+	var tile = "Dirt" if block[x][y] else "Free"
+	return get_tileset().find_tile_by_name(tile)
 
 func spawn_dwarfs():
 	dwarfs = []
@@ -63,7 +66,7 @@ func set_map():
 	#sky on the first 2 lines
 	#dig rock under
 	clear()
-	var size = 32
+	var size = block.size()
 	flags = [[], []]
 	for x in range(size):
 		flags[0].append([])
@@ -74,9 +77,11 @@ func set_map():
 			flags[1][x].append(_new_flag(1, Vector2(x, y)))
 
 func update_ores(turn):
-	#for ore in ores:
-		#fixme
-	return true
+	for ore in ores:
+		if ores.capture < Constants.NB_TOURS_CAPTURE:
+			set_cellv(ore.pos, get_tileset().find_tile_by_name("Ores"))
+		else:
+			set_cellv(ore.pos, get_tileset().find_tile_by_name("Free"))
 
 func is_cell_free(pos):
 	if pos.x < 0 or pos.y < 0 or pos.x >= Constants.TAILLE_MINE or pos.y >= Constants.TAILLE_MINE:
@@ -98,8 +103,8 @@ func teleport_dwarf(i, dest):
 	dwarfs_pos[i] = dest
 	return true
 
-func init(walls_grids, dwarfs_positions):
-	#walls = walls_grids
+func init(block_grids, dwarfs_positions):
+	block = block_grids
 	dwarfs_pos = dwarfs_positions
 	set_map()
 	spawn_dwarfs()
