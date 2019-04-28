@@ -9,7 +9,7 @@ Rope::Rope(position pos)
     pos_.push_back(pos);
 }
 
-std::vector<std::pair<int, int>> Rope::get_nains() const
+const std::vector<std::pair<int, int>>& Rope::get_nains() const
 {
     return nains_;
 }
@@ -27,7 +27,7 @@ void Rope::merge_up(const Rope *rope)
 
 void Rope::remove_nain(int player_id, int nain_id)
 {
-    std::remove(nains_.begin(), nains_.end(), std::make_pair(player_id, nain_id));
+    nains_.erase(std::remove(nains_.begin(), nains_.end(), std::make_pair(player_id, nain_id)), nains_.end());
 }
 void Rope::add_nain(int player_id, int nain_id)
 {

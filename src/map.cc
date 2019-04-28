@@ -174,8 +174,8 @@ inline bool operator==(const minerai& a, const minerai& b)
 
 void Map::remove_minerai(position pos)
 {
-    std::remove(ores_.begin(), ores_.end(), *ore_[pos.ligne][pos.colonne]);
-    std::remove(ores_pos_.begin(), ores_pos_.end(), pos);
+    ores_.erase(std::remove(ores_.begin(), ores_.end(), *ore_[pos.ligne][pos.colonne]), ores_.end());
+    ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos), ores_pos_.end());
     ore_[pos.ligne][pos.colonne] = nullptr;
 }
 

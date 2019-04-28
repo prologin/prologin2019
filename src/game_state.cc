@@ -256,8 +256,8 @@ void GameState::respawn(int player_id)
         }
     if (spawn)
         check_gravity(map_.get_spawn_point(player_id));
-    std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
-                   [&] (auto nain) { return nain.first == player_id; });
+    nains_respawn_.erase(std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
+                   [&] (auto nain) { return nain.first == player_id; }), nains_respawn_.end());
 }
 
 const std::vector<position>& GameState::get_ropes() const
