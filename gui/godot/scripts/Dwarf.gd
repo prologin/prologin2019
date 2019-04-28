@@ -7,7 +7,9 @@ signal finished_moving
 
 var modulate_color = Color(1, 1, 1, 1)
 var moving = false
+var mining = false
 var _moving_to = Vector2()
+var _mining_to = Vector2()
 
 const SPEED = 100
 
@@ -28,7 +30,12 @@ func move_to(to):
 	assert not moving
 	_moving_to = to
 	moving = true
-	var anim = "walk"
+	var anim = null
+	if (to == "EAST" or to == "WEST"):
+		anim = "walk"
+	#else if $TileMap.getTile():
+	else:
+		anim = "climb"
 	$AnimatedSprite.play(anim)
 	var dx = to.x - position.x
 	if dx > 0:
@@ -36,11 +43,24 @@ func move_to(to):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 
+func mine_to(to):
+	assert not mining
+	_mining_to = to
+	mining = true
+	var anim = "mine"
+	$AnimatedSprite.play(anim)
+	var dx = to.x - position.x
+	if dx > 0:
+		$AnimatedSprite.flip_h = false
+	elif dx < 0:
+		$AnimatedSprite.flip_h = true
+	
 func stop():
 	$AnimatedSprite.play("idle")
 	if moving:
 		emit_signal("finished_moving")
 	moving = false
+	mining = false
 
 func _process(delta):
 	if moving:
