@@ -130,12 +130,11 @@ func _finish_last_turn(warn_teleport = true):
 						[flags[turn_index][(x * Constants.TAILLE_MINE + y) * 2 + player_id]])
 
 func _update_ores():
-	#fixme
 	var state = DumpReader.parse_turn(dump[(turn_index - turn_index % 3) / 3 * 2 + 1])
-	#for i in range(state.aliens.size()):
-	#	$GameState/TileMap.aliens[i].capture = state.aliens[i].capture
-	#$GameState/Info.players[0].score = state.players[0].score
-	#$GameState/Info.players[1].score = state.players[1].score
+	for i in range(state.ores.size()):
+		$GameState/TileMap.ores[i].duration = state.ores[i].duration
+	$GameState/Info.players[0].score = state.players[0].score
+	$GameState/Info.players[1].score = state.players[1].score
 	if _tv_show:
 		$Score1.text = str(state.players[0].score)
 		$Score2.text = str(state.players[1].score)
