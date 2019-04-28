@@ -198,8 +198,7 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
         position current = get_position_offset(pos, BAS);
         if (!inside_map(current) || map_.get_cell_type(current) != LIBRE)
             break;
-        int ownership = get_cell_ownership(current);
-        if (ownership != -1 && ownership != player_id)
+        if (get_cell_ownership(current) == player_id)
             break;
         pos = current;
         ++fall;
@@ -209,20 +208,23 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
 
 void GameState::check_gravity(position pos)
 {
-    if (get_cell_ownership(pos) == -1)
-        return;
     if (get_rope(pos) != nullptr)
         return;
+    position dest = get_position_offset(pos, BAS);
+    if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
+        return;
     const auto& nains = map_.get_nains_at(pos);
-    for (int nain_id : nains.second)
+    int player_id = nains.first;
+    std::unordered_set<int> id_nains(nains.second);
+    for (int nain_id : std::unordered_set<int>(nains.second))
     {
-        int fall = get_fall_distance(nains.first, nain_id);
+        int fall = get_fall_distance(player_id, nain_id);
         if (fall == 0)
             continue;
-        set_nain_position_internal(nains.first, nain_id, pos + (BAS * fall));
+        set_nain_position_internal(player_id, nain_id, pos + (BAS * fall));
         if (fall < 4)
-            return;
-        reduce_pv(nains.first, nain_id, std::pow(2, fall - 4));
+            continue;
+        reduce_pv_internal(player_id, nain_id, std::pow(2, fall - 4));
     }
     position up = get_position_offset(pos, HAUT);
     if (inside_map(up))
@@ -258,12 +260,17 @@ void GameState::reset_pa(int player_id)
 void GameState::reduce_pv(int player_id, int nain_id, int damage)
 {
     int internal_player_id = player_info_.at(player_id).get_internal_id();
+    reduce_pv_internal(internal_player_id, nain_id, damage);
+}
+
+void GameState::reduce_pv_internal(int internal_player_id, int nain_id, int damage)
+{
     nains_[internal_player_id][nain_id].vie -= damage;
     if (nains_[internal_player_id][nain_id].vie <= 0)
     {
         nains_[internal_player_id][nain_id].vie = 0;
         map_.remove_nain(nain_id, nains_[internal_player_id][nain_id].pos);
-        nains_respawn_.push_back({ player_id, nain_id });
+        nains_respawn_.push_back({ internal_player_id, nain_id });
     }
 }
 

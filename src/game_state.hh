@@ -67,6 +67,7 @@ class GameState : public rules::GameState
     private:
         int get_fall_distance(int player_id, int nain_id) const;
         void increase_score(int player_id, int delta);
+        void reduce_pv_internal(int internal_player_id, int nain_id, int damage);
 
         std::unordered_map<int, PlayerInfo> player_info_;
         std::array<int, 2> player_ids_;
