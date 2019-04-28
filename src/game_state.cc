@@ -28,7 +28,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
         for (int nain = 0; nain < NB_NAINS; ++nain)
         {
             nains_[player][nain] = { map_.get_spawn_point(player), VIE_NAIN,
-                                     NB_POINTS_DEPLACEMENT, NB_POINTS_ACTION,
+                                     NB_POINTS_ACTION, NB_POINTS_DEPLACEMENT,
                                      false, 0 };
             map_.add_nain(nain, nains_[player][nain].pos, player);
             if (map_.get_rope(map_.get_spawn_point(player)) != nullptr)
