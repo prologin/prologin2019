@@ -73,7 +73,8 @@ case_type GameState::get_cell_type(position pos) const
 
 position GameState::get_spawn_point(int player_id) const
 {
-    return map_.get_spawn_point(player_id);
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
+    return map_.get_spawn_point(internal_player_id);
 }
 
 const minerai* GameState::get_minerai(position pos) const
