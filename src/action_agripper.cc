@@ -19,6 +19,7 @@ int ActionAgripper::check(const GameState* st) const
 void ActionAgripper::apply_on(GameState* st) const
 {
     st->set_nain_accroche(player_id_, id_nain_, true);
+    st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
 
     internal_action action;
     action.internal = false;

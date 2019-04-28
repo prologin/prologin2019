@@ -37,6 +37,7 @@ void ActionMiner::apply_on(GameState* st) const
     st->add_to_internal_history(player_id_, action);
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
+    st->reduce_pa(player_id_, id_nain_, COUT_MINER);
     position dest = get_position_offset(nain->pos, dir_);
     case_type type = st->get_cell_type(dest);
     if (type == LIBRE)

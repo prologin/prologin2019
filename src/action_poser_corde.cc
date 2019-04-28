@@ -29,6 +29,11 @@ void ActionPoserCorde::apply_on(GameState* st) const
 {
     const nain* nain = st->get_nain(player_id_, id_nain_);
     st->add_rope(get_position_offset(nain->pos, dir_));
+    for (int n = 0; n < NB_NAINS; ++n)
+    {
+        int pa = st->get_nain(player_id_, n)->pa;
+        st->reduce_pa(player_id_, n, pa);
+    }
 
     internal_action action;
     action.internal = false;

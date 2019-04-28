@@ -16,6 +16,8 @@ int ActionTirer::check(const GameState* st) const
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
         return NAIN_MORT;
+    if (nain->accroche)
+        return DEJA_ACCROCHE;
     position dest = get_position_offset(nain->pos, dir_corde_);
     if (!inside_map(dest))
         return HORS_LIMITES;
@@ -33,6 +35,7 @@ int ActionTirer::check(const GameState* st) const
 void ActionTirer::apply_on(GameState* st) const
 {
     const nain* nain = st->get_nain(player_id_, id_nain_);
+    st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
     position dest = get_position_offset(nain->pos, dir_corde_);
 
     const Rope *rope = st->get_rope(dest);
