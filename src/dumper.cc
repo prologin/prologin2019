@@ -152,7 +152,11 @@ static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
 {
     std::vector<std::pair<const nain*, int>> nains;
     for (int nain_id = 0; nain_id < NB_NAINS; ++nain_id)
-        nains.push_back({ st.get_nain(player_id, nain_id), nain_id });
+    {
+        const nain *nain = st.get_nain(player_id, nain_id);
+        if (nain != nullptr)
+            nains.push_back({ nain, nain_id });
+    }
     dump_vector<std::pair<const nain*, int>>(nains, ss, [](auto& ss, auto nain)
         {
             ss << "{\"id_nain\": " << nain.second << ", ";

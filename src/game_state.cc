@@ -276,23 +276,24 @@ void GameState::reduce_pv_internal(int internal_player_id, int nain_id, int dama
 
 void GameState::respawn(int player_id)
 {
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
     bool spawn = false;
     for (auto nain : nains_respawn_)
-        if (nain.first == player_id)
+        if (nain.first == internal_player_id)
         {
-            nains_[player_id][nain.second] = { map_.get_spawn_point(player_id),
+            nains_[nain.first][nain.second] = { map_.get_spawn_point(nain.first),
                                                VIE_NAIN, NB_POINTS_DEPLACEMENT,
                                                NB_POINTS_ACTION, false, 0 };
-            map_.add_nain(nain.second, nains_[player_id][nain.second].pos,
-                          player_id);
-            if (map_.get_rope(map_.get_spawn_point(player_id)) != nullptr)
-                map_.add_nain_to_rope(map_.get_spawn_point(player_id), player_id, nain.second);
+            map_.add_nain(nain.second, nains_[nain.first][nain.second].pos,
+                          nain.first);
+            if (map_.get_rope(map_.get_spawn_point(nain.first)) != nullptr)
+                map_.add_nain_to_rope(map_.get_spawn_point(nain.first), nain.first, nain.second);
             spawn = true;
         }
     if (spawn)
-        check_gravity(map_.get_spawn_point(player_id));
+        check_gravity(map_.get_spawn_point(internal_player_id));
     nains_respawn_.erase(std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
-                   [&] (auto nain) { return nain.first == player_id; }), nains_respawn_.end());
+                   [&] (auto nain) { return nain.first == internal_player_id; }), nains_respawn_.end());
 }
 
 const std::vector<position>& GameState::get_ropes() const
