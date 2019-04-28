@@ -6,7 +6,7 @@ from PIL import Image
 
 
 filename = sys.argv[1]
-timelines = [
+animations = [
     'move',
     'in_place',
     'mine',
@@ -20,7 +20,7 @@ tile_height = 30
 img = Image.open(filename)
 width, height = img.size
 
-for y, frame_y in enumerate(timelines):
+for y, name in enumerate(animations):
     for x in range(100):
         # Extract a non-empty area
         area = (x * tile_width, y * tile_height, (x + 1) * tile_width,
@@ -31,7 +31,7 @@ for y, frame_y in enumerate(timelines):
             break
 
         # Save the file
-        if not os.path.exists(timelines[y]):
-            os.makedirs(timelines[y])
+        if not os.path.exists(name):
+            os.makedirs(name)
 
-        cropped.save(f'{timelines[y]}/{x}.png')
+        cropped.save(f'{name}/{x}.png')
