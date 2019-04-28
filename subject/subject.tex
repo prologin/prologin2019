@@ -1,0 +1,187 @@
+% SPDX-License-Identifier: GPL-2.0-or-later
+% Copyright 2018 Association Prologin <info@prologin.org>
+% Copyright 2019 Cyril Amar
+
+%LaTeX Document
+\documentclass[a4paper,twoside,12pt]{article}
+\usepackage{xltxtra}
+\usepackage{url}
+\usepackage{caption}
+%\usepackage{lettrine}
+\usepackage{wrapfig}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setromanfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+\setmonofont[
+  Mapping=tex-text,
+%  Scale=0.85,
+  AutoFakeSlant,
+  BoldItalicFeatures={FakeSlant}]{Inconsolata}
+%\newfontfamily{\A}[Scale=0.85]{DejaVu Sans} % TODO find a free Arial/Helvetica equivalent
+%\newfontfamily{\J}[Scale=0.85]{Hiragino Kaku Gothic Pro}
+%\newfontfamily{\P}[Scale=0.85]{Palatino}
+\usepackage{soul} % Pour barrer
+\usepackage{textcomp} % Pour les trademarks
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         BEGIN FIXME         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\plongday{Vendredi}
+\def\pday{31}
+\def\pmonth{mai}
+\def\pyear{2019}
+
+\def\ptitle{\textsc{Le sujet sans nom}} %% Subject's main title
+\def\psubtitle{Mine standard de granit standard} %% Subject's sub title
+
+\def\plogo{prologin2019.pdf} %% Logo FIXME
+\def\psubjectpicture{logofinale.png} %% Picture to be displayed FIXME
+%% on its own page
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         END FIXME           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%              DO NOT EDIT PAST THIS LINE            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+%\documentclass[a4paper,twoside,12pt]{book}
+
+\usepackage[french]{babel} % TODO switch to polyglossia?
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{tikz}
+
+\def\pdate{\plongday{} \pday{} \pmonth{} \pyear{}}
+\def\tightlist{} % fix for pandoc
+
+\definecolor{colIdentifier}{gray}{0}
+\definecolor{colKeys}{rgb}{0,0,0.6}
+\lstset{
+    extendedchars=false,
+    showstringspaces=false,
+    escapeinside=@@,
+%    keywordstyle=\color{blue},
+%    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    columns=flexible,
+    language=C++,
+    tabsize=2,
+    basicstyle=\ttfamily\NoAutoSpacing
+%    numbers=left,
+%    frame=lines
+}
+\lstnewenvironment{lst-c++}{%
+\lstset{%
+language=C++
+}}{}
+
+\newcommand{\wfig}[2]{
+}
+
+
+\captionsetup{justification=centering}
+
+%\renewcommand\ttdefault{cmtt}
+
+\newcommand{\functitle}[1]{%
+\vspace{0.5cm}
+$\bullet$ \underline{\textbf{#1}}
+}
+
+%\NoAutoSpaceBeforeFDP
+\geometry{bindingoffset=5mm,hmarginratio=1:1,heightrounded,headheight=15pt,bmargin=3cm}
+
+\setcounter{tocdepth}{2}
+
+\makeindex
+
+\begin{document}
+\pagestyle{empty}
+\sloppy
+
+\lhead[\thepage]{\nouppercase \leftmark}
+\rhead[\textsl{Prologin \pyear{}} --- Sujet de la finale]{\thepage}
+%%\cfoot{\color{red}TOP SECRET//SI//ORCON//NOFORN}
+
+\sethlcolor{black}
+
+% Couverture =========================================================
+\begin{titlepage}
+\begin{center}
+~\includegraphics[width=\linewidth]{\plogo}\\
+\vspace{5cm}
+\Huge
+\textbf{\ptitle{}}
+
+\vspace{1cm}
+
+\Large
+\textbf{\psubtitle{}}
+
+\vspace{2cm}
+
+\normalsize
+\textnormal Sujet de la finale du Concours National d'Informatique\\
+\pdate\\
+
+\end{center}
+
+
+\end{titlepage}
+
+\small
+
+% Sommaire ===========================================================
+\cleardoublepage
+\tableofcontents
+
+\normalsize
+
+% Corps ==============================================================
+%\cleardoublepage
+\setcounter{page}{1}
+\pagestyle{fancy}
+\parskip=6pt plus 3pt
+
+\newpage
+\vspace{4cm}
+\begin{center}\includegraphics[height=14cm]{\psubjectpicture}\end{center}
+
+\input{subject_content.tex}
+
+%\newpage
+%\input{finale.tex}
+
+\newpage
+\input{tournois.tex}
+
+
+\newpage
+\section{API}
+\input{apidoc}
+
+\newpage
+\section{Notes sur l'utilisation de l'API}
+\input{useapi}
+
+\end{document}
