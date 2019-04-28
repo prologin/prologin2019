@@ -53,8 +53,11 @@ public:
     /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
     erreur deplacer(int id_nain, direction dir);
 
-    /// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+    /// Le nain (standard) ``id_nain`` lâche la paroi.
     erreur lacher(int id_nain);
+
+    /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
+    erreur agripper(int id_nain);
 
     /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard) dans la direction indiquée.
     erreur miner(int id_nain, direction dir);
@@ -85,6 +88,9 @@ public:
 
     /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
     minerai info_minerai(position pos);
+
+    /// Renvoie la liste de touts les minerais dans la mine.
+    std::vector<position> liste_minerais();
 
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
     int cout_deplacement(int id_nain, direction dir);

@@ -39,6 +39,10 @@ void Rules::register_actions()
         []() -> rules::IAction* { return new ActionLacher(); }
         );
     api_->actions()->register_action(
+        ID_ACTION_AGRIPPER,
+        []() -> rules::IAction* { return new ActionAgripper(); }
+        );
+    api_->actions()->register_action(
         ID_ACTION_MINER,
         []() -> rules::IAction* { return new ActionMiner(); }
         );
@@ -87,7 +91,7 @@ void Rules::at_player_start(rules::ClientMessenger_sptr)
     {
         sandbox_.execute(champion_partie_init_);
     }
-    catch (utils::SandboxTimeout)
+    catch (utils::SandboxTimeout&)
     {
         FATAL("player_start: timeout");
     }
@@ -104,7 +108,7 @@ void Rules::at_player_end(rules::ClientMessenger_sptr)
     {
         sandbox_.execute(champion_partie_fin_);
     }
-    catch (utils::SandboxTimeout)
+    catch (utils::SandboxTimeout&)
     {
         FATAL("player_end: timeout");
     }
@@ -121,7 +125,7 @@ void Rules::player_turn()
     {
         sandbox_.execute(champion_jouer_tour_);
     }
-    catch (utils::SandboxTimeout)
+    catch (utils::SandboxTimeout&)
     {
         FATAL("player_turn: timeout");
     }
@@ -136,9 +140,10 @@ void Rules::start_of_player_turn(unsigned int player_id)
 {
     api_->game_state()->reset_pa(player_id);
     api_->game_state()->reset_pm(player_id);
+    api_->game_state()->respawn(player_id);
 }
 
-void Rules::end_of_player_turn(unsigned int player_id)
+void Rules::end_of_player_turn(unsigned int /* player_id */)
 {
     // Clear the list of game states at the end of each turn (half-round)
     // We need the linked list of game states only for undo and history,

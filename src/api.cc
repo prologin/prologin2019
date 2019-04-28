@@ -40,10 +40,24 @@ erreur Api::deplacer(int id_nain, direction dir)
     return OK;
 }
 
-/// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+/// Le nain (standard) ``id_nain`` lâche la paroi.
 erreur Api::lacher(int id_nain)
 {
     rules::IAction_sptr action(new ActionLacher(id_nain, player_->id));
+
+    erreur err;
+    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+        return err;
+
+    actions_.add(action);
+    game_state_set(action->apply(game_state_));
+    return OK;
+}
+
+/// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
+erreur Api::agripper(int id_nain)
+{
+    rules::IAction_sptr action(new ActionAgripper(id_nain, player_->id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -119,15 +133,13 @@ case_type Api::type_case(position pos)
 /// Renvoie la liste de toutes les corde dans la mine.
 std::vector<position> Api::liste_cordes()
 {
-    // TODO
-    abort();
+    return game_state_->get_ropes();
 }
 
 /// Indique si une corde se trouve sur une case donnée.
 bool Api::corde_sur_case(position pos)
 {
-    // TODO
-    abort();
+    return game_state_->get_rope(pos) != nullptr;
 }
 
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
@@ -143,27 +155,62 @@ nain Api::info_nain(int id_joueur, int id_nain)
         return { { -1, -1 }, -1, -1, -1, -1, -1 };
     if (id_nain < 0 || id_nain >= NB_NAINS)
         return { { -1, -1 }, -1, -1, -1, -1, -1 };
-    return game_state_->get_nain(id_joueur, id_nain);
+    const nain *nain = game_state_->get_nain(id_joueur, id_nain);
+    if (nain == nullptr)
+        return { { -1, -1 }, -1, -1, -1, -1, -1 };
+    return *nain;
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
-    return game_state_->get_minerai(pos);
+    const minerai* minerai = game_state_->get_minerai(pos);
+    if (minerai == nullptr)
+        return { -1, -1 };
+    return *minerai;
 }
 
+/// Renvoie la liste de touts les minerais dans la mine.
+std::vector<position> Api::liste_minerais()
+{
+    return game_state_->get_ores();
+}
+
+#include "position.hh"
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
 int Api::cout_deplacement(int id_nain, direction dir)
 {
-    // TODO
-    abort();
+    if (id_nain < 0 || id_nain >= NB_NAINS)
+        return -1;
+    if (dir < 0 || dir >= 4)
+        return -1;
+
+    const nain* nain = game_state_->get_nain(player_->id, id_nain);
+    if (nain == nullptr)
+        return -1;
+
+    position dest = get_position_offset(nain->pos, dir);
+    if (!inside_map(dest))
+        return -1;
+    if (game_state_->get_cell_type(dest) != LIBRE)
+        return -1;
+    int dest_owner = game_state_->get_cell_ownership(dest);
+    if (dest_owner != -1 && dest_owner != player_->id)
+        return -1;
+
+    bool dest_on_ground = true;
+    if (inside_map(get_position_offset(dest, BAS)))
+        dest_on_ground = game_state_->get_cell_type(get_position_offset(dest, BAS)) != LIBRE;
+    if (!nain->accroche)
+    {
+        
+    }
 }
 
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 std::vector<action_hist> Api::historique()
 {
-    // TODO
-    abort();
+    return game_state_->get_history(adversaire());
 }
 
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
@@ -189,8 +236,11 @@ int Api::adversaire()
 /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
 bool Api::annuler()
 {
-    // TODO
-    abort();
+    if (!game_state_->can_cancel())
+        return false;
+    actions_.cancel();
+    game_state_ = rules::cancel(game_state_);
+    return true;
 }
 
 /// Retourne le numéro du tour actuel.

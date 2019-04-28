@@ -122,6 +122,12 @@ std::string convert_to_string(erreur in){
     case ID_NAIN_INVALIDE: return "\"id_nain_invalide\"";
     case OBSTACLE_MUR: return "\"obstacle_mur\"";
     case OBSTACLE_NAIN: return "\"obstacle_nain\"";
+    case OBSTACLE_CORDE: return "\"obstacle_corde\"";
+    case PAS_DE_NAIN: return "\"pas_de_nain\"";
+    case NAIN_MORT: return "\"nain_mort\"";
+    case PAS_ACCROCHE: return "\"pas_accroche\"";
+    case DEJA_ACCROCHE: return "\"deja_accroche\"";
+    case PAS_DE_CORDE: return "\"pas_de_corde\"";
     case DRAPEAU_INVALIDE: return "\"drapeau_invalide\"";
   }
   return "bad value";
@@ -142,6 +148,7 @@ std::string convert_to_string(action_type in){
   {
     case ACTION_DEPLACER: return "\"action_deplacer\"";
     case ACTION_LACHER: return "\"action_lacher\"";
+    case ACTION_AGRIPPER: return "\"action_agripper\"";
     case ACTION_MINER: return "\"action_miner\"";
     case ACTION_POSER_CORDE: return "\"action_poser_corde\"";
     case ACTION_TIRER: return "\"action_tirer\"";
@@ -288,10 +295,16 @@ extern "C" erreur api_deplacer(int id_nain, direction dir)
   return api->deplacer(id_nain, dir);
 }
 
-/// Le nain (standard) ``id_nain`` lâche la paroi ou la corde.
+/// Le nain (standard) ``id_nain`` lâche la paroi.
 extern "C" erreur api_lacher(int id_nain)
 {
   return api->lacher(id_nain);
+}
+
+/// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
+extern "C" erreur api_agripper(int id_nain)
+{
+  return api->agripper(id_nain);
 }
 
 /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard) dans la direction indiquée.
@@ -352,6 +365,12 @@ extern "C" nain api_info_nain(int id_joueur, int id_nain)
 extern "C" minerai api_info_minerai(position pos)
 {
   return api->info_minerai(pos);
+}
+
+/// Renvoie la liste de touts les minerais dans la mine.
+extern "C" std::vector<position> api_liste_minerais()
+{
+  return api->liste_minerais();
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
@@ -443,6 +462,12 @@ std::ostream& operator<<(std::ostream& os, erreur v)
   case ID_NAIN_INVALIDE: os << "ID_NAIN_INVALIDE"; break;
   case OBSTACLE_MUR: os << "OBSTACLE_MUR"; break;
   case OBSTACLE_NAIN: os << "OBSTACLE_NAIN"; break;
+  case OBSTACLE_CORDE: os << "OBSTACLE_CORDE"; break;
+  case PAS_DE_NAIN: os << "PAS_DE_NAIN"; break;
+  case NAIN_MORT: os << "NAIN_MORT"; break;
+  case PAS_ACCROCHE: os << "PAS_ACCROCHE"; break;
+  case DEJA_ACCROCHE: os << "DEJA_ACCROCHE"; break;
+  case PAS_DE_CORDE: os << "PAS_DE_CORDE"; break;
   case DRAPEAU_INVALIDE: os << "DRAPEAU_INVALIDE"; break;
   }
   return os;

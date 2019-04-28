@@ -11,6 +11,10 @@ int ActionDebugAfficherDrapeau::check(const GameState* /* st */) const
     return OK;
 }
 
-void ActionDebugAfficherDrapeau::apply_on(GameState* /* st */) const
+void ActionDebugAfficherDrapeau::apply_on(GameState* st) const
 {
+    internal_action action;
+    action.internal = true;
+    action.debug_flag = { drapeau_, pos_ };
+    st->add_to_internal_history(player_id_, action);
 }

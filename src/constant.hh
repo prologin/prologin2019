@@ -36,6 +36,9 @@
 /// Nombre de nains (standard) par joueur.
 # define NB_NAINS                  6
 
+/// Dégât infligé par un coup de pioche à un nain (standard).
+# define DEGAT_PIOCHE              3
+
 /// Nombre de points de déplacement pour qu'un nain (standard) se déplace d'une case.
 # define COUT_DEPLACEMENT          1
 
@@ -48,8 +51,11 @@
 /// Nombre de points d'action pour qu'un nain (standard) tire sur une corde.
 # define COUT_TIRER                1
 
-/// Nombre de points d'action pour qu'un nain (standard) lâche une corde ou la paroi.
+/// Nombre de points d'action pour qu'un nain (standard) lâche la paroi.
 # define COUT_LACHER               0
+
+/// Nombre de points d'action pour qu'un nain (standard) s'agrippe à la paroi.
+# define COUT_AGRIPPER             0
 
 /// Types de cases
 typedef enum case_type {
@@ -98,6 +104,12 @@ typedef enum erreur {
   ID_NAIN_INVALIDE, /* <- Le nain (standard) spécifié n'existe pas. */
   OBSTACLE_MUR, /* <- La position spécifiée est un mur. */
   OBSTACLE_NAIN, /* <- La position spécifiée est un nain (standard). */
+  OBSTACLE_CORDE, /* <- Il y a déjà une corde dans la direction spécifiée. */
+  PAS_DE_NAIN, /* <- Il n'y a pas de nain (standard) sur la position spécifiée. */
+  NAIN_MORT, /* <- Le nain (standard) spécifié est mort. */
+  PAS_ACCROCHE, /* <- Le nain (standard) n'est pas accroché. */
+  DEJA_ACCROCHE, /* <- Le nain (standard) est déjà accroché. */
+  PAS_DE_CORDE, /* <- Il n'y a pas de corde dans la direction spécifiée. */
   DRAPEAU_INVALIDE, /* <- Le drapeau spécifié n'existe pas. */
 } erreur;
 // This is needed for old compilers
@@ -114,6 +126,7 @@ namespace std
 typedef enum action_type {
   ACTION_DEPLACER, /* <- Action ``deplacer`` */
   ACTION_LACHER, /* <- Action ``lacher`` */
+  ACTION_AGRIPPER, /* <- Action ``agripper`` */
   ACTION_MINER, /* <- Action ``miner`` */
   ACTION_POSER_CORDE, /* <- Action ``poser_corde`` */
   ACTION_TIRER, /* <- Action ``tirer`` */
