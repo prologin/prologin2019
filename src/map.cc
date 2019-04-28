@@ -249,6 +249,11 @@ const std::vector<position>& Map::get_ropes() const
     return ropes_pos_;
 }
 
+const std::vector<Rope> Map::get_base_ropes() const
+{
+    return ropes_;
+}
+
 void Map::check_gravity(position pos)
 {
     const Rope *rope = get_rope(pos);

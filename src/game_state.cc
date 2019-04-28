@@ -222,7 +222,7 @@ void GameState::check_gravity(position pos)
         set_nain_position_internal(nains.first, nain_id, pos + (BAS * fall));
         if (fall < 4)
             return;
-        reduce_pv(nains.first, nain_id, std::pow(2, 3 - fall));
+        reduce_pv(nains.first, nain_id, std::pow(2, fall - 4));
     }
     position up = get_position_offset(pos, HAUT);
     if (inside_map(up))
@@ -291,6 +291,11 @@ void GameState::respawn(int player_id)
 const std::vector<position>& GameState::get_ropes() const
 {
     return map_.get_ropes();
+}
+
+const std::vector<Rope> GameState::get_base_ropes() const
+{
+    return map_.get_base_ropes();
 }
 
 const Rope* GameState::get_rope(position pos) const

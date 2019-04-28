@@ -48,6 +48,7 @@ class GameState : public rules::GameState
         void respawn(int player_id);
 
         const std::vector<position>& get_ropes() const;
+        const std::vector<Rope> get_base_ropes() const;
         const Rope* get_rope(position pos) const;
         void add_rope(position pos);
 

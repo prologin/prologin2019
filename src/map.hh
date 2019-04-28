@@ -51,6 +51,7 @@ public:
     void add_nain_to_rope(position pos, int player_id, int nain_id);
     void remove_nain_from_rope(position pos, int player_id, int nain_id);
     const std::vector<position>& get_ropes() const;
+    const std::vector<Rope> get_base_ropes() const;
     void check_gravity(position pos);
 
 private:

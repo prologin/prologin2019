@@ -201,7 +201,11 @@ static void dump_map(std::ostream& ss, const GameState& st)
             ss << ", \"rendement\": " << ore->rendement << "}";
         });
     ss << ", \"cordes\": ";
-    dump_vector<position>(st.get_ropes(), ss, [](auto& ss, position pos) { ss << pos; });
+    dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope)
+        {
+            ss << "{ \"anchor\": " << rope.get_anchor();
+            ss << ", \"bottom\": " << rope.get_bottom() << "}";
+        });
     ss << "}";
 }
 

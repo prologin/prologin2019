@@ -488,6 +488,7 @@ std::ostream& operator<<(std::ostream& os, action_type v)
 {
   switch (v) {
   case ACTION_DEPLACER: os << "ACTION_DEPLACER"; break;
+  case ACTION_AGRIPPER: os << "ACTION_AGRIPPER"; break;
   case ACTION_LACHER: os << "ACTION_LACHER"; break;
   case ACTION_MINER: os << "ACTION_MINER"; break;
   case ACTION_POSER_CORDE: os << "ACTION_POSER_CORDE"; break;
