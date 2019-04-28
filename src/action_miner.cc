@@ -17,7 +17,7 @@ int ActionMiner::check(const GameState* st) const
         return HORS_LIMITES;
     case_type type = st->get_cell_type(dest);
     if (type == OBSIDIENNE)
-        return OBSTACLE_MUR; // TODO maybe change error
+        return OBSTACLE_MUR;
 
     const auto& nains = st->get_nains_at(dest);
     if (type == LIBRE && nains.second.empty())

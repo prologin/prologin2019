@@ -9,7 +9,7 @@ int ActionPoserCorde::check(const GameState* st) const
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
     if (st->can_cancel())
-        return PA_INSUFFISANTS; // TODO already do something
+        return PA_INSUFFISANTS;
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)
@@ -18,7 +18,7 @@ int ActionPoserCorde::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
     if (st->get_rope(dest) != nullptr)
-        return -1; // TODO already a rope there
+        return OBSTACLE_CORDE;
     if (st->get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 

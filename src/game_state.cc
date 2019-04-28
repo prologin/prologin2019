@@ -185,6 +185,8 @@ void GameState::check_gravity(position pos)
 {
     if (get_cell_ownership(pos) == -1)
         return;
+    if (get_rope(pos) != nullptr)
+        return;
     const auto& nains = map_.get_nains_at(pos);
     for (int nain_id : nains.second)
     {

@@ -25,7 +25,7 @@ int ActionTirer::check(const GameState* st) const
         return OBSTACLE_MUR;
     const Rope *rope = st->get_rope(dest);
     if (rope == nullptr)
-        return -1; // TODO no rope
+        return PAS_DE_CORDE;
     if (rope->get_nains().empty())
         return PAS_DE_NAIN;
 
