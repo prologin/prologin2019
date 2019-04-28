@@ -207,6 +207,14 @@ int Api::cout_deplacement(int id_nain, direction dir)
     }
 }
 
+/// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+position Api::position_taverne(int id_joueur)
+{
+    if (id_joueur != moi() && id_joueur != adversaire())
+        return { -1, -1 };
+    return game_state_->get_spawn_point(id_joueur);
+}
+
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 std::vector<action_hist> Api::historique()
 {

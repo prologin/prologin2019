@@ -23,6 +23,7 @@ class GameState : public rules::GameState
         int internal_to_external_id(int internal_id) const;
 
         case_type get_cell_type(position pos) const;
+        position get_spawn_point(int player_id) const;
         const minerai* get_minerai(position pos) const;
         const std::vector<position>& get_ores() const;
         void set_cell_type(position pos, case_type type);

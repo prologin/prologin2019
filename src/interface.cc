@@ -379,6 +379,12 @@ extern "C" int api_cout_deplacement(int id_nain, direction dir)
   return api->cout_deplacement(id_nain, dir);
 }
 
+/// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+extern "C" position api_position_taverne(int id_joueur)
+{
+  return api->position_taverne(id_joueur);
+}
+
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 extern "C" std::vector<action_hist> api_historique()
 {

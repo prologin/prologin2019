@@ -143,7 +143,7 @@ struct:
     str_summary: Minerai à récolter
     str_tuple: no
     str_field:
-      - [resistance, int, "Nombre de tours consécutifs de minage nécessaires"]
+      - [resistance, int, "Nombre de tours de minage nécessaires"]
       - [rendement, int, "Valeur marchande du bloc de minerai"]
   -
     str_name: nain
@@ -300,6 +300,12 @@ function:
     fct_arg:
       - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
+  -
+    fct_name: position_taverne
+    fct_summary: Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+    fct_ret_type: position
+    fct_arg:
+      - [id_joueur, int, "Numéro du joueur"]
 
 # Historique (actions de l'adversaire durant le tour précédent)
 

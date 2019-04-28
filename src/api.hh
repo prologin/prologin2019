@@ -95,6 +95,9 @@ public:
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
     int cout_deplacement(int id_nain, direction dir);
 
+    /// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+    position position_taverne(int id_joueur);
+
     /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
     std::vector<action_hist> historique();
 

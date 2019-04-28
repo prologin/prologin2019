@@ -167,7 +167,7 @@ typedef struct position {
 
 /// Minerai à récolter
 typedef struct minerai {
-  int resistance;  /* <- Nombre de tours consécutifs de minage nécessaires */
+  int resistance;  /* <- Nombre de tours de minage nécessaires */
   int rendement;  /* <- Valeur marchande du bloc de minerai */
 } minerai;
 
