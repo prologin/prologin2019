@@ -77,7 +77,6 @@ enum:
       - [libre, "Case libre"]
       - [granite, "Granite standard"]
       - [obsidienne, "Obsidienne"]
-      - [minerai, "Minerai"]
       - [erreur_case, "Erreur"]
   -
     enum_name: direction

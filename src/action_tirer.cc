@@ -39,7 +39,7 @@ void ActionTirer::apply_on(GameState* st) const
     position dest = get_position_offset(nain->pos, dir_corde_);
 
     const Rope *rope = st->get_rope(dest);
-    auto nains = rope->get_nains();
+    auto nains(rope->get_nains());
     std::sort(nains.begin(), nains.end(), [&] (const auto& a, const auto& b)
         {
             position pa = st->get_nain(a.first, a.second)->pos;
@@ -51,14 +51,14 @@ void ActionTirer::apply_on(GameState* st) const
 
     for (auto& nain : nains)
     {
-        position pos = st->get_nain(nain.first, nain.second)->pos;
+        position pos = st->get_nain_internal(nain.first, nain.second)->pos;
         position dest = get_position_offset(pos, sens_);
         if (st->get_rope(dest) == nullptr)
             continue;
         int ownership = st->get_internal_cell_ownership(dest);
         if (ownership != player_id_ && ownership != -1)
             continue;
-        st->set_nain_position_internal(player_id_, id_nain_, dest);
+        st->set_nain_position_internal(nain.first, nain.second, dest);
     }
 
     internal_action action;

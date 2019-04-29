@@ -62,7 +62,6 @@ typedef enum case_type {
   LIBRE, /* <- Case libre */
   GRANITE, /* <- Granite standard */
   OBSIDIENNE, /* <- Obsidienne */
-  MINERAI, /* <- Minerai */
   ERREUR_CASE, /* <- Erreur */
 } case_type;
 // This is needed for old compilers

@@ -83,7 +83,7 @@ void Map::load_minerai_info(std::istream& stream)
 
         ores_[minerai] = { resistance, rendement };
         ores_pos_[minerai] = { l, c };
-        ore_[l][c] = &ores_[minerai];
+        ore_[l][c] = minerai;
         seen.push_back(pos);
     }
 }
@@ -115,14 +115,18 @@ Map::Map(std::istream& stream)
 {
     INFO("Loading map");
 
+    for (int x = 0; x < TAILLE_MINE; ++x)
+        for (int y = 0; y < TAILLE_MINE; ++y)
+        {
+            ore_[y][x] = -1;
+            rope_[y][x] = -1;
+            nains_[y][x] = { -1, std::unordered_set<int>() };
+        }
+
     load_map_cells(stream);
     load_spawn_point(stream);
     load_minerai_info(stream);
     load_rope_info(stream);
-
-    for (int x = 0; x < TAILLE_MINE; ++x)
-        for (int y = 0; y < TAILLE_MINE; ++y)
-            nains_[y][x] = { -1, std::unordered_set<int>() };
 }
 
 Map::Map(const Map& map)
@@ -154,7 +158,10 @@ const minerai* Map::get_minerai(position pos) const
 {
     if (!inside_map(pos))
         return nullptr;
-    return ore_[pos.ligne][pos.colonne];
+    int index = ore_[pos.ligne][pos.colonne];
+    if (index == -1)
+        return nullptr;
+    return &ores_[index];
 }
 
 const std::vector<position>& Map::get_ores() const
@@ -174,14 +181,13 @@ inline bool operator==(const minerai& a, const minerai& b)
 
 void Map::remove_minerai(position pos)
 {
-    ores_.erase(std::remove(ores_.begin(), ores_.end(), *ore_[pos.ligne][pos.colonne]), ores_.end());
     ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos), ores_pos_.end());
-    ore_[pos.ligne][pos.colonne] = nullptr;
+    ore_[pos.ligne][pos.colonne] = -1;
 }
 
 void Map::set_minerai_resistance(position pos, int resistance)
 {
-    ore_[pos.ligne][pos.colonne]->resistance = resistance;
+    ores_[ore_[pos.ligne][pos.colonne]].resistance = resistance;
 }
 
 void Map::add_nain(int nain_id, position pos, int player_id)
@@ -223,7 +229,7 @@ void Map::add_rope(position pos)
 {
     ropes_.push_back(Rope(pos));
     ropes_pos_.push_back(pos);
-    rope_[pos.ligne][pos.colonne] = &ropes_.back();
+    rope_[pos.ligne][pos.colonne] = ropes_.size() - 1;
     check_gravity(pos);
 }
 
@@ -231,17 +237,20 @@ const Rope* Map::get_rope(position pos) const
 {
     if (!inside_map(pos))
         return nullptr;
-    return rope_[pos.ligne][pos.colonne];
+    int index = rope_[pos.ligne][pos.colonne];
+    if (index == -1)
+        return nullptr;
+    return &ropes_[index];
 }
 
 void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
 {
-    rope_[pos.ligne][pos.colonne]->add_nain(player_id, nain_id);
+    ropes_[rope_[pos.ligne][pos.colonne]].add_nain(player_id, nain_id);
 }
 
 void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
 {
-    rope_[pos.ligne][pos.colonne]->remove_nain(player_id, nain_id);
+    ropes_[rope_[pos.ligne][pos.colonne]].remove_nain(player_id, nain_id);
 }
 
 const std::vector<position>& Map::get_ropes() const
@@ -264,10 +273,16 @@ void Map::check_gravity(position pos)
     if (down == nullptr)
     {
         ropes_pos_.push_back(dest);
-        rope_[pos.ligne][pos.colonne]->extends(dest);
+        ropes_[rope_[pos.ligne][pos.colonne]].extends(dest);
         rope_[dest.ligne][dest.colonne] = rope_[pos.ligne][pos.colonne];
         check_gravity(dest);
         return;
     }
-    INFO("merge");
+    ropes_[rope_[dest.ligne][dest.colonne]].merge_up(rope);
+    const auto& positions(rope->get_positions());
+    ropes_[rope_[pos.ligne][pos.colonne]].clear();
+    for (position pos : positions)
+        rope_[pos.ligne][pos.colonne] =  rope_[dest.ligne][dest.colonne];
+    for (const auto& nain : rope->get_nains())
+        add_nain_to_rope(dest, nain.first, nain.second);
 }

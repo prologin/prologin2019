@@ -66,11 +66,11 @@ private:
     std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
     std::array<position, 2> spawn_point_;
 
-    std::array<std::array<Rope*, TAILLE_MINE>, TAILLE_MINE> rope_;
+    std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> rope_;
     std::vector<Rope> ropes_;
     std::vector<position> ropes_pos_;
 
-    std::array<std::array<minerai*, TAILLE_MINE>, TAILLE_MINE> ore_;
+    std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> ore_;
     std::vector<minerai> ores_;
     std::vector<position> ores_pos_;
 };

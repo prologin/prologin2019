@@ -90,6 +90,14 @@ const std::vector<position>& GameState::get_ores() const
 void GameState::set_cell_type(position pos, case_type type)
 {
     map_.set_cell_type(pos, type);
+    position up = get_position_offset(pos, HAUT);
+    if (inside_map(up) && type == LIBRE)
+    {
+        if (get_rope(up) != nullptr)
+            map_.check_gravity(up);
+        if (map_.get_nains_at(up).first != -1)
+            check_gravity(up);
+    }
 }
 
 bool GameState::mine_minerai(position pos, int player_id, int nain_id)
@@ -108,6 +116,11 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 const nain* GameState::get_nain(int player_id, int nain_id) const
 {
     int internal_player_id = player_info_.at(player_id).get_internal_id();
+    return get_nain_internal(internal_player_id, nain_id);
+}
+
+const nain* GameState::get_nain_internal(int internal_player_id, int nain_id) const
+{
     nain nain = nains_[internal_player_id][nain_id];
     if (nain.vie <= 0)
         return nullptr;
@@ -183,8 +196,10 @@ int GameState::get_movement_cost(int player_id, int nain_id, direction dir) cons
 
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 {
-    nains_[player_id][nain_id].accroche = accroche;
-    check_gravity(nains_[player_id][nain_id].pos);
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
+    nains_[internal_player_id][nain_id].accroche = accroche;
+    if (!accroche)
+        check_gravity(nains_[internal_player_id][nain_id].pos);
 }
 
 int GameState::get_fall_distance(int player_id, int nain_id) const

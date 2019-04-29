@@ -21,7 +21,8 @@ void Rope::extends(position pos)
 
 void Rope::merge_up(const Rope *rope)
 {
-    for (auto pos = rope->get_positions().cbegin(); pos != rope->get_positions().cend(); ++pos)
+    const auto& poss(rope->get_positions());
+    for (auto pos = poss.rbegin(); pos != poss.rend(); ++pos)
         pos_.insert(pos_.begin(), *pos);
 }
 
@@ -32,6 +33,11 @@ void Rope::remove_nain(int player_id, int nain_id)
 void Rope::add_nain(int player_id, int nain_id)
 {
     nains_.push_back({ player_id, nain_id });
+}
+
+void Rope::clear()
+{
+    pos_.clear();
 }
 
 position Rope::get_anchor() const

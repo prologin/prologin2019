@@ -72,7 +72,6 @@ std::string convert_to_string(case_type in){
     case LIBRE: return "\"libre\"";
     case GRANITE: return "\"granite\"";
     case OBSIDIENNE: return "\"obsidienne\"";
-    case MINERAI: return "\"minerai\"";
     case ERREUR_CASE: return "\"erreur_case\"";
   }
   return "bad value";
@@ -428,7 +427,6 @@ std::ostream& operator<<(std::ostream& os, case_type v)
   case LIBRE: os << "LIBRE"; break;
   case GRANITE: os << "GRANITE"; break;
   case OBSIDIENNE: os << "OBSIDIENNE"; break;
-  case MINERAI: os << "MINERAI"; break;
   case ERREUR_CASE: os << "ERREUR_CASE"; break;
   }
   return os;

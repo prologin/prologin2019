@@ -8,8 +8,10 @@ int ActionPoserCorde::check(const GameState* st) const
         return ID_NAIN_INVALIDE;
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
-    if (st->can_cancel())
-        return PA_INSUFFISANTS;
+
+    for (int i = 0; i < NB_NAINS; ++i)
+        if (st->get_nain(player_id_, i)->pa != NB_POINTS_ACTION)
+            return PA_INSUFFISANTS;
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
     if (nain == nullptr)

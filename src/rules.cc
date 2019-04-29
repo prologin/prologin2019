@@ -148,7 +148,7 @@ void Rules::end_of_player_turn(unsigned int /* player_id */)
     // Clear the list of game states at the end of each turn (half-round)
     // We need the linked list of game states only for undo and history,
     // therefore old states are not needed anymore after the turn ends.
-    // TODO add this => api_->game_state()->clear_old_version();
+    api_->game_state()->clear_old_version();
 }
 
 void Rules::start_of_round()

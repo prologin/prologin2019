@@ -30,6 +30,7 @@ class GameState : public rules::GameState
         bool mine_minerai(position pos, int player_id, int nain_id);
 
         const nain* get_nain(int player_id, int nain_id) const;
+        const nain* get_nain_internal(int internal_player_id, int nain_id) const;
         const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
         int get_cell_ownership(position pos) const;
         int get_internal_cell_ownership(position pos) const;
