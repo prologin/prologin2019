@@ -3,7 +3,7 @@
 
 #include "test-helpers.hh"
 
-TEST_F(ApiTest, Api_spawn_obsidienne)
+TEST_F(ApiTest, Map_spawn_obsidienne)
 {
     for (auto& player: players)
     {

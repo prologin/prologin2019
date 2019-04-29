@@ -36,6 +36,7 @@ int PlayerInfo::get_score() const
 
 void PlayerInfo::increase_score(int delta)
 {
+    assert(true == false);
     player_->score += delta;
 }
 
