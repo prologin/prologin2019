@@ -7,7 +7,7 @@ name="gui.png"
 background=('granite/granite_dark.png' 'granite/granite_light.png')
 back_len=${#background[@]}
 
-characters=(mine/** move/**)
+characters=(blue/**/** green/**/**)
 char_len=${#characters[@]}
 
 gen_img()
