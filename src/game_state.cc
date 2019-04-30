@@ -83,7 +83,7 @@ std::vector<direction> GameState::get_shortest_path(position start,
     std::queue<int> current_component;
     current_component.push(pos_id(start));
 
-    while (true) {
+    while (predecessor[dest_id] == -1) {
         // Blocks part of next connected component by mining exactly 1
         // unexplored block.
         std::queue<int> next_component;
