@@ -75,7 +75,7 @@ std::vector<direction> GameState::get_shortest_path(position start,
     // to this cell.
     std::vector<int> predecessor(TAILLE_MINE * TAILLE_MINE, -1);
     // Marked to a different value from -1 to avoid a loop
-    predecessor[pos_id(start)] = -1;
+    predecessor[pos_id(start)] = -2;
 
     // Current component to explore: the queue is ordered in increasing number
     // of moves to use, all cells in this queue are accessible with the same
@@ -104,7 +104,7 @@ std::vector<direction> GameState::get_shortest_path(position start,
                 position target = get_position_offset(source, (direction) dir);
                 int target_id = pos_id(target);
 
-                if (inside_map(target) && predecessor[target_id] != -1) {
+                if (inside_map(target) && predecessor[target_id] == -1) {
                     predecessor[target_id] = source_id;
 
                     if (!is_obstacle(target))
