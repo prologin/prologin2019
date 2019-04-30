@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <queue>
 
 #include "position.hh"
 
@@ -53,6 +54,102 @@ rules::GameState* GameState::copy() const
     return new GameState(*this);
 }
 
+std::vector<direction> GameState::get_shortest_path(position start,
+                                                    position dest) const
+{
+    auto pos_id = [] (position pos) -> int {
+        return pos.ligne * TAILLE_MINE + pos.colonne;
+    };
+
+    auto pos_from_id = [] (int id) -> position {
+        position pos;
+        pos.ligne = id / TAILLE_MINE;
+        pos.colonne = id % TAILLE_MINE;
+        return pos;
+    };
+
+    int dest_id = pos_id(dest);
+    int start_id = pos_id(start);
+
+    // Keep track of the predecessor of each cell in a shortest path from start
+    // to this cell.
+    std::vector<int> predecessor(TAILLE_MINE * TAILLE_MINE, -1);
+    // Marked to a different value from -1 to avoid a loop
+    predecessor[pos_id(start)] = -1;
+
+    // Current component to explore: the queue is ordered in increasing number
+    // of moves to use, all cells in this queue are accessible with the same
+    // minimal number of mined blocks (initialy 0).
+    std::queue<int> current_component;
+    current_component.push(pos_id(start));
+
+    while (true) {
+        // Blocks part of next connected component by mining exactly 1
+        // unexplored block.
+        std::queue<int> next_component;
+
+        // Explore the current connected component by moving without digging
+        // any block.
+        while (!current_component.empty()) {
+            int source_id = current_component.front();
+            current_component.pop();
+            position source = pos_from_id(source_id);
+
+
+            if (source_id == dest_id) {
+                break;
+            }
+
+            for (int dir = 0 ; dir < 4 ; dir++) {
+                position target = get_position_offset(source, (direction) dir);
+                int target_id = pos_id(target);
+
+                if (inside_map(target) && predecessor[target_id] != -1) {
+                    predecessor[target_id] = source_id;
+
+                    if (!is_obstacle(target))
+                        current_component.push(target_id);
+                    else if (is_minable(target))
+                        next_component.push(target_id);
+                }
+            }
+        }
+
+        current_component = next_component;
+    }
+
+    // There might be no path to a cell if it is surrounded by unbreakable
+    // blocks.
+    if (predecessor[dest_id] == -1) {
+        return {};
+    }
+
+    // Unroll the path from the end.
+    std::vector<int> rev_ret;
+    rev_ret.push_back(dest_id);
+
+    while (rev_ret.back() != start_id) {
+        int source_id = rev_ret.back();
+        rev_ret.push_back(predecessor[source_id]);
+    }
+
+    // TODO: reverse ret and return
+    std::vector<direction> ret;
+
+    for (int i = rev_ret.size() - 1 ; i > 0 ; i--) {
+        for (int dir = 0 ; dir < 4 ; dir++) {
+            position source = pos_from_id(rev_ret[i]);
+            position target = pos_from_id(rev_ret[i-1]);
+
+            if (get_position_offset(source, (direction) dir) == target) {
+                ret.push_back((direction) dir);
+            }
+        }
+    }
+
+    return ret;
+}
+
 int GameState::opponent(int player_id) const
 {
     return (player_ids_[0] == player_id) ? player_ids_[1] : player_ids_[0];
@@ -69,6 +166,18 @@ int GameState::internal_to_external_id(int internal_id) const
 case_type GameState::get_cell_type(position pos) const
 {
     return map_.get_cell_type(pos);
+}
+
+bool GameState::is_obstacle(position pos) const
+{
+    case_type type = get_cell_type(pos);
+    return type == GRANITE || type == OBSIDIENNE;
+}
+
+bool GameState::is_minable(position pos) const
+{
+    case_type type = get_cell_type(pos);
+    return type == GRANITE;
 }
 
 position GameState::get_spawn_point(int player_id) const
