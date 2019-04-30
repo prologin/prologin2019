@@ -305,6 +305,16 @@ function:
     fct_ret_type: position
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]
+  -
+    fct_name: chemin
+    fct_summary: Renvoie le plus court chemin entre deux positions de la
+                 mine sous la forme d'une suite de direction à emprunter. Si la
+                 position est invalide ou que le chemin n'existe pas, le chemin
+                 renvoyé est vide.
+    fct_ret_type: direction array
+    fct_arg:
+      - [pos1, position, "Position de départ"]
+      - [pos2, position, "Position d'arrivée"]
 
 # Historique (actions de l'adversaire durant le tour précédent)
 

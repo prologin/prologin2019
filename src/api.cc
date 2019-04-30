@@ -190,6 +190,13 @@ position Api::position_taverne(int id_joueur)
     return game_state_->get_spawn_point(id_joueur);
 }
 
+/// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
+std::vector<direction> Api::chemin(position pos1, position pos2)
+{
+    // TODO
+    abort();
+}
+
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 std::vector<action_hist> Api::historique()
 {
@@ -231,5 +238,3 @@ int Api::tour_actuel()
 {
     return game_state_->get_round();
 }
-
-

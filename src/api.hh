@@ -98,6 +98,9 @@ public:
     /// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
     position position_taverne(int id_joueur);
 
+    /// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
+    std::vector<direction> chemin(position pos1, position pos2);
+
     /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
     std::vector<action_hist> historique();
 

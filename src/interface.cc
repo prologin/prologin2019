@@ -384,6 +384,12 @@ extern "C" position api_position_taverne(int id_joueur)
   return api->position_taverne(id_joueur);
 }
 
+/// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
+extern "C" std::vector<direction> api_chemin(position pos1, position pos2)
+{
+  return api->chemin(pos1, pos2);
+}
+
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
 extern "C" std::vector<action_hist> api_historique()
 {
