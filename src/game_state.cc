@@ -382,6 +382,7 @@ void GameState::add_to_internal_history(int player_id, internal_action action)
 
 void GameState::increase_score(int player_id, int delta)
 {
-    assert(player_info_.count(player_id) != 0);
-    player_info_.at(player_id).increase_score(delta);
+    int external_id = internal_to_external_id(player_id);
+    assert(player_info_.count(external_id) != 0);
+    player_info_.at(external_id).increase_score(delta);
 }
