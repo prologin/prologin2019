@@ -22,11 +22,8 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Constants="*res://scripts/Constants.gd"
+Global="*res://scripts/Global.gd"
 
 [editor]
 
 main_run_args="-json=/home/bfor/download/dump-38134.json"
-
-[rendering]
-
-environment/default_environment="res://default_env.tres"

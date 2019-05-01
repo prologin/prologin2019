@@ -68,7 +68,7 @@ static func parse_turn(json):
 	var result = Turn.new()
 	result.roundNumber = int(json["tour"][0])
 	result.roundTotal = int(json["tour"][1])
-	assert(json["joueurs"].size() == 2)
+	assert(json["joueurs"].size() == Constants.NB_JOUEURS)
 	var players = []
 	for player in json["joueurs"]:
 		players.append([player["id"], player])
