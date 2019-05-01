@@ -17,6 +17,7 @@ func finish_animating():
 func _ready():
 	dump = DUMP_READER.parse_input_json()
 	var current_turn = DUMP_READER.parse_turn(dump[turn])
+	$Info.init(current_turn.players)
 	$GameState.init(current_turn.blocks, current_turn.players, self)
 	
 func next_turn():
