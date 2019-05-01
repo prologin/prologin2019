@@ -12,7 +12,9 @@ animations = [
     'mine',
     'rope',
     'hit',
-    'die',]
+    'die',
+    'climb',
+    'pull',]
 tile_width = 30
 tile_height = 30
 
@@ -27,7 +29,7 @@ for y, name in enumerate(animations):
                 (y + 1) * tile_height)
         cropped = img.crop(area)
 
-        if numpy.sum(cropped) == 0:
+        if not numpy.any(cropped):
             break
 
         # Save the file
