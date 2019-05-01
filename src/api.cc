@@ -151,13 +151,14 @@ int Api::nain_sur_case(position pos)
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas présent sur la carte, tous les membres de la structure ``nain`` renvoyée sont initialisés à -1.
 nain Api::info_nain(int id_joueur, int id_nain)
 {
+    // TODO add false to func description
     if (id_joueur != moi() && id_joueur != adversaire())
-        return { { -1, -1 }, -1, -1, -1, -1, -1 };
+        return { { -1, -1 }, -1, -1, -1, false, -1 };
     if (id_nain < 0 || id_nain >= NB_NAINS)
-        return { { -1, -1 }, -1, -1, -1, -1, -1 };
+        return { { -1, -1 }, -1, -1, -1, false, -1 };
     const nain *nain = game_state_->get_nain(id_joueur, id_nain);
     if (nain == nullptr)
-        return { { -1, -1 }, -1, -1, -1, -1, -1 };
+        return { { -1, -1 }, -1, -1, -1, false, -1 };
     return *nain;
 }
 
