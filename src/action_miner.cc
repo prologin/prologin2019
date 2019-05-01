@@ -32,7 +32,7 @@ int ActionMiner::check(const GameState* st) const
 void ActionMiner::apply_on(GameState* st) const
 {
     internal_action action;
-    action.internal = false;
+    action.type = 1;
     action.action = { ACTION_MINER, id_nain_, dir_, ERREUR_DIRECTION };
     st->add_to_internal_history(player_id_, action);
 
@@ -51,8 +51,8 @@ void ActionMiner::apply_on(GameState* st) const
     if (minerai != nullptr)
         if (!st->mine_minerai(dest, player_id_, id_nain_))
             return;
-    st->set_cell_type(dest, LIBRE);
+    st->set_cell_type(dest, LIBRE, player_id_);
     position up = get_position_offset(dest, HAUT);
     if (inside_map(up))
-        st->check_gravity(up);
+        st->check_gravity(up, player_id_);
 }

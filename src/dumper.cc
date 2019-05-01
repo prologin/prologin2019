@@ -132,18 +132,25 @@ static void dump_history(std::ostream& ss, const GameState& st, int player_id)
 {
     dump_vector<internal_action>(st.get_internal_history(player_id), ss, [](auto& ss, auto action)
         {
-            if (action.internal)
+            switch (action.type)
             {
-                ss << "{\"action\": " << -1;
-                ss << ", \"drapeau\": " << action.debug_flag.ftype;
-                ss << ", \"pos\": " << action.debug_flag.pos << "}";
-            }
-            else
-            {
-                ss << "{\"action\": " << action.action.atype;
-                ss << ", \"id_nain\": " << action.action.id_nain;
-                ss << ", \"dir\": " << action.action.dir;
-                ss << ", \"sens\": " << action.action.sens << "}";
+                case 0:
+                    ss << "{\"action\": " << -1;
+                    ss << ", \"drapeau\": " << action.debug_flag.ftype;
+                    ss << ", \"pos\": " << action.debug_flag.pos << "}";
+                    break;
+                case 1:
+                    ss << "{\"action\": " << action.action.atype;
+                    ss << ", \"id_nain\": " << action.action.id_nain;
+                    ss << ", \"dir\": " << action.action.dir;
+                    ss << ", \"sens\": " << action.action.sens << "}";
+                    break;
+                case 2:
+                    ss << "{\"action\": " << -2;
+                    ss << ", \"player_id\": " << action.fall.player_id;
+                    ss << ", \"id_nain\": " << action.fall.nain_id;
+                    ss << ", \"goal\": " << action.fall.goal << "}";
+                    break;
             }
         });
 }

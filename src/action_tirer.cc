@@ -62,7 +62,7 @@ void ActionTirer::apply_on(GameState* st) const
     }
 
     internal_action action;
-    action.internal = false;
+    action.type = 1;
     action.action = { ACTION_TIRER, id_nain_, dir_corde_, sens_ };
     st->add_to_internal_history(player_id_, action);
 }

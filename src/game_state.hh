@@ -31,7 +31,7 @@ class GameState : public rules::GameState
         position get_spawn_point(int player_id) const;
         const minerai* get_minerai(position pos) const;
         const std::vector<position>& get_ores() const;
-        void set_cell_type(position pos, case_type type);
+        void set_cell_type(position pos, case_type type, int current_player);
         bool mine_minerai(position pos, int player_id, int nain_id);
 
         const nain* get_nain(int player_id, int nain_id) const;
@@ -44,7 +44,7 @@ class GameState : public rules::GameState
         void set_nain_position_internal(int player_id, int nain_id, position dest);
         int get_movement_cost(int player_id, int nain_id, direction dir) const;
         void set_nain_accroche(int player_id, int nain_id, bool accroche);
-        void check_gravity(position pos);
+        void check_gravity(position pos, int current_player);
 
         void reduce_pm(int player_id, int nain_id, int pm);
         void reset_pm(int player_id);

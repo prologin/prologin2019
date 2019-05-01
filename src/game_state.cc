@@ -35,7 +35,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
             if (map_.get_rope(map_.get_spawn_point(player)) != nullptr)
                 map_.add_nain_to_rope(map_.get_spawn_point(player), player, nain);
         }
-        check_gravity(map_.get_spawn_point(player));
+        check_gravity(map_.get_spawn_point(player), player);
     }
 }
 
@@ -196,7 +196,7 @@ const std::vector<position>& GameState::get_ores() const
     return map_.get_ores();
 }
 
-void GameState::set_cell_type(position pos, case_type type)
+void GameState::set_cell_type(position pos, case_type type, int current_player)
 {
     map_.set_cell_type(pos, type);
     position up = get_position_offset(pos, HAUT);
@@ -205,7 +205,7 @@ void GameState::set_cell_type(position pos, case_type type)
         if (get_rope(up) != nullptr)
             map_.check_gravity(up);
         if (map_.get_nains_at(up).first != -1)
-            check_gravity(up);
+            check_gravity(up, current_player);
     }
 }
 
@@ -309,7 +309,7 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
     int internal_player_id = player_info_.at(player_id).get_internal_id();
     nains_[internal_player_id][nain_id].accroche = accroche;
     if (!accroche)
-        check_gravity(nains_[internal_player_id][nain_id].pos);
+        check_gravity(nains_[internal_player_id][nain_id].pos, player_id);
 }
 
 int GameState::get_fall_distance(int player_id, int nain_id) const
@@ -331,7 +331,7 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
     return fall;
 }
 
-void GameState::check_gravity(position pos)
+void GameState::check_gravity(position pos, int current_player)
 {
     if (get_rope(pos) != nullptr)
         return;
@@ -347,13 +347,19 @@ void GameState::check_gravity(position pos)
         if (fall == 0)
             continue;
         set_nain_position_internal(player_id, nain_id, pos + (BAS * fall));
+
+        internal_action action;
+        action.type = 2;
+        action.fall = { player_id, nain_id, pos + (BAS * fall) };
+        add_to_internal_history(current_player, action);
+
         if (fall < 4)
             continue;
         reduce_pv_internal(player_id, nain_id, std::pow(2, fall - 4));
     }
     position up = get_position_offset(pos, HAUT);
     if (inside_map(up))
-        check_gravity(up);
+        check_gravity(up, current_player);
 }
 
 void GameState::reduce_pm(int player_id, int nain_id, int pm)
@@ -416,7 +422,7 @@ void GameState::respawn(int player_id)
             spawn = true;
         }
     if (spawn)
-        check_gravity(map_.get_spawn_point(internal_player_id));
+        check_gravity(map_.get_spawn_point(internal_player_id), internal_player_id);
     nains_respawn_.erase(std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
                    [&] (auto nain) { return nain.first == internal_player_id; }), nains_respawn_.end());
 }
@@ -473,7 +479,7 @@ const std::vector<action_hist> GameState::get_history(int player_id) const
     std::vector<internal_action> internal_hist = get_internal_history(player_id);
     std::vector<action_hist> hist;
     for (auto action : internal_hist)
-        if (!action.internal)
+        if (action.type == 1)
             hist.push_back(action.action);
     return hist;
 }

@@ -22,7 +22,7 @@ void ActionAgripper::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
 
     internal_action action;
-    action.internal = false;
+    action.type = 1;
     action.action = { ACTION_AGRIPPER, id_nain_, ERREUR_DIRECTION, ERREUR_DIRECTION };
     st->add_to_internal_history(player_id_, action);
 }
