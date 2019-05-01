@@ -90,10 +90,10 @@ static func parse_turn(json):
 		player.history = node["historique"]
 		result.players.append(player)
 	var cells = json["carte"]["cases"]
-	for c in range(Constants.TAILLE_MINE):
+	for y in range(Constants.TAILLE_MINE):
 		result.blocks.append([])
-		for r in range(Constants.TAILLE_MINE):
-			result.blocks[c].append(cells[r * Constants.TAILLE_MINE + c])
+		for x in range(Constants.TAILLE_MINE):
+			result.blocks[y].append(cells[y * Constants.TAILLE_MINE + x])
 	for ores_data in json["carte"]["minerais"]:
 		var ore = Ores.new()
 		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])
