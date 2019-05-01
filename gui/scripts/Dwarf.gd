@@ -10,7 +10,7 @@ var moving = false
 var mining = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
-var external_position = Vector2()
+var external_pos = Vector2()
 
 const SPEED = 100
 
@@ -22,7 +22,7 @@ func set_team(player_id):
 	set_modulate(modulate_color)
 
 func set_external_position(pos, map):
-	external_position = pos
+	external_pos = pos
 	position = map.world_position(pos)
 
 func focus():
@@ -31,8 +31,10 @@ func focus():
 func unfocus():
 	set_modulate(modulate_color)
 
-func move_to(to):
+func move_to(external_to, map):
 	assert not moving
+	external_pos = external_to
+	var to = map.world_position(external_to)
 	_moving_to = to
 	moving = true
 	var anim = null

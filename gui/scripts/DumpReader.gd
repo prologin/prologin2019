@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright 2019 Martin Huvelle
 
-static func _parse_json():
+static func parse_input_json():
 	for arg in OS.get_cmdline_args():
 		if arg.begins_with("-json="):
 			var json = arg.right(6)
