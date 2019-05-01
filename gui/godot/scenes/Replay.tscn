@@ -79,3 +79,9 @@ align = 2
 valign = 1
 autowrap = true
 
+[node name="Tour" type="Label" parent="."]
+margin_left = 834.0
+margin_top = 32.0
+margin_right = 909.0
+margin_bottom = 63.0
+

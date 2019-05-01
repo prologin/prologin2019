@@ -32,7 +32,7 @@ window/size/resizable=false
 
 [editor]
 
-main_run_args="-json=/home/bfor/code/prologin/prologin2019/cxx/dump.json"
+main_run_args="-json=/home/bull/prologin2019/gui/dump4.json"
 
 [rendering]
 

@@ -44,6 +44,10 @@ class Dwarf:
 	var pm = 0
 	var stick = 0
 	var butin = 0
+	
+class Rope:
+	var haut = Vector2()
+	var bas = Vector2()
 
 class Turn:
 	var roundNumber = 0
@@ -92,12 +96,12 @@ static func parse_turn(json):
 		for i in range(node["nains"].size()):
 			player.dwarfs.append(Vector2(-1, -1))
 		for dwarf in node["nains"]:
-			player.dwarfs[dwarf["id_nain"]] = Vector2(dwarf["pos"]["c"], dwarf["pos"]["l"])
-			player.dwarfs[dwarf["id_nain"]].pm = dwarf["pm"]
-			player.dwarfs[dwarf["id_nain"]].pa = dwarf["pa"]
-			player.dwarfs[dwarf["id_nain"]].stick = dwarf["accroche"]
-			player.dwarfs[dwarf["id_nain"]].vie = dwarf["vie"]
-			player.dwarfs[dwarf["id_nain"]].butin = dwarf["butin"]
+			player.dwarfs[dwarf["id_nain"]]  = Vector2(dwarf["pos"]["c"], dwarf["pos"]["l"])
+			#player.dwarfs[dwarf["id_nain"]] = dwarf["pm"]
+			#player.dwarfs[dwarf["id_nain"]] = dwarf["pa"]
+			#player.dwarfs[dwarf["id_nain"]] = dwarf["accroche"]
+			#player.dwarfs[dwarf["id_nain"]] = dwarf["vie"]
+			#player.dwarfs[dwarf["id_nain"]] = dwarf["butin"]
 		player.history = node["historique"]
 		result.players.append(player)
 	var cells = json["carte"]["cases"]
@@ -106,11 +110,15 @@ static func parse_turn(json):
 	for c in range(size):
 		result.blocks.append([])
 		for r in range(size):
-			result.blocks[c].append(cells[r * size + c] == "BLOCK")
-	for ores_data in json["carte"]["minerai"]:
+			result.blocks[c].append(cells[r * size + c] == 2.0)
+	for ores_data in json["carte"]["minerais"]:
 		var ore = Ores.new()
 		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])
 		ore.value = ores_data["rendement"]
 		ore.duration = ores_data["resistance"]
 		result.ores.append(ore)
+	for rope_data in json["carte"]["cordes"]:
+		var rope = Rope.new()
+		rope.haut = Vector2(rope_data["haut"]["c"], rope_data["haut"]["l"])
+		rope.bas = Vector2(rope_data["bas"]["c"], rope_data["bas"]["l"])
 	return result

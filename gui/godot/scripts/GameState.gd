@@ -18,34 +18,36 @@ func internal_to_dwarf_id(internal):
 	return internal % Constants.NB_NAINS
 
 func move(dwarf_id, direction, player_id):
-	var internal = dwarf_id_to_internal(dwarf_id, player_id)
-	var destination = $TileMap.dwarf_pos[internal] + DIR[direction]
+	var internal = dwarf_id_to_internal(dwarf_id, 1)
+	var destination = $TileMap.dwarfs_pos[internal] + DIR[direction]
 	if not $TileMap.is_cell_free(destination):
 		return false
-	if direction == 'NORD' or direction == 'SUD':
-		if $TileMap.get_tile() == 'Rope':
-				$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER_CORDE
-		else:
-			$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
+	if DIR[direction] == DIR[1] or DIR[direction] == DIR[3]:
+	#	if $TileMap.get_tile() == 'Rope':
+	#		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER_CORDE
+	#	else:
+		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
 	else:
 		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_DEPLACEMENT
 	_undo.append([player_id, dwarf_id, Constants.COUT_DEPLACEMENT, \
-			internal, $TileMap.dwarf_pos[internal]])
-	$TileMap.move_dwarf(internal, destination, false, false)
+			internal, $TileMap.dwarfs_pos[internal]])
+	$TileMap.move_dwarf(internal, destination)
 	$Info.redraw()
 	return true
 	
 func drop(dwarf_id, player_id):
 	var internal = dwarf_id_to_internal(dwarf_id, player_id)
-	$TileMap.move_dwarf(internal, $TileMap.dwarf_pos[internal] + 'SUD', false, false)
+	$TileMap.move_dwarf(internal, $TileMap.dwarfs_pos[internal] + DIR[1])
 	$Info.redraw()
 	return true
 
 func mine(dwarf_id, player_id, dir):
 	var internal = dwarf_id_to_internal(dwarf_id, player_id)
-	_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
-			internal, $TileMap.dwarf_pos[internal]])
+	var destination = $TileMap.dwarfs_pos[internal] + DIR[dir]
+	#_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
+	#		internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_MINER
+	$TileMap.mine_dwarf(internal, destination)
 	$Info.redraw()
 	return true
 
@@ -54,6 +56,13 @@ func pull(dwarf_id, player_id):
 	_undo.append([player_id, dwarf_id, Constants.COUT_TIRER, \
 			internal, $TileMap.dwarf_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_TIRER
+	return true
+
+func grab(dwarf_id, player_id):
+	var internal = dwarf_id_to_internal(dwarf_id, player_id)
+	_undo.append([player_id, dwarf_id, Constants.COUT_AGRIPPER, \
+		internal, $TileMap.dwarfs_pos[internal]])
+	#$Info.players[player_id]
 	return true
 
 func set_a_rope(dwarf_id, player_id):
@@ -69,7 +78,7 @@ func undo():
 
 func init(dirt, dwarfs):
 	$TileMap.init(dirt, dwarfs)
-	$Info.position.y = $TileMap.blocks.size() * $TileMap.cell_size.y * $TileMap.scale.y
+	$Info.position.y = $TileMap.block.size() * $TileMap.cell_size.y * $TileMap.scale.y
 
 func set_turn(turn_index):
 	var type = turn_index % 3
@@ -94,7 +103,7 @@ func _update_tile_info():
 				if a.duration == 0:
 					ores = a
 					break
-	$Info.set_tile(selected_tile, $TileMap.dirt[selected_tile.x][selected_tile.y], ores)
+	$Info.set_tile(selected_tile, $TileMap.block[selected_tile.x][selected_tile.y], ores)
 
 func _update_dwarf_info():
 	$Info.set_dwarf(selected_dwarf)
@@ -111,10 +120,10 @@ func select_dwarf(dwarf):
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		var pos = $TileMap.world_to_map(event.position)
-		if pos.x >= 0 and pos.y >= 0 and pos.x < $TileMap.dirt.size() and pos.y < $TileMap.dirt.size():
-			var dwarf = $TileMap.dwarf_pos.find(pos)
+		if pos.x >= 0 and pos.y >= 0 and pos.x < $TileMap.block.size() and pos.y < $TileMap.block.size():
+			var dwarf = $TileMap.dwarfs_pos.find(pos)
 			if dwarf != -1:
-				select_dwarf(dwarf)
+				select_dwarf(dwarf) 
 				_update_dwarf_info()
 			if not Input.is_action_pressed("ui_shift") or dwarf == -1:
 				if selected_tile == pos:
@@ -124,20 +133,23 @@ func _input(event):
 				_update_tile_info()
 
 func replay_action(action, player_id):
-	if action['atype'] == 'ID_ACTION_DEPLACER':
-		return move(int(action['id_dwarf']), DIR_DIC[action['dir']], player_id)
-	elif action['atype'] == 'ID_ACTION_LACHER':
-		return drop(int(action['id_dwarf']), player_id)
-	elif action['atype'] == 'ID_ACTION_MINER':
-		return mine(int(action['id_dwarf']), DIR_DIC[action['dir']], player_id)
-	elif action['atype'] == 'ID_ACTION_POSER_CORDE':
-		return set_a_rope(int(action['id_dwarf']), player_id)
-	elif action['atype'] == 'ID_ACTION_TIRER':
-		return pull(int(action['id_dwarf']), player_id)
-	elif action['atype'] == 'ID_ACTION_DEBUG_AFFICHER_DRAPEAU':
-		$TileMap.set_flag(player_id, Vector2(action['pos']['c'], action['pos']['r']), action['drapeau'])
+	var direct = DIR_DIC.values()
+	if action['action'] == Constants.ACTIONS.get("ACTION_DEPLACER"):
+		return move(int(action['id_nain']), direct[action["dir"]], player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_LACHER"):
+		return drop(int(action['id_nain']), player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_MINER"):
+		return mine(int(action['id_nain']), 1, player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_POSER_CORDE"):
+		return set_a_rope(int(action['id_nain']), player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_TIRER"):
+		return pull(int(action['id_nain']), player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_AGRIPPER"):
+		return grab(int(action['id_nain']), player_id)
+	elif action['action'] == Constants.ACTIONS.get("ACTION_DEBUG_AFFICHER_DRAPEAU"):
+		$TileMap.set_flag(player_id, Vector2(action['pos']['c'], action['pos']['l']), action['drapeau'])
 	else:
-		print("Unknown action ", action['atype'])
+		print("Unknown action ", action['action'])
 	return false
 
 func _no_flags():

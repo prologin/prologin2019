@@ -72,13 +72,13 @@ func set_map():
 		flags[0].append([])
 		flags[1].append([])
 		for y in range(size):
-			set_cell(x, y, get_tile(x, y))
+			set_cell(x, y, 1.0)
 			flags[0][x].append(_new_flag(0, Vector2(x, y)))
 			flags[1][x].append(_new_flag(1, Vector2(x, y)))
 
 func update_ores(turn):
 	for ore in ores:
-		if ores.capture < Constants.NB_TOURS_CAPTURE:
+		if ore.duration != 0:
 			set_cellv(ore.pos, get_tileset().find_tile_by_name("Ores"))
 		else:
 			set_cellv(ore.pos, get_tileset().find_tile_by_name("Free"))
@@ -94,6 +94,19 @@ func move_dwarf(i, dest):
 	dwarfs[i].move_to(world_position(dest.x, dest.y))
 	dwarfs_pos[i] = dest
 	return true
+
+func mine_dwarf(i, dest):
+	dwarfs[i].mine_to(world_position(dest.x, dest.y))
+	#FIXME UPDATE TILEMAP
+	return true
+
+func grab_dwarf(i):
+	dwarfs[i].grab_to()
+	return true
+
+func pull_dwarf(i):
+	dwarfs[i].pull_to()
+	return true 
 
 func teleport_dwarf(i, dest):
 	dwarfs[i].stop()

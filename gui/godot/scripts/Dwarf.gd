@@ -6,7 +6,7 @@ extends KinematicBody2D
 signal finished_moving
 
 var modulate_color = Color(1, 1, 1, 1)
-var moving = true
+var moving = false
 var mining = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
@@ -31,11 +31,11 @@ func move_to(to):
 	_moving_to = to
 	moving = true
 	var anim = null
-	if (to == "EAST" or to == "WEST"):
-		anim = "move"
+	#if (to == "EAST" or to == "WEST"):
+	anim = "move"
 	#else if $TileMap.getTile():
-	else:
-		anim = "climb"
+	#else:
+	#	anim = "climb"
 	$AnimatedSprite.play(anim)
 	var dx = to.x - position.x
 	if dx > 0:
@@ -55,6 +55,14 @@ func mine_to(to):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 	
+func grab_to():
+	assert not mining
+	$AnimatedSprite.play("grab")
+	
+func pull_to():
+	assert not mining
+	$AnimatedSprite.play("climb")
+	
 func stop():
 	$AnimatedSprite.play("idle")
 	if moving:
@@ -63,6 +71,7 @@ func stop():
 	mining = false
 
 func _process(delta):
+	print(Global.speed_factor)
 	if moving:
 		var diff = _moving_to - position
 		if diff == Vector2():
@@ -74,3 +83,5 @@ func _process(delta):
 			else:
 				position = _moving_to
 				stop()
+	else:
+		stop()
