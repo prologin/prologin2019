@@ -1,7 +1,10 @@
 extends TileMap
 
 func world_position(pos):
-	return map_to_world(pos) + (get_cell_size() / 2);
+	return map_to_world(pos) + (get_cell_size() / 2)
+
+func mine(pos):
+	set_cell(pos.x, pos.y, 0)
 
 func init(blocks):
 	for y in range(Constants.TAILLE_MINE):

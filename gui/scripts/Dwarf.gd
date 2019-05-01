@@ -46,8 +46,9 @@ func move_to(external_to, map):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 
-func mine_to(to):
+func mine_to(external_to, map):
 	assert not mining
+	var to = map.world_position(external_to)
 	_mining_to = to
 	mining = true
 	var anim = "mine"
@@ -68,10 +69,16 @@ func pull_to():
 	
 func stop():
 	$AnimatedSprite.play("idle")
-	if moving:
-		emit_signal("finished_moving")
+	emit_signal("finished_moving")
 	moving = false
 	mining = false
+
+func animation_finished():
+	if mining:
+		stop()
+
+func _ready():
+	$AnimatedSprite.connect("animation_finished", self, "animation_finished")
 
 func _process(delta):
 	if moving:
@@ -85,5 +92,3 @@ func _process(delta):
 			else:
 				position = _moving_to
 				stop()
-	else:
-		stop()

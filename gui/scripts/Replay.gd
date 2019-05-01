@@ -20,7 +20,8 @@ func _ready():
 	$GameState.init(current_turn.blocks, current_turn.players, self)
 	
 func next_turn():
-	print("next_turn()")
+	$GameState.finish_action()
+
 	if turn + 1 == Constants.NB_TOURS * 2:
 		return
 	turn += 1
