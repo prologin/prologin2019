@@ -1,6 +1,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright 2019 Martin Huvelle
 
+static func _parse_json():
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("-json="):
+			var json = arg.right(6)
+			print("Read dump ", json)
+			return parse_dump(json)
+	print("FATAL: could not retreive dump")
+
 static func parse_dump(filename):
 	var rounds = []
 	var file = File.new()

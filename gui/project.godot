@@ -23,6 +23,10 @@ config/icon="res://assets/icon.png"
 
 Constants="*res://scripts/Constants.gd"
 
+[editor]
+
+main_run_args="-json=/home/bfor/download/dump-38134.json"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
