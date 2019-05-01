@@ -263,7 +263,7 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: info_nain
-    fct_summary: RenvoieIndique la position du nain (standar) dans la mine désigné par
+    fct_summary: Indique la position du nain (standar) dans la mine désigné par
                  le numéro ``id_nain`` appartenant au joueur ``id_joueur``.
                  Si la description du nain (standard) est incorrecte, la
                  position (-1, -1) est renvoyée.
@@ -292,16 +292,19 @@ function:
     fct_ret_type: position array
     fct_arg: []
   -
-    fct_name: cout_deplacement
+    fct_name: cout_de_deplacement
     fct_summary: Renvoie le nombre de points de déplacement pour le déplacement
-                 d'un nain (standard) dans une direction donnée.
+                 d'un nain (standard) dans une direction donnée. Si le
+                 déplacement n'est pas position, renvoie -1.
     fct_ret_type: int
     fct_arg:
       - [id_nain, int, "Numéro du nain (standard)"]
       - [dir, direction, "Direction visée"]
   -
     fct_name: position_taverne
-    fct_summary: Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+    fct_summary: Renvoie le position de la position taverne appartenant au
+                 joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la
+                 position (-1, -1).
     fct_ret_type: position
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]

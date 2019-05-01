@@ -177,7 +177,7 @@ std::vector<position> Api::liste_minerais()
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
-int Api::cout_deplacement(int id_nain, direction dir)
+int Api::cout_de_deplacement(int id_nain, direction dir)
 {
     return game_state_->get_movement_cost(player_->id, id_nain, dir);
 }

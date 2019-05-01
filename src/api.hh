@@ -93,7 +93,7 @@ public:
     std::vector<position> liste_minerais();
 
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
-    int cout_deplacement(int id_nain, direction dir);
+    int cout_de_deplacement(int id_nain, direction dir);
 
     /// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
     position position_taverne(int id_joueur);
