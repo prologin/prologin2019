@@ -73,16 +73,16 @@ func _create_flags_maps():
 	flags[0] = []
 	for i in range(Constants.TAILLE_MINE * Constants.TAILLE_MINE * 2):
 		flags[0].append(0)
-	#for index in range(1, flags.size()):
-		#flags[index] = flags[index - 1].duplicate()
-		#if index % 3:
-			#var i = (index - index % 3) / 3 * 2 + index % 3
-			#var state = DumpReader.parse_turn(dump[i])
-			#for player_id in range(2):
-				#for action in state.players[player_id].history:
-					#if action['atype'] == 'ID_ACTION_DEBUG_AFFICHER_DRAPEAU':
-					#	var byte = {'AUCUN_DRAPEAU': 0, 'DRAPEAU_ROUGE': 1, 'DRAPEAU_VERT': 2, 'DRAPEAU_BLEU': 3}[action['drapeau']]
-					#	flags[index][(action['pos']['c'] * Constants.TAILLE_MINE + action['pos']['r']) * 2 + player_id] = byte
+	for index in range(1, flags.size()):
+		flags[index] = flags[index - 1].duplicate()
+		if index % 3:
+			var i = (index - index % 3) / 3 * 2 + index % 3
+			var state = DumpReader.parse_turn(dump[i])
+			for player_id in range(2):
+				for action in state.players[player_id].history:
+					if action['action'] == Constants.ACTIONS.get('ID_ACTION_DEBUG_AFFICHER_DRAPEAU'):
+						var byte = {'AUCUN_DRAPEAU': 0, 'DRAPEAU_ROUGE': 1, 'DRAPEAU_VERT': 2, 'DRAPEAU_BLEU': 3}[action['drapeau']]
+						flags[index][(action['pos']['c'] * Constants.TAILLE_MINE + action['pos']['r']) * 2 + player_id] = byte
 
 func _ready():
 	dump = _parse_json()
@@ -126,15 +126,15 @@ func _finish_last_turn(warn_teleport = true):
 				if warn_teleport:
 					print("Had to fix inconsistency in dump dwarf position")
 					pass
-	#for x in range(Constants.TAILLE_MINE):
-	#	for y in range(Constants.TAILLE_MINE):
-	#		for player_id in range(2):
-	#			$GameState/TileMap.set_flag(player_id, Vector2(x, y), \
-	#					['AUCUN_DRAPEAU', 'DRAPEAU_ROUGE', 'DRAPEAU_VERT', 'DRAPEAU_BLEU'] \
-	#					[flags[turn_index][(x * Constants.TAILLE_MINE + y) * 2 + player_id]])
+	for x in range(Constants.TAILLE_MINE):
+		for y in range(Constants.TAILLE_MINE):
+			for player_id in range(2):
+				$GameState/TileMap.set_flag(player_id, Vector2(x, y), \
+						['AUCUN_DRAPEAU', 'DRAPEAU_ROUGE', 'DRAPEAU_VERT', 'DRAPEAU_BLEU'] \
+						[flags[turn_index][(x * Constants.TAILLE_MINE + y) * 2 + player_id]])
 
 func _update_ores():
-	var state = DumpReader.parse_turn(dump[(turn_index - turn_index % 3) / 3 * 2 + 1])
+	var state = DumpReader.parse_turn(dump[(turn_index)])
 	for i in range(state.ores.size()):
 		$GameState/TileMap.ores[i].duration = state.ores[i].duration
 	$GameState/Info.players[0].score = state.players[0].score
@@ -147,7 +147,7 @@ func _jump(index):
 	turn_index = max(index - 1, 0)
 	_finish_last_turn(false)
 	turn_index = index
-	#_update_ores()
+	_update_ores()
 	$GameState.set_turn(turn_index)
 	playing = false
 	get_tree().paused = false
@@ -163,7 +163,7 @@ func _continue():
 		# We duplicate the array here in case we read it again
 		actions_playing = state.players[turn_index % 3 - 1].history.duplicate()
 	#else:
-	#	_update_ores()
+	_update_ores()
 	$GameState.set_turn(turn_index)
 
 func _process(delta):

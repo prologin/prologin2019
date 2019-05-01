@@ -71,7 +71,6 @@ func stop():
 	mining = false
 
 func _process(delta):
-	print(Global.speed_factor)
 	if moving:
 		var diff = _moving_to - position
 		if diff == Vector2():
@@ -83,5 +82,3 @@ func _process(delta):
 			else:
 				position = _moving_to
 				stop()
-	else:
-		stop()

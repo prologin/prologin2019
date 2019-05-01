@@ -22,13 +22,13 @@ func move(dwarf_id, direction, player_id):
 	var destination = $TileMap.dwarfs_pos[internal] + DIR[direction]
 	if not $TileMap.is_cell_free(destination):
 		return false
-	if DIR[direction] == DIR[1] or DIR[direction] == DIR[3]:
-	#	if $TileMap.get_tile() == 'Rope':
+	#if DIR[direction] == DIR[1] or DIR[direction] == DIR[3]:
+	#	if $TileMap.get_tile($TileMap.dwarfs_pos[internal].x, $TileMap.dwarfs_pos[internal].y) == 5.0:
 	#		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER_CORDE
 	#	else:
-		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
-	else:
-		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_DEPLACEMENT
+	#		$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_ESCALADER
+	#else:
+	#	$Info.players[player_id].move_points[dwarf_id] -= Constants.COUT_DEPLACEMENT
 	_undo.append([player_id, dwarf_id, Constants.COUT_DEPLACEMENT, \
 			internal, $TileMap.dwarfs_pos[internal]])
 	$TileMap.move_dwarf(internal, destination)
@@ -43,11 +43,12 @@ func drop(dwarf_id, player_id):
 
 func mine(dwarf_id, player_id, dir):
 	var internal = dwarf_id_to_internal(dwarf_id, player_id)
-	var destination = $TileMap.dwarfs_pos[internal] + DIR[dir]
-	#_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
-	#		internal, $TileMap.dwarf_pos[internal]])
+	var target = $TileMap.dwarfs_pos[internal] + DIR[dir]
+	_undo.append([player_id, dwarf_id, Constants.COUT_MINER, \
+			internal, $TileMap.dwarfs_pos[internal]])
 	$Info.players[player_id].action_points[dwarf_id] -= Constants.COUT_MINER
-	$TileMap.mine_dwarf(internal, destination)
+	print("player id: ", player_id)
+	$TileMap.mine_dwarf(internal, target)
 	$Info.redraw()
 	return true
 
@@ -76,8 +77,8 @@ func undo():
 		$Info.redraw()
 		$TileMap.teleport_dwarf(data[3], data[4])
 
-func init(dirt, dwarfs):
-	$TileMap.init(dirt, dwarfs)
+func init(blocks, dwarfs):
+	$TileMap.init(blocks, dwarfs)
 	$Info.position.y = $TileMap.block.size() * $TileMap.cell_size.y * $TileMap.scale.y
 
 func set_turn(turn_index):
@@ -139,7 +140,7 @@ func replay_action(action, player_id):
 	elif action['action'] == Constants.ACTIONS.get("ACTION_LACHER"):
 		return drop(int(action['id_nain']), player_id)
 	elif action['action'] == Constants.ACTIONS.get("ACTION_MINER"):
-		return mine(int(action['id_nain']), 1, player_id)
+		return mine(int(action['id_nain']), action["dir"], player_id)
 	elif action['action'] == Constants.ACTIONS.get("ACTION_POSER_CORDE"):
 		return set_a_rope(int(action['id_nain']), player_id)
 	elif action['action'] == Constants.ACTIONS.get("ACTION_TIRER"):

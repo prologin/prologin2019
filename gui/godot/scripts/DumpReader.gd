@@ -70,8 +70,8 @@ static func parse_map(json, result):
 	result.map_size = size
 	for c in range(size):
 		result.blocks.append([])
-		for r in range(size):
-			result.blocks[c].append(cells[r * size + c] == 1.0)
+		#for r in range(size):
+		#	result.blocks[c].append(cells[r * size + c] == 4.0)
 	for ores_data in json["carte"]["minerais"]:
 		var ore = Ores.new()
 		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])
@@ -110,7 +110,7 @@ static func parse_turn(json):
 	for c in range(size):
 		result.blocks.append([])
 		for r in range(size):
-			result.blocks[c].append(cells[r * size + c] == 2.0)
+			result.blocks[c].append(cells[r * size + c] == 4.0)
 	for ores_data in json["carte"]["minerais"]:
 		var ore = Ores.new()
 		ore.pos = Vector2(ores_data["pos"]["c"], ores_data["pos"]["l"])

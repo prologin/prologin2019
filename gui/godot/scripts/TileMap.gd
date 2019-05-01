@@ -27,7 +27,7 @@ func world_position(x, y):
 	return map_to_world(Vector2(x, y)) + get_cell_size() / 2
 
 func get_tile(x, y):
-	var tile = "Dirt" if block[x][y] else "Free"
+	var tile = "Stone" if block[x][y] else "Free"
 	return get_tileset().find_tile_by_name(tile)
 
 func spawn_dwarfs():
@@ -72,7 +72,10 @@ func set_map():
 		flags[0].append([])
 		flags[1].append([])
 		for y in range(size):
-			set_cell(x, y, 1.0)
+			if y == 0 or y == 1:
+				set_cell(x, y, 5.0)
+			else:
+				set_cell(x, y, 3.0)
 			flags[0][x].append(_new_flag(0, Vector2(x, y)))
 			flags[1][x].append(_new_flag(1, Vector2(x, y)))
 
@@ -97,7 +100,9 @@ func move_dwarf(i, dest):
 
 func mine_dwarf(i, dest):
 	dwarfs[i].mine_to(world_position(dest.x, dest.y))
-	#FIXME UPDATE TILEMAP
+	print(dest.x, " ",dest.y)
+	if (get_cell(dest.x, dest.y) == 3.0):
+		set_cell(dest.x, dest.y, 5.0)
 	return true
 
 func grab_dwarf(i):

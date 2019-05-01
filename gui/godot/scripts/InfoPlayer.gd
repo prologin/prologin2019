@@ -54,7 +54,7 @@ func set_tile(pos, block, ores):
 	#fixme
 	$Tile.text = "l. " + str(pos.y) + ", c. " + str(pos.x)
 	if block:
-		$Tile.text += "\nDirt"
+		$Tile.text += "\nStone"
 	elif ores:
 		$Tile.text += "\nMinerai de valeur " + str(ores.value) + " points\ntour " + str(ores.duration)
 
