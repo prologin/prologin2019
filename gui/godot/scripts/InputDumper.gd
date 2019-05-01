@@ -104,28 +104,28 @@ func _ready():
 	_begin()
 
 func _turn_slider(value):
-	if int(value) != (turn_index - turn_index % 3) / 3:
-		_jump(int(value) * 3)
+	if int(value) != turn_index:
+		_jump(int(value) * 2)
 
 func _finish_animating():
 	animating = false
 	$Names.set_visible(false)
 
 func _dump_index():
-	return (turn_index - turn_index % 3) / 3 * 2 + turn_index % 3
+	return turn_index
 
 func _finish_last_turn(warn_teleport = true):
 	"""The actions for a turn have been processed; now prepare next"""
 	actions_playing = []
 	var state = DumpReader.parse_turn(dump[_dump_index()])
 	var size = state.players[0].dwarfs.size()
-	for dwarf_id in range(size):
-		for player_id in range(2):
-			var pos = state.players[player_id].dwarfs[dwarf_id]
-			if $GameState/TileMap.teleport_dwarf(dwarf_id + player_id * size, pos):
-				if warn_teleport:
-					print("Had to fix inconsistency in dump dwarf position")
-					pass
+	#for dwarf_id in range(size):
+	#	for player_id in range(2):
+	#		var pos = state.players[player_id].dwarfs[dwarf_id]
+	#		if $GameState/TileMap.teleport_dwarf(dwarf_id + player_id * size, pos):
+	#			if warn_teleport:
+	#				print("Had to fix inconsistency in dump dwarf position")
+	#				pass
 	for x in range(Constants.TAILLE_MINE):
 		for y in range(Constants.TAILLE_MINE):
 			for player_id in range(2):
@@ -154,15 +154,14 @@ func _jump(index):
 
 func _continue():
 	_finish_last_turn()
-	if turn_index + 1 == Constants.NB_TOURS * 3:
+	if turn_index + 1 == Constants.NB_TOURS * 2:
 		_end()
 		return
 	turn_index += 1
-	var state = DumpReader.parse_turn(dump[_dump_index()])
-	if turn_index % 3:
-		# We duplicate the array here in case we read it again
-		actions_playing = state.players[turn_index % 3 - 1].history.duplicate()
-	#else:
+	print("turn_index = {index}".format({"index": turn_index }))
+	var state = DumpReader.parse_turn(dump[turn_index])
+	# We duplicate the array here in case we read it again
+	actions_playing = state.players[(turn_index - 1) % 2].history.duplicate()
 	_update_ores()
 	$GameState.set_turn(turn_index)
 
@@ -174,10 +173,10 @@ func _process(delta):
 		get_tree().paused = not playing
 	if not animating:
 		while actions_playing and not animating:
-			animating = $GameState.replay_action(actions_playing.pop_front(), turn_index % 3 - 1)
+			animating = $GameState.replay_action(actions_playing.pop_front(), (turn_index - 1) % 2)
 	if not actions_playing and not animating and playing:
 		_continue()
-	if Input.is_action_just_pressed("ui_right") and turn_index < Constants.NB_TOURS * 3:
+	if Input.is_action_just_pressed("ui_right") and turn_index < Constants.NB_TOURS * 2:
 		_jump(turn_index + 1)
 	elif Input.is_action_just_pressed("ui_left") and turn_index > 0:
 		_jump(turn_index - 1)

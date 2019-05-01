@@ -3,8 +3,8 @@
 
 extends Node
 
-const DIR = [Vector2(-1, 0), Vector2(0, 1), Vector2(1, 0), Vector2(0, -1)]
-const DIR_DIC = {'OUEST': 0, 'SUD': 1, 'EST': 2, 'NORD': 3}
+const DIR = [Vector2(0, 1), Vector2(0, -1), Vector2(-1, 0), Vector2(1, 0)]
+const DIR_DIC = {'HAUT': 0, 'BAS': 1, 'GAUCHE': 2, 'DROITE': 3}
 
 var selected_tile = null
 var selected_dwarf = -1
@@ -18,7 +18,7 @@ func internal_to_dwarf_id(internal):
 	return internal % Constants.NB_NAINS
 
 func move(dwarf_id, direction, player_id):
-	var internal = dwarf_id_to_internal(dwarf_id, 1)
+	var internal = dwarf_id_to_internal(dwarf_id, player_id)
 	var destination = $TileMap.dwarfs_pos[internal] + DIR[direction]
 	if not $TileMap.is_cell_free(destination):
 		return false
