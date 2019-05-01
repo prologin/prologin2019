@@ -217,7 +217,8 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
         map_.set_minerai_resistance(pos, minerai->resistance - 1);
         return false;
     }
-    nains_[player_id][nain_id].butin += map_.get_minerai(pos)->rendement;
+    int internal_player_id = player_info_.at(player_id).get_internal_id();
+    nains_[internal_player_id][nain_id].butin += minerai->rendement;
     map_.remove_minerai(pos);
     return true;
 }
