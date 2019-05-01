@@ -19,7 +19,6 @@ int ActionLacher::check(const GameState* st) const
 void ActionLacher::apply_on(GameState* st) const
 {
     st->set_nain_accroche(player_id_, id_nain_, false);
-    const nain* nain = st->get_nain(player_id_, id_nain_);
     st->reduce_pa(player_id_, id_nain_, COUT_LACHER);
 
     internal_action action;
