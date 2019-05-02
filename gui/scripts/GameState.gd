@@ -72,8 +72,8 @@ func redraw(turn, players):
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
 
-func init(blocks, players, ores, parent_node):
-	$TileMap.init(blocks, ores)
+func init(blocks, players, ores, ropes, parent_node):
+	$TileMap.init(blocks, ores, ropes)
 	$Info.init(players)
 	
 	for player in range(Constants.NB_JOUEURS):
