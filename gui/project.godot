@@ -26,4 +26,4 @@ Global="*res://scripts/Global.gd"
 
 [editor]
 
-main_run_args="-json=/home/bull/prologin2019/gui/dump3.json"
+main_run_args="-json=/home/bull/prologin2019/gui/dump2.json"

@@ -64,3 +64,9 @@ margin_bottom = 24.0
 margin_right = 40.0
 margin_bottom = 14.0
 
+[node name="End" type="Label" parent="Info"]
+margin_left = 1063.24
+margin_top = 199.001
+margin_right = 1156.24
+margin_bottom = 232.001
+

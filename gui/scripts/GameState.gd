@@ -93,7 +93,12 @@ func redraw(turn, players, ropes):
 		$Info/Turn.text = str(turn / 2 + 1) + " / 100"
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
-	#$TileMap.update_ropes(ropes)
+
+	if turn / 2 + 1 == 100:
+		if players[0].score > players[1].score:
+			$Info/End.text = "Victoire de " + players[0].name
+		else:
+			$Info/End.text = "Victoire de " + players[1].name
 
 func init(turn, parent_node):
 	$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos)
