@@ -42,9 +42,9 @@ void ActionMiner::apply_on(GameState* st) const
     case_type type = st->get_cell_type(dest);
     if (type == LIBRE)
     {
-        const auto& nains = st->get_nains_at(dest);
+        const auto nains(st->get_nains_at(dest));
         for (int nain_id : nains.second)
-            st->reduce_pv(nains.first, nain_id, DEGAT_PIOCHE);
+            st->reduce_pv_internal(nains.first, nain_id, DEGAT_PIOCHE);
         return;
     }
     const minerai *minerai = st->get_minerai(dest);

@@ -51,6 +51,7 @@ class GameState : public rules::GameState
         void reduce_pa(int player_id, int nain_id, int pa);
         void reset_pa(int player_id);
         void reduce_pv(int player_id, int nain_id, int damage);
+        void reduce_pv_internal(int internal_player_id, int nain_id, int damage);
         void respawn(int player_id);
 
         const std::vector<position>& get_ropes() const;
@@ -73,7 +74,6 @@ class GameState : public rules::GameState
     private:
         int get_fall_distance(int player_id, int nain_id) const;
         void increase_score(int player_id, int delta);
-        void reduce_pv_internal(int internal_player_id, int nain_id, int damage);
 
         std::unordered_map<int, PlayerInfo> player_info_;
         std::array<int, 2> player_ids_;
