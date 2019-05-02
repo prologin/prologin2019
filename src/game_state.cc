@@ -105,12 +105,14 @@ std::vector<direction> GameState::get_shortest_path(position start,
                 int target_id = pos_id(target);
 
                 if (inside_map(target) && predecessor[target_id] == -1) {
-                    predecessor[target_id] = source_id;
-
-                    if (!is_obstacle(target))
+                    if (!is_obstacle(target)) {
+                        predecessor[target_id] = source_id;
                         current_component.push(target_id);
-                    else if (is_minable(target))
+                    }
+                    else if (is_minable(target)) {
+                        predecessor[target_id] = source_id;
                         next_component.push(target_id);
+                    }
                 }
             }
         }
@@ -133,7 +135,7 @@ std::vector<direction> GameState::get_shortest_path(position start,
         rev_ret.push_back(predecessor[source_id]);
     }
 
-    // TODO: reverse ret and return
+    // Reverse ret, convert to directions and return
     std::vector<direction> ret;
 
     for (int i = rev_ret.size() - 1 ; i > 0 ; i--) {
