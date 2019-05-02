@@ -9,6 +9,7 @@ var modulate_color = Color(1, 1, 1, 1)
 var moving = false
 var mining = false
 var stick = false
+var roping = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
 var external_pos = Vector2()
@@ -67,6 +68,12 @@ func mine_to(external_to, map):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 	
+func set_rope_to(external_to, map):
+	assert not mining
+	assert not moving
+	assert not roping
+	roping = true
+	
 func grab_to(map):
 	assert not mining
 	stick = true
@@ -86,7 +93,7 @@ func stop():
 	mining = false
 
 func animation_finished():
-	if mining or (stick and not moving):
+	if mining or (stick and not moving) or roping:
 		stop()
 
 func _ready():

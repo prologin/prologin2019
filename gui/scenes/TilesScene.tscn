@@ -31,3 +31,10 @@ texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 96, 32, 32, 32 )
 
+[node name="Spawn" type="Sprite" parent="."]
+position = Vector2( 1.5, -0.999998 )
+scale = Vector2( 0.976562, 1.02344 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 32, 32, 32, 32 )
+

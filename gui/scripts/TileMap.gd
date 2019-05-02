@@ -6,14 +6,24 @@ func world_position(pos):
 func mine(pos):
 	set_cell(pos.x, pos.y, 0)
 
-func init(blocks, ores, ropes):
+func set_rope(pos):
+	set_cell(pos.x, pos.y, 0)
+
+func update_ropes(ropes):
+	for rope in ropes:
+		var i = rope.haut.y+1
+		while i <= rope.bas.y:
+			set_cell(rope.haut.x, i, 4)
+			i += 1
+
+func init(blocks, ores, ropes, spawn1, spawn2):
 	for y in range(Constants.TAILLE_MINE):
 		for x in range(Constants.TAILLE_MINE):
 			var is_ore = false
 			var is_rope = false
 			
 			for rope in ropes:
-				if rope.haut > Vector2(x,y) and rope.bas < Vector2(x,y):
+				if rope.haut.y >= y or rope.bas.y <= y:
 					is_rope = true
 				
 			for ore in ores:
@@ -22,7 +32,9 @@ func init(blocks, ores, ropes):
 					
 			if is_ore:
 				set_cell(x, y, 3)
-			elif is_rope:
+			elif Vector2(x, y) == spawn1 or Vector2(x, y) == spawn2:
 				set_cell(x, y, 5)
+			elif is_rope:
+				set_cell(x, y, 4)
 			else:
 				set_cell(x, y, blocks[y][x])

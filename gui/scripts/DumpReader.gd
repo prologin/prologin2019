@@ -113,4 +113,5 @@ static func parse_turn(json):
 		var rope = Rope.new()
 		rope.haut = Vector2(rope_data["haut"]["c"], rope_data["haut"]["l"])
 		rope.bas = Vector2(rope_data["bas"]["c"], rope_data["bas"]["l"])
+		result.ropes.append(rope)
 	return result

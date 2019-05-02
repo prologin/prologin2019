@@ -19,7 +19,7 @@ func finish_animating():
 func _ready():
 	dump = DUMP_READER.parse_input_json()
 	current_turn = DUMP_READER.parse_turn(dump[turn])
-	$GameState.init(current_turn.blocks, current_turn.players, current_turn.ores, current_turn.ropes, self)
+	$GameState.init(current_turn, self)
 
 func next_turn():
 	$GameState.finish_action()
@@ -28,7 +28,7 @@ func next_turn():
 	turn += 1
 	var current_turn = DUMP_READER.parse_turn(dump[turn])
 	actions = current_turn.players[get_player_id()].history.duplicate()
-	$GameState.redraw(turn, current_turn.players)
+	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
 
 func _process(delta):
 	print("actions.size(): ", actions.size())
