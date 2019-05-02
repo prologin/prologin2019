@@ -20,3 +20,4 @@ func _process(delta):
 func init(players):
 	$"Name 1".text = players[0].name
 	$"Name 2".text = players[1].name
+	$Turn.text = "0 / 100"

@@ -32,26 +32,32 @@ margin_right = 45.0
 margin_bottom = -2.0
 
 [node name="Score 1" type="Label" parent="Info"]
-margin_left = 878.0
-margin_top = 73.0
-margin_right = 918.0
-margin_bottom = 87.0
+margin_left = 1100.0
+margin_top = 90.0
+margin_right = 1140.0
+margin_bottom = 104.0
 
 [node name="Score 2" type="Label" parent="Info"]
-margin_left = 959.0
-margin_top = 85.0
-margin_right = 999.0
-margin_bottom = 99.0
+margin_left = 1225.0
+margin_top = 90.0
+margin_right = 1265.0
+margin_bottom = 104.0
 
 [node name="Name 1" type="Label" parent="Info"]
-margin_left = 828.0
-margin_top = 57.0
-margin_right = 868.0
-margin_bottom = 71.0
+margin_left = 1100.0
+margin_top = 75.0
+margin_right = 1140.0
+margin_bottom = 89.0
 
 [node name="Name 2" type="Label" parent="Info"]
-margin_left = 940.0
-margin_top = 55.0
-margin_right = 980.0
-margin_bottom = 69.0
+margin_left = 1225.0
+margin_top = 75.0
+margin_right = 1265.0
+margin_bottom = 89.0
+
+[node name="Turn" type="Label" parent="Info"]
+margin_left = 1200.0
+margin_top = 10.0
+margin_right = 1240.0
+margin_bottom = 24.0
 

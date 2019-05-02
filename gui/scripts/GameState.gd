@@ -58,6 +58,12 @@ func spawn_dwarf(player_id, pos, parent_node):
 	add_child(dwarf)
 	return dwarf
 
+func redraw(turn, players):
+	if (turn % 2 == 0):
+		$Info/Turn.text = str(turn / 2 + 1) + " / 100"
+	$"Info/Score 1".text = str(players[0].score)
+	$"Info/Score 2".text = str(players[1].score)
+
 func init(blocks, players, ores, parent_node):
 	$TileMap.init(blocks, ores)
 	$Info.init(players)
