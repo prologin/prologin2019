@@ -86,7 +86,7 @@ func stop():
 	mining = false
 
 func animation_finished():
-	if mining:
+	if mining or (stick and not moving):
 		stop()
 
 func _ready():

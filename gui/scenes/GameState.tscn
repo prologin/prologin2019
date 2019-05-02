@@ -23,7 +23,6 @@ margin_top = 31.5514
 margin_right = 1106.07
 margin_bottom = 47.5514
 max_value = 5.0
-value = 1.0
 
 [node name="Speed" type="Label" parent="Info/SpeedSlider"]
 margin_left = 5.0

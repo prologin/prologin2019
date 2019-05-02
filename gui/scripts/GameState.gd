@@ -22,8 +22,8 @@ func replay_action(action, player_id):
 		return move(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_MINER"):
 		return mine(action, player_id)
-	if action["action"] == Constants.ACTIONS.get("ACTION_AGRIPPER"):
-		return grab(action, player_id)
+	#if action["action"] == Constants.ACTIONS.get("ACTION_AGRIPPER"):
+	#	return grab(action, player_id)
 	if action["action"] == -2:
 		return fall(action)
 	print("unknown action: ", action["action"])
