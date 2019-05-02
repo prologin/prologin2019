@@ -39,6 +39,7 @@ func move_to(external_to, map):
 	moving = true
 	var anim = null
 	anim = "move"
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 	var dx = to.x - position.x
 	if dx > 0:
@@ -52,6 +53,7 @@ func mine_to(external_to, map):
 	_mining_to = to
 	mining = true
 	var anim = "mine"
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 	var dx = to.x - position.x
 	if dx > 0:
@@ -61,13 +63,16 @@ func mine_to(external_to, map):
 	
 func grab_to():
 	assert not mining
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("grab")
 	
 func pull_to():
 	assert not mining
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("climb")
 	
 func stop():
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("idle")
 	emit_signal("finished_moving")
 	moving = false

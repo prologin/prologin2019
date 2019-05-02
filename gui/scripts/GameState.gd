@@ -58,8 +58,9 @@ func spawn_dwarf(player_id, pos, parent_node):
 	add_child(dwarf)
 	return dwarf
 
-func init(blocks, players, parent_node):
-	$TileMap.init(blocks)
+func init(blocks, players, ores, parent_node):
+	$TileMap.init(blocks, ores)
+	$Info.init(players)
 	
 	for player in range(Constants.NB_JOUEURS):
 		dwarfs.append([])

@@ -2,12 +2,21 @@
 # Copyright 2019 Martin Huvelle
 
 static func parse_input_json():
+	if OS.has_feature('JavaScript'):
+		return parse_dump_js()
 	for arg in OS.get_cmdline_args():
 		if arg.begins_with("-json="):
 			var json = arg.right(6)
 			print("Read dump ", json)
 			return parse_dump(json)
 	print("FATAL: could not retreive dump")
+
+static func parse_dump_js():
+	var text = JavaScript.eval("dump_value", true)
+	var rounds = []
+	for line in text.split("\n", false):
+		rounds.append(JSON.parse(line).result)
+	return rounds
 
 static func parse_dump(filename):
 	var rounds = []

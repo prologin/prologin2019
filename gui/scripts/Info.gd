@@ -7,7 +7,7 @@ func _ready():
 func _speed_slider(value):
 	var v = 1 << int(value)
 	Global.speed_factor = v
-	$Speed.text = "Vitesse: " + str(Global.speed_factor)
+	$SpeedSlider/Speed.text = "Vitesse: " + str(Global.speed_factor)
 	
 func _process(delta):
 	if Input.is_action_just_pressed("ui_up"):
