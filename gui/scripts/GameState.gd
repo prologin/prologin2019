@@ -62,7 +62,7 @@ func mine(action, player_id):
 	return true
 
 func extand_rope(action):
-	$TileMap.draw_rope(action, is_prev_rope)
+	$TileMap.draw_rope(action["pos"], is_prev_rope)
 	is_prev_rope = Vector2(-1,-1)
 	return true
 

@@ -15,6 +15,9 @@ func draw_rope(begin, end):
 		set_cell(begin.x,i,4)
 		i += 1
 
+func get_tile(x, y):
+	return get_cell(x,y)
+
 func init(blocks, ores, ropes, spawn1, spawn2):
 	for y in range(Constants.TAILLE_MINE):
 		for x in range(Constants.TAILLE_MINE):

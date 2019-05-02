@@ -42,7 +42,10 @@ func move_to(external_to, map):
 	var anim = null
 	var dx = to.x - position.x
 	if (stick and dx == 0):
-		anim = "grab"
+		if ($TileMap.get_tile(position.x, position.y) == 4):
+			anim = "climb"
+		else:
+			anim = "grab"
 	else:
 		anim = "move"
 		stick = false
