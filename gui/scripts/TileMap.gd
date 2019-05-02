@@ -9,12 +9,11 @@ func mine(pos):
 func set_rope(pos):
 	set_cell(pos.x, pos.y, 0)
 
-func update_ropes(ropes):
-	for rope in ropes:
-		var i = rope.haut.y+1
-		while i <= rope.bas.y:
-			set_cell(rope.haut.x, i, 4)
-			i += 1
+func draw_rope(begin, end):
+	var i = begin.y
+	while i >= end.y:
+		set_cell(begin.x,i,4)
+		i += 1
 
 func init(blocks, ores, ropes, spawn1, spawn2):
 	for y in range(Constants.TAILLE_MINE):
