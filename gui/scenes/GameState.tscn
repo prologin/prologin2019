@@ -61,3 +61,7 @@ margin_top = 10.0
 margin_right = 1240.0
 margin_bottom = 24.0
 
+[node name="Dwarf" type="Label" parent="Info"]
+margin_right = 40.0
+margin_bottom = 14.0
+

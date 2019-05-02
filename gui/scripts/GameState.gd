@@ -22,6 +22,8 @@ func replay_action(action, player_id):
 		return move(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_MINER"):
 		return mine(action, player_id)
+	if action["action"] == Constants.ACTIONS.get("ACTION_AGRIPPER"):
+		return grab(action, player_id)
 	if action["action"] == -2:
 		return fall(action)
 	print("unknown action: ", action["action"])
@@ -48,6 +50,12 @@ func fall(action):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
 	dwarf.move_to(dest, $TileMap)
+	return true
+
+func grab(action, player_id):
+	var dwarf_id = int(action["id_nain"])
+	var dwarf = dwarfs[player_id][dwarf_id]
+	dwarf.grab_to($TileMap)
 	return true
 
 func spawn_dwarf(player_id, pos, parent_node):

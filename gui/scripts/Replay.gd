@@ -31,7 +31,7 @@ func next_turn():
 	$GameState.redraw(turn, current_turn.players)
 
 func _process(delta):
-	#print("actions.size(): ", actions.size())
+	print("actions.size(): ", actions.size())
 	while actions.size() != 0 and not is_animating:
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:

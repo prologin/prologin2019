@@ -8,6 +8,7 @@ signal finished_moving
 var modulate_color = Color(1, 1, 1, 1)
 var moving = false
 var mining = false
+var stick = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
 var external_pos = Vector2()
@@ -38,10 +39,15 @@ func move_to(external_to, map):
 	_moving_to = to
 	moving = true
 	var anim = null
-	anim = "move"
+	var dx = to.x - position.x
+	if (stick and dx == 0):
+		anim = "grab"
+	else:
+		anim = "move"
+		stick = false
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
-	var dx = to.x - position.x
+
 	if dx > 0:
 		$AnimatedSprite.flip_h = false
 	elif dx < 0:
@@ -61,8 +67,9 @@ func mine_to(external_to, map):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 	
-func grab_to():
+func grab_to(map):
 	assert not mining
+	stick = true
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("grab")
 	
