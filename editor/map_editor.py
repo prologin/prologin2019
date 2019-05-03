@@ -199,8 +199,8 @@ class Grid(Canvas):
             ropes = []
             minerals = []
 
-            for y, row in enumerate(self.grid):
-                for x, cell in enumerate(row):
+            for x, row in enumerate(self.grid):
+                for y, cell in enumerate(row):
                     if cell.cell_type in ['libre', 'rope', 'spawn 1', 'spawn 2']:
                         f.write('.')
                     elif cell.cell_type == 'obsidian':
@@ -240,8 +240,33 @@ class Grid(Canvas):
             for row in range(SIZE_GRID):
                 for col in range(SIZE_GRID):
                     c = f.read(1)
-                    self.grid[row][col].fill = (c == 'X')
+
+                    if c == '.':
+                        self.grid[row][col].set('libre')
+                    elif c == 'X':
+                        self.grid[row][col].set('granite')
+                    elif c == '#':
+                        self.grid[row][col].set('obsidian')
+                    else:
+                        self.grid[row][col].set(DEFAULT_CELL_TYPE)
+
                 f.read(1)
+
+            sp1_y, sp1_x = map(int, f.readline().split(' '))
+            sp2_y, sp2_x = map(int, f.readline().split(' '))
+
+            self.grid[sp1_x][sp1_y].set('spawn 1')
+            self.grid[sp2_x][sp2_y].set('spawn 2')
+
+            nb_minerals = int(f.readline())
+            for _ in range(nb_minerals):
+                y, x, res, val = map(int, f.readline().split(' '))
+                self.grid[x][y].set('minerai')
+
+            nb_ropes = int(f.readline())
+            for _ in range(nb_ropes):
+                y, x = map(int, f.readline().split(' '))
+                self.grid[x][y].set('rope')
 
         self.draw_cells()
 
