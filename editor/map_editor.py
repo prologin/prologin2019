@@ -14,14 +14,17 @@ import sys
 
 
 SIZE_GRID = 31
-MAP_CELL_SIZE = 20
+MAP_CELL_SIZE = 16
 
 CELL_TYPES = {
     'libre': {'sprite': 'libre.png'},
     'granite': {'sprite': 'stone.png'},
     'rope': {'sprite': 'rope.png'},
+    'minerai': {'color': 'black'},
+    'spawn 1': {'color': 'red'},
+    'spawn 2': {'color': 'blue'},
 }
-DEFAULT_TYPE = 'libre'
+DEFAULT_CELL_TYPE = 'libre'
 
 BORDER_COLOR = "black"
 EMPTY_COLOR = "white"
@@ -62,29 +65,22 @@ def get_opp(pos, sym):
 class Cell():
     def __init__(self, master, x, y):
         self.master = master
+
         self.x = x
         self.y = y
-        self.fill = False
+        self.cell_type = DEFAULT_CELL_TYPE
 
-    def switch(self):
-        self.fill = not self.fill
+    def set(self, cell_type):
+        self.cell_type = cell_type
+        self.draw()
 
-    def draw(self, cell_type):
-        global img
-
+    def draw(self):
         if self.master is not None:
-            outline = BORDER_COLOR
+            x = self.x * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
+            y = self.y * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
 
-            if self.fill:
-                fill = FILLED_COLOR
-            else:
-                fill = EMPTY_COLOR
-
-            xmin = self.x * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
-            ymin = self.y * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
-
-            self.img = ImageTk.PhotoImage(SPRITES[cell_type])
-            self.master.create_image((xmin, ymin), image=self.img)
+            self.img = ImageTk.PhotoImage(SPRITES[self.cell_type])
+            self.master.create_image((x, y), image=self.img)
 
 
 class Grid(Canvas):
@@ -116,7 +112,7 @@ class Grid(Canvas):
 
         types = list(CELL_TYPES.keys())
         self.draw_type = StringVar(master)
-        self.draw_type.set(DEFAULT_TYPE)
+        self.draw_type.set(DEFAULT_CELL_TYPE)
         self.dd_draw_type = OptionMenu(master, self.draw_type, *types)
         self.dd_draw_type.pack(side="bottom")
 
@@ -128,12 +124,9 @@ class Grid(Canvas):
         self.draw_coords()
 
     def draw_cells(self):
-        draw_type = DEFAULT_TYPE if not hasattr(
-            self, 'draw_type') else self.draw_type.get()
-
         for row in self.grid:
             for cell in row:
-                cell.draw(draw_type)
+                cell.draw()
 
     def draw_coords(self):
         for row in range(1, SIZE_GRID + 1):
@@ -159,15 +152,13 @@ class Grid(Canvas):
 
         row, col = self.get_coords(event)
         cell = self.grid[row][col]
-        cell.switch()
-        cell.draw(self.draw_type.get())
+        cell.set(self.draw_type.get())
         self.switched.append(cell)
         opp = get_opp((row, col), self.symetry.get())
 
         if opp != (-1, -1):
             cell = self.grid[opp[0]][opp[1]]
-            cell.switch()
-            cell.draw(self.draw_type.get())
+            cell.set(self.draw_type.get())
             self.switched.append(cell)
 
     def handle_mouse_motion(self, event):
@@ -178,15 +169,13 @@ class Grid(Canvas):
         cell = self.grid[row][col]
 
         if cell not in self.switched:
-            cell.switch()
-            cell.draw(self.draw_type.get())
+            cell.set(self.draw_type.get())
             self.switched.append(cell)
             opp = get_opp((row, col), self.symetry.get())
 
             if opp != (-1, -1):
                 cell = self.grid[opp[0]][opp[1]]
-                cell.switch()
-                cell.draw(self.draw_type.get())
+                cell.set(self.draw_type.get())
                 self.switched.append(cell)
 
     def clean_grid(self):
@@ -200,16 +189,48 @@ class Grid(Canvas):
 
     def save_grid(self):
         filename = asksaveasfilename()
+
         if not filename:
             return
+
         with open(filename, 'w+') as f:
-            for row in self.grid:
-                for cell in row:
-                    if cell.fill:
+            spawn1_pos = 0, 0
+            spawn2_pos = 0, 1
+            ropes = []
+            minerals = []
+
+            for y, row in enumerate(self.grid):
+                for x, cell in enumerate(row):
+                    if cell.cell_type in ['libre', 'rope', 'spawn 1', 'spawn 2']:
+                        f.write('.')
+                    elif cell.cell_type == 'obsidian':
+                        f.write('#')
+                    elif cell.cell_type in ['granite', 'minerai']:
                         f.write('X')
                     else:
-                        f.write('.')
+                        f.write('?')
+
+                    if cell.cell_type == 'rope':
+                        ropes.append((y, x))
+                    elif cell.cell_type == 'minerai':
+                        minerals.append((y, x))
+                    elif cell.cell_type == 'spawn 1':
+                        spawn1_pos = y, x
+                    elif cell.cell_type == 'spawn 2':
+                        spawn2_pos = y, x
+
                 f.write('\n')
+
+            f.write('{} {}\n'.format(*spawn1_pos))
+            f.write('{} {}\n'.format(*spawn2_pos))
+
+            f.write('{}\n'.format(len(minerals)))
+            for mineral_pos in minerals:
+                f.write('{} {} 1 1\n'.format(*mineral_pos))
+
+            f.write('{}\n'.format(len(ropes)))
+            for rope_pos in ropes:
+                f.write('{} {}\n'.format(*rope_pos))
 
     def load_grid(self, filename=None):
         if filename is None:
