@@ -5,26 +5,71 @@
 # Copyright 2018 Paul Guénézan
 # Copyright 2018 Thibault Allançon
 
+import sys
+
 from tkinter import Tk, Canvas, Frame, Button, StringVar, OptionMenu
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 from PIL import Image, ImageTk
-import tkinter.ttk as ttk
-
-import sys
 
 
 SIZE_GRID = 31
 MAP_CELL_SIZE = 20
 
 CELL_TYPES = {
-    'libre': {'sprite': 'libre.png'},
-    'granite': {'sprite': 'stone.png'},
-    'rope': {'sprite': 'rope.png'},
-    'minerai': {'sprite': 'mineral.png'},
-    'obsidian': {'sprite': 'obsidian.png'},
-    'spawn 1': {'color': 'red'},
-    'spawn 2': {'color': 'blue'},
+    'libre': {
+        'sprite': 'libre.png',
+        'serialize': {
+            'method': 'ascii',
+            'ascii': '.',
+        }
+    },
+    'granite': {
+        'sprite': 'stone.png',
+        'serialize': {
+            'method': 'ascii',
+            'ascii': 'X'
+        }
+    },
+    'obsidian': {
+        'sprite': 'obsidian.png',
+        'serialize': {
+            'method': 'ascii',
+            'ascii': '#',
+        }
+    },
+    'red_spawn': {
+        'color': 'red',
+        'serialize': {
+            'method': 'raw',
+            'order': 0,
+        }
+    },
+    'blue_spawn': {
+        'name': 'blue_spawn',
+        'color': 'blue',
+        'serialize': {
+            'method': 'raw',
+            'order': 1,
+        }
+    },
+    'minerai': {
+        'sprite': 'mineral.png',
+        'extra': ['resistance', 'value'],
+        'serialize': {
+            'method': 'list',
+            'ascii': 'X',
+            'order': 2,
+        }
+    },
+    'rope': {
+        'sprite': 'rope.png',
+        'serialize': {
+            'method': 'list',
+            'order': 3,
+        }
+    },
 }
+
 DEFAULT_CELL_TYPE = 'libre'
 
 GRID_OFFSET = 50
@@ -36,13 +81,13 @@ SYMETRY = ["NONE", "CENT", "HORI", "VERT", "DIAG1", "DIAG2"]
 # Load sprites for different types of cells
 SPRITES = dict()
 
-for cell_type, params in CELL_TYPES.items():
-    if 'sprite' in params:
-        SPRITES[cell_type] = Image.open(params['sprite']).resize(
+for name, conf in CELL_TYPES.items():
+    if 'sprite' in conf:
+        SPRITES[name] = Image.open(conf['sprite']).resize(
             (MAP_CELL_SIZE, MAP_CELL_SIZE), Image.ANTIALIAS)
     else:
-        color = params['color'] if 'color' in params else 'white'
-        SPRITES[cell_type] = Image.new(
+        color = conf['color'] if 'color' in conf else 'white'
+        SPRITES[name] = Image.new(
             'RGB', (MAP_CELL_SIZE, MAP_CELL_SIZE), color)
 
 
@@ -61,10 +106,10 @@ def get_opp(pos, sym):
 
 
 class Cell():
-    def __init__(self, master, x, y):
+    def __init__(self, master, row, col):
         self.master = master
-        self.x = x
-        self.y = y
+        self.x = col
+        self.y = row
 
         self.cell_type = DEFAULT_CELL_TYPE
         self.img = None
@@ -101,8 +146,8 @@ class Grid(Canvas):
         self.load_button = Button(master, text="Load", command=self.load_grid)
         self.load_button.pack(in_=self.menu, side="left")
 
-        self.grid = [[Cell(self, x, y) for x in range(SIZE_GRID)]
-                     for y in range(SIZE_GRID)]
+        self.grid = [[Cell(self, row, col) for col in range(SIZE_GRID)]
+                     for row in range(SIZE_GRID)]
 
         self.symetry = StringVar(master)
         self.symetry.set(SYMETRY[0])
@@ -181,85 +226,92 @@ class Grid(Canvas):
 
     def save_grid(self):
         filename = asksaveasfilename()
-
         if not filename:
             return
 
         with open(filename, 'w+') as f:
-            spawn1_pos = 0, 0
-            spawn2_pos = 0, 1
-            ropes = []
-            minerals = []
+            # Init raw and list outputs datas
+            raw_output = dict()
+            list_output = dict()
 
-            for x, row in enumerate(self.grid):
-                for y, cell in enumerate(row):
-                    if cell.cell_type in ['libre', 'rope', 'spawn 1', 'spawn 2']:
-                        f.write('.')
-                    elif cell.cell_type == 'obsidian':
-                        f.write('#')
-                    elif cell.cell_type in ['granite', 'minerai']:
-                        f.write('X')
+            for name, conf in CELL_TYPES.items():
+                if conf['serialize']['method'] == 'raw':
+                    default_data = [0, 0] + ([0] * len(conf['extra'])
+                                             if 'extra' in conf else [])
+                    raw_output[conf['serialize']['order']] = default_data
+                elif conf['serialize']['method'] == 'list':
+                    list_output[conf['serialize']['order']] = []
+
+            # Serialize the grid and catch raw and list outputs
+            for row, row_data in enumerate(self.grid):
+                for col, cell in enumerate(row_data):
+                    conf = CELL_TYPES[cell.cell_type]
+                    data = [row, col] + ([10] * len(conf['extra'])
+                                         if 'extra' in conf else [])
+
+                    # Serialization of the grid
+                    if 'ascii' in conf['serialize']:
+                        f.write(conf['serialize']['ascii'])
                     else:
-                        f.write('?')
+                        f.write(CELL_TYPES[DEFAULT_CELL_TYPE]
+                                ['serialize']['ascii'])
 
-                    if cell.cell_type == 'rope':
-                        ropes.append((x, y))
-                    elif cell.cell_type == 'minerai':
-                        minerals.append((x, y))
-                    elif cell.cell_type == 'spawn 1':
-                        spawn1_pos = x, y
-                    elif cell.cell_type == 'spawn 2':
-                        spawn2_pos = x, y
+                    # Register for raw and list outputs
+                    if conf['serialize']['method'] == 'raw':
+                        raw_output[conf['serialize']['order']] = data
+                    elif conf['serialize']['method'] == 'list':
+                        list_output[conf['serialize']['order']].append(data)
 
                 f.write('\n')
 
-            f.write('{} {}\n'.format(*spawn1_pos))
-            f.write('{} {}\n'.format(*spawn2_pos))
+            # Serialize raw and list outputs
+            order_keys = sorted(list(raw_output.keys()) +
+                                list(list_output.keys()))
 
-            f.write('{}\n'.format(len(minerals)))
-            for mineral_pos in minerals:
-                f.write('{} {} 1 1\n'.format(*mineral_pos))
-
-            f.write('{}\n'.format(len(ropes)))
-            for rope_pos in ropes:
-                f.write('{} {}\n'.format(*rope_pos))
+            for order in order_keys:
+                if order in raw_output:
+                    f.write('{}\n'.format(
+                        ' '.join(map(str, raw_output[order]))))
+                else:
+                    f.write('{}\n'.format(len(list_output[order])))
+                    for item in list_output[order]:
+                        f.write('{}\n'.format(' '.join(map(str, item))))
 
     def load_grid(self, filename=None):
         if filename is None:
             filename = askopenfilename()
 
+        # Index of symbols to consider in the grid
+        from_ascii = {conf['serialize']['ascii']: name
+                      for name, conf in CELL_TYPES.items()
+                      if conf['serialize']['method'] == 'ascii'}
+
+        # Ordered list of items to catch after reading the grid
+        from_raw_or_list = [(name, conf['serialize']['order'])
+                            for name, conf in CELL_TYPES.items()
+                            if conf['serialize']['method'] in ['raw', 'list']]
+        from_raw_or_list.sort(key=lambda x: x[1])
+        from_raw_or_list = map(lambda x: x[0], from_raw_or_list)
+
         with open(filename, 'r') as f:
+            # Read the grid
             for row in range(SIZE_GRID):
-                for col in range(SIZE_GRID):
-                    c = f.read(1)
+                for col, char in enumerate(f.readline()):
+                    if self.inside_grid(row, col) and char in from_ascii:
+                        self.grid[row][col].set(from_ascii[char])
 
-                    if c == '.':
-                        self.grid[row][col].set('libre')
-                    elif c == 'X':
-                        self.grid[row][col].set('granite')
-                    elif c == '#':
-                        self.grid[row][col].set('obsidian')
-                    else:
-                        self.grid[row][col].set(DEFAULT_CELL_TYPE)
+            # Read raw and list infos
+            for name in from_raw_or_list:
+                conf = CELL_TYPES[name]
 
-                f.read(1)
-
-            y, x = map(int, f.readline().split(' '))
-            self.grid[x][y].set('spawn 1')
-
-            y, x = map(int, f.readline().split(' '))
-            self.grid[x][y].set('spawn 2')
-
-            nb_minerals = int(f.readline())
-            for _ in range(nb_minerals):
-                y, x, _, _ = map(int, f.readline().split(' '))
-                self.grid[x][y].set('minerai')
-
-            nb_ropes = int(f.readline())
-            for _ in range(nb_ropes):
-                y, x = map(int, f.readline().split(' '))
-                self.grid[x][y].set('rope')
-
+                if conf['serialize']['method'] == 'raw':
+                    row, col, *extra = map(int, f.readline().split(' '))
+                    self.grid[row][col].set(name)
+                elif conf['serialize']['method'] == 'list':
+                    n = int(f.readline())
+                    for _ in range(n):
+                        row, col, *extra = map(int, f.readline().split(' '))
+                        self.grid[row][col].set(name)
         self.draw()
 
 
