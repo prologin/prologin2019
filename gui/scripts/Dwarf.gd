@@ -34,7 +34,7 @@ func unfocus():
 	set_modulate(modulate_color)
 
 func move_to(external_to, map):
-	assert not moving
+	#assert not moving
 	external_pos = external_to
 	var to = map.world_position(external_to)
 	_moving_to = to
@@ -58,7 +58,7 @@ func move_to(external_to, map):
 		$AnimatedSprite.flip_h = true
 
 func mine_to(external_to, map):
-	assert not mining
+	#assert not mining
 	var to = map.world_position(external_to)
 	_mining_to = to
 	mining = true
@@ -72,9 +72,9 @@ func mine_to(external_to, map):
 		$AnimatedSprite.flip_h = true
 	
 func set_rope_to(external_to, map):
-	assert not mining
-	assert not moving
-	assert not roping
+	#assert not mining
+	#assert not moving
+	#assert not roping
 	roping = true
 	
 func grab_to(map):

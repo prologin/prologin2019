@@ -54,12 +54,6 @@ margin_top = 75.0
 margin_right = 1265.0
 margin_bottom = 89.0
 
-[node name="Turn" type="Label" parent="Info"]
-margin_left = 1200.0
-margin_top = 10.0
-margin_right = 1240.0
-margin_bottom = 24.0
-
 [node name="Dwarf" type="Label" parent="Info"]
 margin_right = 40.0
 margin_bottom = 14.0
@@ -69,4 +63,24 @@ margin_left = 1063.24
 margin_top = 199.001
 margin_right = 1156.24
 margin_bottom = 232.001
+
+[node name="Turn" type="Label" parent="Info"]
+margin_left = 1140.91
+margin_top = 6.10394
+margin_right = 1180.91
+margin_bottom = 20.1039
+
+[node name="Jump" type="Button" parent="Info"]
+margin_left = 1081.32
+margin_top = 512.329
+margin_right = 1124.32
+margin_bottom = 532.329
+text = "Jump"
+
+[node name="TurnIndex" type="TextEdit" parent="Info/Jump"]
+margin_left = 0.00012207
+margin_top = 33.1163
+margin_right = 40.0001
+margin_bottom = 73.1163
+text = "0"
 

@@ -90,6 +90,7 @@ func spawn_dwarf(player_id, pos, parent_node):
 
 func redraw(turn, players, ropes):
 	if (turn % 2 == 0):
+		print(turn)
 		$Info/Turn.text = str(turn / 2 + 1) + " / 100"
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
@@ -100,11 +101,20 @@ func redraw(turn, players, ropes):
 		else:
 			$Info/End.text = "Victoire de " + players[1].name
 
-func init(turn, parent_node):
-	$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos)
-	$Info.init(turn.players)
+func teleport(dwarf, pos):
+	dwarf.set_external_position(pos, $TileMap)
+
+func init(turn, parent_node, reinit=false):
+	if (reinit):
+			$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos, true)
+	else:
+		$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos)
+		$Info.init(turn.players)
 	
 	for player in range(Constants.NB_JOUEURS):
 		dwarfs.append([])
 		for dwarf_id in range(Constants.NB_NAINS):
-			dwarfs[player].append(spawn_dwarf(player, turn.players[player].dwarfs[dwarf_id].pos, parent_node))
+			if (reinit):
+				teleport(dwarfs[player][dwarf_id], turn.players[player].dwarfs[dwarf_id].pos) 
+			else:
+				dwarfs[player].append(spawn_dwarf(player, turn.players[player].dwarfs[dwarf_id].pos, parent_node))

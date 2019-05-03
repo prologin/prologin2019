@@ -10,9 +10,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	print("I am alive")
 	if $Unpause.pressed:
 		get_tree().paused = false
 		self.hide()
+
 	if $Quit.pressed:
 		get_tree().quit()
