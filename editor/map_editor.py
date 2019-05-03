@@ -14,21 +14,19 @@ import sys
 
 
 SIZE_GRID = 31
-MAP_CELL_SIZE = 16
+MAP_CELL_SIZE = 20
 
 CELL_TYPES = {
     'libre': {'sprite': 'libre.png'},
     'granite': {'sprite': 'stone.png'},
     'rope': {'sprite': 'rope.png'},
-    'minerai': {'color': 'black'},
+    'minerai': {'sprite': 'mineral.png'},
+    'obsidian': {'sprite': 'obsidian.png'},
     'spawn 1': {'color': 'red'},
     'spawn 2': {'color': 'blue'},
 }
 DEFAULT_CELL_TYPE = 'libre'
 
-BORDER_COLOR = "black"
-EMPTY_COLOR = "white"
-FILLED_COLOR = "black"
 GRID_OFFSET = 50
 TEXT_OFFSET = 30
 
@@ -49,29 +47,30 @@ for cell_type, params in CELL_TYPES.items():
 
 
 def get_opp(pos, sym):
-    if (sym == "CENT"):
+    if sym == "CENT":
         return (SIZE_GRID - 1 - pos[0], SIZE_GRID - 1 - pos[1])
-    if (sym == "HORI"):
+    if sym == "HORI":
         return (SIZE_GRID - 1 - pos[0], pos[1])
-    if (sym == "VERT"):
+    if sym == "VERT":
         return (pos[0], SIZE_GRID - 1 - pos[1])
-    if (sym == "DIAG1"):
+    if sym == "DIAG1":
         return (SIZE_GRID - 1 - pos[1], SIZE_GRID - 1 - pos[0])
-    if (sym == "DIAG2"):
+    if sym == "DIAG2":
         return (pos[1], pos[0])
-    return (-1, -1)
+    return None
 
 
 class Cell():
     def __init__(self, master, x, y):
         self.master = master
-
         self.x = x
         self.y = y
-        self.cell_type = DEFAULT_CELL_TYPE
 
-    def set(self, cell_type):
-        self.cell_type = cell_type
+        self.cell_type = DEFAULT_CELL_TYPE
+        self.img = None
+
+    def set(self, _type):
+        self.cell_type = _type
         self.draw()
 
     def draw(self):
@@ -102,8 +101,8 @@ class Grid(Canvas):
         self.load_button = Button(master, text="Load", command=self.load_grid)
         self.load_button.pack(in_=self.menu, side="left")
 
-        self.clean_grid()
-        self.switched = []
+        self.grid = [[Cell(self, x, y) for x in range(SIZE_GRID)]
+                     for y in range(SIZE_GRID)]
 
         self.symetry = StringVar(master)
         self.symetry.set(SYMETRY[0])
@@ -116,14 +115,13 @@ class Grid(Canvas):
         self.dd_draw_type = OptionMenu(master, self.draw_type, *types)
         self.dd_draw_type.pack(side="bottom")
 
-        self.bind("<Button-1>", self.handle_mouse_click)
-        self.bind("<B1-Motion>", self.handle_mouse_motion)
-        self.bind("<ButtonRelease-1>", lambda event: self.switched.clear())
+        self.bind("<Button-1>", self.event_set_cell)
+        self.bind("<B1-Motion>", self.event_set_cell)
 
-        self.draw_cells()
+        self.draw()
         self.draw_coords()
 
-    def draw_cells(self):
+    def draw(self):
         for row in self.grid:
             for cell in row:
                 cell.draw()
@@ -132,60 +130,54 @@ class Grid(Canvas):
         for row in range(1, SIZE_GRID + 1):
             y_pos = MAP_CELL_SIZE * row - (MAP_CELL_SIZE // 2)
             self.create_text(TEXT_OFFSET, y_pos + GRID_OFFSET, text=str(row))
+
         for col in range(1, SIZE_GRID + 1):
             x_pos = MAP_CELL_SIZE * col - (MAP_CELL_SIZE // 2)
             self.create_text(x_pos + GRID_OFFSET, TEXT_OFFSET, text=str(col))
 
-    def get_coords(self, event):
-        row = int((event.y - GRID_OFFSET) / MAP_CELL_SIZE)
-        col = int((event.x - GRID_OFFSET) / MAP_CELL_SIZE)
-        return row, col
+    #    ____     _ _
+    #   / ___|___| | |___
+    #  | |   / _ \ | / __|
+    #  | |__|  __/ | \__ \
+    #   \____\___|_|_|___/
+    #
 
     @staticmethod
-    def inside_grid(event):
-        return GRID_OFFSET <= event.x < GRID_OFFSET + SIZE_GRID * MAP_CELL_SIZE and \
-            GRID_OFFSET <= event.y < GRID_OFFSET + SIZE_GRID * MAP_CELL_SIZE
+    def inside_grid(row, col):
+        return 0 <= row < SIZE_GRID and 0 <= col < SIZE_GRID
 
-    def handle_mouse_click(self, event):
-        if not self.inside_grid(event):
-            return
+    def set_cell(self, row, col):
+        self.grid[row][col].set(self.draw_type.get())
 
-        row, col = self.get_coords(event)
-        cell = self.grid[row][col]
-        cell.set(self.draw_type.get())
-        self.switched.append(cell)
         opp = get_opp((row, col), self.symetry.get())
-
-        if opp != (-1, -1):
-            cell = self.grid[opp[0]][opp[1]]
-            cell.set(self.draw_type.get())
-            self.switched.append(cell)
-
-    def handle_mouse_motion(self, event):
-        if not self.inside_grid(event):
-            return
-
-        row, col = self.get_coords(event)
-        cell = self.grid[row][col]
-
-        if cell not in self.switched:
-            cell.set(self.draw_type.get())
-            self.switched.append(cell)
-            opp = get_opp((row, col), self.symetry.get())
-
-            if opp != (-1, -1):
-                cell = self.grid[opp[0]][opp[1]]
-                cell.set(self.draw_type.get())
-                self.switched.append(cell)
+        if opp is not None:
+            self.grid[opp[0]][opp[1]].set(self.draw_type.get())
 
     def clean_grid(self):
-        self.grid = []
-        for row in range(SIZE_GRID):
-            line = []
-            for col in range(SIZE_GRID):
-                line.append(Cell(self, col, row))
-            self.grid.append(line)
-        self.draw_cells()
+        for row in self.grid:
+            for cell in row:
+                cell.set(DEFAULT_CELL_TYPE)
+
+    #   _____                 _     _   _                 _ _ _
+    #  | ____|_   _____ _ __ | |_  | | | | __ _ _ __   __| | (_)_ __   __ _
+    #  |  _| \ \ / / _ \ '_ \| __| | |_| |/ _` | '_ \ / _` | | | '_ \ / _` |
+    #  | |___ \ V /  __/ | | | |_  |  _  | (_| | | | | (_| | | | | | | (_| |
+    #  |_____| \_/ \___|_| |_|\__| |_| |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
+    #                                                                 |___/
+
+    def event_set_cell(self, event):
+        row = int((event.y - GRID_OFFSET) / MAP_CELL_SIZE)
+        col = int((event.x - GRID_OFFSET) / MAP_CELL_SIZE)
+
+        if self.inside_grid(row, col):
+            self.set_cell(row, col)
+
+    #   ____            _       _ _          _   _
+    #  / ___|  ___ _ __(_) __ _| (_)______ _| |_(_) ___  _ __
+    #  \___ \ / _ \ '__| |/ _` | | |_  / _` | __| |/ _ \| '_ \
+    #   ___) |  __/ |  | | (_| | | |/ / (_| | |_| | (_) | | | |
+    #  |____/ \___|_|  |_|\__,_|_|_/___\__,_|\__|_|\___/|_| |_|
+    #
 
     def save_grid(self):
         filename = asksaveasfilename()
@@ -211,13 +203,13 @@ class Grid(Canvas):
                         f.write('?')
 
                     if cell.cell_type == 'rope':
-                        ropes.append((y, x))
+                        ropes.append((x, y))
                     elif cell.cell_type == 'minerai':
-                        minerals.append((y, x))
+                        minerals.append((x, y))
                     elif cell.cell_type == 'spawn 1':
-                        spawn1_pos = y, x
+                        spawn1_pos = x, y
                     elif cell.cell_type == 'spawn 2':
-                        spawn2_pos = y, x
+                        spawn2_pos = x, y
 
                 f.write('\n')
 
@@ -252,15 +244,15 @@ class Grid(Canvas):
 
                 f.read(1)
 
-            sp1_y, sp1_x = map(int, f.readline().split(' '))
-            sp2_y, sp2_x = map(int, f.readline().split(' '))
+            y, x = map(int, f.readline().split(' '))
+            self.grid[x][y].set('spawn 1')
 
-            self.grid[sp1_x][sp1_y].set('spawn 1')
-            self.grid[sp2_x][sp2_y].set('spawn 2')
+            y, x = map(int, f.readline().split(' '))
+            self.grid[x][y].set('spawn 2')
 
             nb_minerals = int(f.readline())
             for _ in range(nb_minerals):
-                y, x, res, val = map(int, f.readline().split(' '))
+                y, x, _, _ = map(int, f.readline().split(' '))
                 self.grid[x][y].set('minerai')
 
             nb_ropes = int(f.readline())
@@ -268,7 +260,7 @@ class Grid(Canvas):
                 y, x = map(int, f.readline().split(' '))
                 self.grid[x][y].set('rope')
 
-        self.draw_cells()
+        self.draw()
 
 
 if __name__ == "__main__":
