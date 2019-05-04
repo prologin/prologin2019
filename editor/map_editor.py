@@ -6,82 +6,62 @@
 # Copyright 2018 Thibault Allançon
 
 import sys
+from tkinter import Canvas, Frame, StringVar, Tk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.ttk import Button, OptionMenu, Style
 
-from tkinter import Tk, Canvas, Frame, Button, StringVar, OptionMenu
-from tkinter.filedialog import asksaveasfilename, askopenfilename
+import yaml
 from PIL import Image, ImageTk
 
+# Display related constants
 
-SIZE_GRID = 31
 MAP_CELL_SIZE = 20
-
-CELL_TYPES = {
-    'libre': {
-        'sprite': 'libre.png',
-        'serialize': {
-            'method': 'ascii',
-            'ascii': '.',
-        }
-    },
-    'granite': {
-        'sprite': 'stone.png',
-        'serialize': {
-            'method': 'ascii',
-            'ascii': 'X'
-        }
-    },
-    'obsidian': {
-        'sprite': 'obsidian.png',
-        'serialize': {
-            'method': 'ascii',
-            'ascii': '#',
-        }
-    },
-    'red_spawn': {
-        'color': 'red',
-        'serialize': {
-            'method': 'raw',
-            'order': 0,
-        }
-    },
-    'blue_spawn': {
-        'name': 'blue_spawn',
-        'color': 'blue',
-        'serialize': {
-            'method': 'raw',
-            'order': 1,
-        }
-    },
-    'minerai': {
-        'sprite': 'mineral.png',
-        'extra': ['resistance', 'value'],
-        'serialize': {
-            'method': 'list',
-            'ascii': 'X',
-            'order': 2,
-        }
-    },
-    'rope': {
-        'sprite': 'rope.png',
-        'serialize': {
-            'method': 'list',
-            'order': 3,
-        }
-    },
-}
-
-DEFAULT_CELL_TYPE = 'libre'
-
-GRID_OFFSET = 50
-TEXT_OFFSET = 30
+GRID_OFFSET = 20
+TEXT_OFFSET = 5
 
 SYMETRY = ["NONE", "CENT", "HORI", "VERT", "DIAG1", "DIAG2"]
+
+# Load configuration
+with open('conf.yml') as f:
+    CONF = yaml.load(f)
+
+MAP_SIZE = CONF['map_size']
+CELL_TYPES = CONF['cell_types']
+DEFAULT_CELL_TYPE = CONF['default_cell_type']
+
+
+def list_draw_types():
+    for name, conf in CELL_TYPES.items():
+        if 'extra' not in conf or 'default' in conf:
+            yield name
+
+        if 'presets' in conf:
+            for preset_name in conf['presets']:
+                yield f'{name}:{preset_name}'
+
+
+def get_type_conf(name):
+    if ':' not in name:
+        return CELL_TYPES[name]
+
+    name, preset = name.split(':')
+    base_conf = CELL_TYPES[name].copy()
+    preset_conf = CELL_TYPES[name]['presets'][preset]
+
+    if 'sprite' in preset_conf or 'color' in preset_conf:
+        base_conf.pop('sprite', None)
+        base_conf.pop('color', None)
+
+    base_conf.update(preset_conf)
+    return base_conf
 
 
 # Load sprites for different types of cells
 SPRITES = dict()
 
-for name, conf in CELL_TYPES.items():
+for name in list_draw_types():
+    conf = get_type_conf(name)
+
     if 'sprite' in conf:
         SPRITES[name] = Image.open(conf['sprite']).resize(
             (MAP_CELL_SIZE, MAP_CELL_SIZE), Image.ANTIALIAS)
@@ -93,13 +73,13 @@ for name, conf in CELL_TYPES.items():
 
 def get_opp(pos, sym):
     if sym == "CENT":
-        return (SIZE_GRID - 1 - pos[0], SIZE_GRID - 1 - pos[1])
+        return (MAP_SIZE - 1 - pos[0], MAP_SIZE - 1 - pos[1])
     if sym == "HORI":
-        return (SIZE_GRID - 1 - pos[0], pos[1])
+        return (MAP_SIZE - 1 - pos[0], pos[1])
     if sym == "VERT":
-        return (pos[0], SIZE_GRID - 1 - pos[1])
+        return (pos[0], MAP_SIZE - 1 - pos[1])
     if sym == "DIAG1":
-        return (SIZE_GRID - 1 - pos[1], SIZE_GRID - 1 - pos[0])
+        return (MAP_SIZE - 1 - pos[1], MAP_SIZE - 1 - pos[0])
     if sym == "DIAG2":
         return (pos[1], pos[0])
     return None
@@ -120,65 +100,68 @@ class Cell():
 
     def draw(self):
         if self.master is not None:
-            x = self.x * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
-            y = self.y * MAP_CELL_SIZE + GRID_OFFSET + MAP_CELL_SIZE // 2
+            x = self.x * MAP_CELL_SIZE + MAP_CELL_SIZE // 2
+            y = self.y * MAP_CELL_SIZE + MAP_CELL_SIZE // 2
 
-            self.img = ImageTk.PhotoImage(SPRITES[self.cell_type])
+            self.img = ImageTk.PhotoImage(
+                SPRITES[self.cell_type], master=self.master)
             self.master.create_image((x, y), image=self.img)
 
 
-class Grid(Canvas):
+class Grid():
     def __init__(self, master):
-        Canvas.__init__(self, master,
-                        width=MAP_CELL_SIZE * SIZE_GRID + 2 * GRID_OFFSET,
-                        height=MAP_CELL_SIZE * SIZE_GRID + 2 * GRID_OFFSET)
-
+        # Top menu
         self.menu = Frame(master)
-        self.menu.pack(side="top")
+        self.menu.pack(fill='both', expand=True)
 
-        self.clean_button = Button(
-            master, text="Clean", command=self.clean_grid)
-        self.clean_button.pack(in_=self.menu, side="left")
+        self.save_button = Button(master, text='Save',
+                                  command=self.save_grid)
+        self.save_button.pack(in_=self.menu, side='right')
 
-        self.save_button = Button(master, text="Save", command=self.save_grid)
-        self.save_button.pack(in_=self.menu, side="left")
+        self.load_button = Button(master, text='Load',
+                                  command=self.load_grid)
+        self.load_button.pack(in_=self.menu, side='right')
 
-        self.load_button = Button(master, text="Load", command=self.load_grid)
-        self.load_button.pack(in_=self.menu, side="left")
+        # Place the canvas
+        self.canvas = Canvas(master,
+                             width=MAP_CELL_SIZE * MAP_SIZE,
+                             height=MAP_CELL_SIZE * MAP_SIZE)
 
-        self.grid = [[Cell(self, row, col) for col in range(SIZE_GRID)]
-                     for row in range(SIZE_GRID)]
+        self.grid = [[Cell(self.canvas, row, col) for col in range(MAP_SIZE)]
+                     for row in range(MAP_SIZE)]
+
+        self.canvas.bind("<Button-1>", self.event_set_cell)
+        self.canvas.bind("<B1-Motion>", self.event_set_cell)
+
+        self.canvas.pack()
+
+        # Tools
+        self.tools = Frame(master)
+        self.tools.pack(fill='both', expand=True)
+
+        self.fill_button = Button(
+            self.tools, text="Fill", command=self.fill_grid)
+        self.fill_button.pack(side='left')
+
+        types = list(list_draw_types())
+        self.draw_type = StringVar(master)
+        self.draw_type.set(DEFAULT_CELL_TYPE)
+        self.dd_draw_type = OptionMenu(
+            self.tools, self.draw_type, DEFAULT_CELL_TYPE, *types)
+        self.dd_draw_type.pack(side='left')
 
         self.symetry = StringVar(master)
         self.symetry.set(SYMETRY[0])
-        self.dd_symetry = OptionMenu(master, self.symetry, *SYMETRY)
-        self.dd_symetry.pack(side="bottom")
-
-        types = list(CELL_TYPES.keys())
-        self.draw_type = StringVar(master)
-        self.draw_type.set(DEFAULT_CELL_TYPE)
-        self.dd_draw_type = OptionMenu(master, self.draw_type, *types)
-        self.dd_draw_type.pack(side="bottom")
-
-        self.bind("<Button-1>", self.event_set_cell)
-        self.bind("<B1-Motion>", self.event_set_cell)
+        self.dd_symetry = OptionMenu(
+            self.tools, self.symetry, SYMETRY[0], *SYMETRY)
+        self.dd_symetry.pack(side='right')
 
         self.draw()
-        self.draw_coords()
 
     def draw(self):
         for row in self.grid:
             for cell in row:
                 cell.draw()
-
-    def draw_coords(self):
-        for row in range(1, SIZE_GRID + 1):
-            y_pos = MAP_CELL_SIZE * row - (MAP_CELL_SIZE // 2)
-            self.create_text(TEXT_OFFSET, y_pos + GRID_OFFSET, text=str(row))
-
-        for col in range(1, SIZE_GRID + 1):
-            x_pos = MAP_CELL_SIZE * col - (MAP_CELL_SIZE // 2)
-            self.create_text(x_pos + GRID_OFFSET, TEXT_OFFSET, text=str(col))
 
     #    ____     _ _
     #   / ___|___| | |___
@@ -189,7 +172,7 @@ class Grid(Canvas):
 
     @staticmethod
     def inside_grid(row, col):
-        return 0 <= row < SIZE_GRID and 0 <= col < SIZE_GRID
+        return 0 <= row < MAP_SIZE and 0 <= col < MAP_SIZE
 
     def set_cell(self, row, col):
         self.grid[row][col].set(self.draw_type.get())
@@ -198,10 +181,10 @@ class Grid(Canvas):
         if opp is not None:
             self.grid[opp[0]][opp[1]].set(self.draw_type.get())
 
-    def clean_grid(self):
+    def fill_grid(self):
         for row in self.grid:
             for cell in row:
-                cell.set(DEFAULT_CELL_TYPE)
+                cell.set(self.draw_type.get())
 
     #   _____                 _     _   _                 _ _ _
     #  | ____|_   _____ _ __ | |_  | | | | __ _ _ __   __| | (_)_ __   __ _
@@ -211,8 +194,8 @@ class Grid(Canvas):
     #                                                                 |___/
 
     def event_set_cell(self, event):
-        row = int((event.y - GRID_OFFSET) / MAP_CELL_SIZE)
-        col = int((event.x - GRID_OFFSET) / MAP_CELL_SIZE)
+        row = int(event.y / MAP_CELL_SIZE)
+        col = int(event.x / MAP_CELL_SIZE)
 
         if self.inside_grid(row, col):
             self.set_cell(row, col)
@@ -245,9 +228,13 @@ class Grid(Canvas):
             # Serialize the grid and catch raw and list outputs
             for row, row_data in enumerate(self.grid):
                 for col, cell in enumerate(row_data):
-                    conf = CELL_TYPES[cell.cell_type]
-                    data = [row, col] + ([10] * len(conf['extra'])
-                                         if 'extra' in conf else [])
+                    conf = get_type_conf(cell.cell_type)
+                    data = [row, col]
+
+                    # Add extra infos if necessary
+                    if 'extra' in conf:
+                        data += [conf['default'][field]
+                                 for field in conf['extra']]
 
                     # Serialization of the grid
                     if 'ascii' in conf['serialize']:
@@ -293,9 +280,24 @@ class Grid(Canvas):
         from_raw_or_list.sort(key=lambda x: x[1])
         from_raw_or_list = map(lambda x: x[0], from_raw_or_list)
 
+        # Need to match exactly a preset when 'extra' is specified, create
+        # an index to get which preset is used
+        fullname_index = dict()
+
+        for full_name in list_draw_types():
+            if ':' in full_name:
+                conf = get_type_conf(full_name)
+                parent_name, preset_name = full_name.split(':')
+
+                key = tuple([parent_name] + [conf['default'][field]
+                                             for field in conf['extra']])
+                fullname_index[key] = full_name
+            else:
+                fullname_index[(full_name, )] = full_name
+
         with open(filename, 'r') as f:
             # Read the grid
-            for row in range(SIZE_GRID):
+            for row in range(MAP_SIZE):
                 for col, char in enumerate(f.readline()):
                     if self.inside_grid(row, col) and char in from_ascii:
                         self.grid[row][col].set(from_ascii[char])
@@ -311,16 +313,24 @@ class Grid(Canvas):
                     n = int(f.readline())
                     for _ in range(n):
                         row, col, *extra = map(int, f.readline().split(' '))
-                        self.grid[row][col].set(name)
+
+                        identifier = (name, ) + tuple(extra)
+                        if identifier in fullname_index:
+                            self.grid[row][col].set(fullname_index[identifier])
+
         self.draw()
 
 
 if __name__ == "__main__":
+
     app = Tk()
 
+    style = Style()
+    style.theme_use('default')
+
     grid = Grid(app)
+
     if len(sys.argv) == 2:
         grid.load_grid(sys.argv[1])
-    grid.pack()
 
     app.mainloop()

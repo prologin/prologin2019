@@ -1,0 +1,69 @@
+map_size: 31
+
+default_cell_type: libre
+
+cell_types:
+    libre:
+        sprite: libre.png
+        serialize:
+            method: ascii
+            ascii: '.'
+
+    granite:
+        sprite: stone.png
+        serialize:
+            method: ascii
+            ascii: 'X'
+
+    obsidian:
+        sprite: obsidian.png
+        serialize:
+            method: ascii
+            ascii: '#'
+
+    red_spawn:
+        color: red
+        serialize:
+            method: raw
+            order: 0
+
+    blue_spawn:
+        color: blue
+        serialize:
+            method: raw
+            order: 1
+
+    minerai:
+        extra: ['resistance', 'value']
+        serialize:
+            method: list
+            ascii: 'X'
+            order: 2
+        presets:
+            coal:
+                sprite: ores/coal.png
+                default:
+                    resistance: 2
+                    value: 5
+            gold:
+                sprite: ores/gold.png
+                default:
+                    resistance: 4
+                    value: 10
+            ruby:
+                sprite: ores/ruby.png
+                default:
+                    resistance: 5
+                    value: 15
+            diamond:
+                sprite: ores/diamond.png
+                default:
+                    resistance: 25
+                    value: 50
+
+    rope:
+        sprite: rope.png
+        serialize:
+            method: list
+            ascii: '.'
+            order: 3
