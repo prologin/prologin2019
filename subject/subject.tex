@@ -24,6 +24,12 @@
 \usepackage{soul} % Pour barrer
 \usepackage{textcomp} % Pour les trademarks
 
+
+\usepackage{cellspace}
+\setlength\cellspacetoplimit{4pt}
+\setlength\cellspacebottomlimit{4pt}
+\newcommand\cincludegraphics[2][]{\raisebox{-0.2\height}{\includegraphics[#1]{#2}}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         BEGIN FIXME         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -37,8 +43,8 @@
 
 \def\plogo{prologin2019.pdf} %% Logo FIXME
 \def\psubjectpicture{logofinale.png} %% Picture to be displayed FIXME
-%% on its own page
 
+%% on its own page \vspace*{0.1cm}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         END FIXME           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
