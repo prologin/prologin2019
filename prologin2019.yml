@@ -74,8 +74,9 @@ enum:
     enum_name: case_type
     enum_summary: "Types de cases"
     enum_field:
-      - [libre, "Case libre"]
-      - [granite, "Granite standard"]
+      - [libre, "Case libre (peut comporter une corde)"]
+      - [granite, "Granite standard (indépendament de s'il cache des minerais
+                   ou non)"]
       - [obsidienne, "Obsidienne"]
       - [erreur_case, "Erreur"]
   -
