@@ -115,7 +115,6 @@ std::string convert_to_string(erreur in){
     case OK: return "\"ok\"";
     case PA_INSUFFISANTS: return "\"pa_insuffisants\"";
     case PM_INSUFFISANTS: return "\"pm_insuffisants\"";
-    case POSITION_INVALIDE: return "\"position_invalide\"";
     case HORS_LIMITES: return "\"hors_limites\"";
     case DIRECTION_INVALIDE: return "\"direction_invalide\"";
     case ID_NAIN_INVALIDE: return "\"id_nain_invalide\"";
@@ -466,7 +465,6 @@ std::ostream& operator<<(std::ostream& os, erreur v)
   case OK: os << "OK"; break;
   case PA_INSUFFISANTS: os << "PA_INSUFFISANTS"; break;
   case PM_INSUFFISANTS: os << "PM_INSUFFISANTS"; break;
-  case POSITION_INVALIDE: os << "POSITION_INVALIDE"; break;
   case HORS_LIMITES: os << "HORS_LIMITES"; break;
   case DIRECTION_INVALIDE: os << "DIRECTION_INVALIDE"; break;
   case ID_NAIN_INVALIDE: os << "ID_NAIN_INVALIDE"; break;

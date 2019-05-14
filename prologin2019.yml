@@ -96,7 +96,6 @@ enum:
                            d'action pour réaliser cette action."]
       - [pm_insuffisants, "Votre nain (standard) ne possède pas assez de points
                            de déplacement pour réaliser ce déplacement."]
-      - [position_invalide, "La position spécifiée n'est pas sur la mine."]
       - [hors_limites, "L'action est en dehors des limites de la mine."]
       - [direction_invalide, "La direction spécifiée n'existe pas."]
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
