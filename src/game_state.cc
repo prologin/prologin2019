@@ -95,7 +95,6 @@ std::vector<direction> GameState::get_shortest_path(position start,
             current_component.pop();
             position source = pos_from_id(source_id);
 
-
             if (source_id == dest_id) {
                 break;
             }

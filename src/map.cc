@@ -105,7 +105,7 @@ void Map::load_rope_info(std::istream& stream)
             error = "not in libre";
 
         if (error != "")
-            FATAL("invalid position (%d;%d) for minerai is %s", l, c,
+            FATAL("invalid position (%d;%d) for rope is %s", l, c,
                   error.c_str());
         add_rope(pos);
     }
