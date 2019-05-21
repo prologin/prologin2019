@@ -1,0 +1,215 @@
+/*
+
+SPDX-License-Identifier: GPL-2.0-or-later
+
+Copyright 2018 Alexandre Macabies
+Copyright 2019 Kilian Guillaume
+
+*/
+
+/********/
+/* Font */
+/********/
+
+@font-face {
+	font-family: GoudyBookletter;
+	src: url("../fonts/GoudyBookletter1911.ttf");
+}
+
+@font-face {
+	font-family: OpenSansRegular;
+	src: url("../fonts/OpenSans-Regular.ttf");
+}
+
+body {
+	font-family: OpenSansRegular;
+}
+
+h1, h2, h3, h4, h5, h6, .nav a, .nav span, th
+{
+	font-family: GoudyBookletter;
+}
+
+/*************/
+/* Variables */
+/*************/
+
+body {
+	--accent-color: #222;
+	--background-color: #FFF;
+	--background-color-2: #eee;
+	--background-darker: rgba(0,0,0,0.02);
+	--border-color: #111;
+	--text-color: #000;
+}
+
+/* global stuff */
+
+body {
+	background: center / cover #000 url("../img/background.jpg");
+	color: var(--text-color);
+}
+
+/*******/
+/* nav */
+/*******/
+
+.navbar-default {
+	background: transparent;
+	border: transparent;
+	border-radius: 0;
+}
+
+.navbar-default .navbar-text, .navbar-default .navbar-nav > li > a {
+	color: #ffffff;
+	text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+}
+
+/********/
+/* main */
+/********/
+
+[role=complementary] h1 {
+	margin: 0;
+	padding: 0 0 .5rem 0;
+}
+
+body>div.container {
+	background: url("../img/paper.png");
+	background-position: top left;
+	background-repeat: repeat;
+	box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+	padding-bottom: 20px;
+}
+
+/**********/
+/* panels */
+/**********/
+
+.panel-primary, .panel-default {
+	background: var(--background-darker);
+	border-color: var(--border-color);
+}
+
+.panel-primary > .panel-heading {
+	background-color: var(--accent-color);
+	border-color: var(--border-color);
+	color: var(--background-color);
+	text-decoration: underline;
+}
+
+.panel-default > .panel-heading {
+	background: transparent;
+	border-color: var(--border-color);
+	border-bottom: 2px dotted;
+	color: var(--text-color);
+}
+
+/********************/
+/* left nav / links */
+/********************/
+
+a, a:hover, a:active {
+	color: var(--text-color);
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+	background: transparent;
+	border: 1px solid var(--border-color);
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+	background: transparent;
+	text-decoration: underline;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+	color: var(--text-color);
+}
+
+/**********/
+/* tables */
+/**********/
+
+table {
+	border: 1px solid var(--border-color);
+}
+
+.table > thead > tr > th {
+	border-bottom: 2px dotted var(--border-color);
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+	border-top-color: var(--border-color);
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+	background: rgba(0,0,0,0.04);
+}
+
+/**************/
+/* pre/inputs */
+/**************/
+
+pre, input[type=text], textarea.form-control {
+	background: var(--background-darker);
+	border-color: var(--border-color);
+}
+
+/***********/
+/* buttons */
+/***********/
+
+/* primary */
+
+.btn-primary {
+	background: var(--accent-color);
+	color: var(--background-color);
+	border: 1px solid var(--border-color);
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+
+	background: var(--accent-color);
+	color: var(--background-color);
+	border: 1px solid var(--border-color);
+	text-decoration: underline;
+}
+
+/* default */
+
+.btn-default {
+	background: transparent;
+	border: 1px solid var(--border-color);
+}
+
+.btn-default:hover, .btn-default:active, .btn-default:focus {
+	background: transparent;
+	text-decoration: underline;
+	border-color: var(--border-color);
+}
+
+/* easter */
+.easter-peng {
+	position: fixed;
+	bottom: -128px;
+	transition: all .35s ease;
+	cursor: pointer;
+}
+.easter-peng.peak {
+	bottom: -64px;
+}
+.easter-peng.visible {
+	bottom: -12px;
+	animation: poop-dance .8s infinite alternate ease-in-out;
+}
+.easter-peng:not(.visible):hover {
+	bottom: -55px;
+}
+@keyframes poop-dance {
+  from, 49% { transform-origin: -50% 100%; }
+  50%, 75%, to { transform-origin: 150% 100%; }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(10deg); }
+}
