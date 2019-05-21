@@ -45,6 +45,11 @@
 /// Nombre de points de déplacement pour qu'un nain (standard) grimpe d'une case.
 # define COUT_ESCALADER            2
 
+/// Nombre de points de déplacement pour qu'un nain (standard) grimpe d'une case
+/// lorsqu'il est aggripé à une corde.
+# define COUT_ESCALADER_CORDE      1
+
+
 /// Nombre de points d'action pour qu'un nain (standard) mine un bloc.
 # define COUT_MINER                6
 

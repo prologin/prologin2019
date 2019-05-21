@@ -52,7 +52,10 @@ public:
     void remove_nain_from_rope(position pos, int player_id, int nain_id);
     const std::vector<position>& get_ropes() const;
     const std::vector<Rope> get_base_ropes() const;
-    void check_gravity(position pos);
+
+    /// Try to expend the rope 1 cell towards the bottom direction, return true
+    /// when a new rope cell is created at the bottom of the rope.
+    bool try_extend_rope(position pos);
 
 private:
     void load_map_cells(std::istream& stream);

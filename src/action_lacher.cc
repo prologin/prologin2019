@@ -21,6 +21,10 @@ void ActionLacher::apply_on(GameState* st) const
     st->set_nain_accroche(player_id_, id_nain_, false);
     st->reduce_pa(player_id_, id_nain_, COUT_LACHER);
 
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    if (st->get_rope(nain->pos) != nullptr)
+        st->remove_nain_from_rope(nain->pos, player_id_, id_nain_);
+
     internal_action action;
     action.type = 1;
     action.action = { ACTION_LACHER, id_nain_, ERREUR_DIRECTION, ERREUR_DIRECTION };

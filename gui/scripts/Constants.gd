@@ -23,6 +23,8 @@ const COUT_DEPLACEMENT = 1
 
 const COUT_ESCALADER = 2
 
+const COUT_ESCALADER_CORDE = 1
+
 const COUT_MINER = 6
 
 const COUT_TIRER = 1

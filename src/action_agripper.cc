@@ -21,6 +21,10 @@ void ActionAgripper::apply_on(GameState* st) const
     st->set_nain_accroche(player_id_, id_nain_, true);
     st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
 
+    const nain* nain = st->get_nain(player_id_, id_nain_);
+    if (st->get_rope(nain->pos) != nullptr)
+        st->add_nain_to_rope(nain->pos, player_id_, id_nain_);
+
     internal_action action;
     action.type = 1;
     action.action = { ACTION_AGRIPPER, id_nain_, ERREUR_DIRECTION, ERREUR_DIRECTION };

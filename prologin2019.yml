@@ -49,6 +49,11 @@ constant:
     cst_comment: Nombre de points de déplacement pour qu'un nain (standard)
                  grimpe d'une case.
   -
+    cst_name: COUT_ESCALADER_CORDE
+    cst_val: 1
+    cst_comment: Nombre de points de déplacement pour qu'un nain (standard)
+                 grimpe d'une case lorsqu'il est aggripé à une corde.
+  -
     cst_name: COUT_MINER
     cst_val: 6
     cst_comment: Nombre de points d'action pour qu'un nain (standard) mine un

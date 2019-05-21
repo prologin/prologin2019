@@ -107,7 +107,9 @@ void Map::load_rope_info(std::istream& stream)
         if (error != "")
             FATAL("invalid position (%d;%d) for rope is %s", l, c,
                   error.c_str());
+
         add_rope(pos);
+        while (try_extend_rope(pos));
     }
 }
 
@@ -230,7 +232,6 @@ void Map::add_rope(position pos)
     ropes_.push_back(Rope(pos));
     ropes_pos_.push_back(pos);
     rope_[pos.ligne][pos.colonne] = ropes_.size() - 1;
-    check_gravity(pos);
 }
 
 const Rope* Map::get_rope(position pos) const
@@ -263,26 +264,35 @@ const std::vector<Rope> Map::get_base_ropes() const
     return ropes_;
 }
 
-void Map::check_gravity(position pos)
+bool Map::try_extend_rope(position pos)
 {
     const Rope *rope = get_rope(pos);
+
+    if (rope == nullptr)
+        return false;
+
     position dest = get_position_offset(rope->get_bottom(), BAS);
     if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
-        return;
-    const Rope *down = get_rope(dest);
-    if (down == nullptr)
+        return false;
+
+    if (get_rope(dest) == nullptr)
     {
         ropes_pos_.push_back(dest);
         ropes_[rope_[pos.ligne][pos.colonne]].extends(dest);
         rope_[dest.ligne][dest.colonne] = rope_[pos.ligne][pos.colonne];
-        check_gravity(dest);
-        return;
+        return true;
     }
+
+    // Merge with the bottom rope
     ropes_[rope_[dest.ligne][dest.colonne]].merge_up(rope);
     const auto& positions(rope->get_positions());
     ropes_[rope_[pos.ligne][pos.colonne]].clear();
+
     for (position pos : positions)
         rope_[pos.ligne][pos.colonne] =  rope_[dest.ligne][dest.colonne];
+
     for (const auto& nain : rope->get_nains())
         add_nain_to_rope(dest, nain.first, nain.second);
+
+    return false;
 }

@@ -45,6 +45,8 @@ class GameState : public rules::GameState
         int get_movement_cost(int player_id, int nain_id, direction dir) const;
         void set_nain_accroche(int player_id, int nain_id, bool accroche);
         void check_gravity(position pos, int current_player);
+        void check_rope_gravity(position pos);
+        void update_nains_on_rope(position pos);
 
         void reduce_pm(int player_id, int nain_id, int pm);
         void reset_pm(int player_id);
@@ -58,6 +60,8 @@ class GameState : public rules::GameState
         const std::vector<Rope> get_base_ropes() const;
         const Rope* get_rope(position pos) const;
         void add_rope(position pos);
+        void add_nain_to_rope(position pos, int player_id, int nain_id);
+        void remove_nain_from_rope(position pos, int player_id, int nain_id);
 
         int get_score(int player_id) const;
         bool is_finished() const;
