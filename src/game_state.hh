@@ -37,14 +37,14 @@ class GameState : public rules::GameState
         const nain* get_nain(int player_id, int nain_id) const;
         const nain* get_nain_internal(int internal_player_id, int nain_id) const;
         const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
-        int get_cell_ownership(position pos) const;
-        int get_internal_cell_ownership(position pos) const;
+        int get_cell_occupant(position pos) const;
+        int get_internal_cell_occupant(position pos) const;
 
         void set_nain_position(int player_id, int nain_id, position dest);
         void set_nain_position_internal(int player_id, int nain_id, position dest);
         int get_movement_cost(int player_id, int nain_id, direction dir) const;
         void set_nain_accroche(int player_id, int nain_id, bool accroche);
-        void check_gravity(position pos, int current_player);
+        void check_nain_gravity(position pos, int current_player);
         void check_rope_gravity(position pos);
         void update_nains_on_rope(position pos);
 

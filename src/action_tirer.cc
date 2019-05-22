@@ -53,12 +53,13 @@ void ActionTirer::apply_on(GameState* st) const
     {
         position pos = st->get_nain_internal(nain.first, nain.second)->pos;
         position dest = get_position_offset(pos, sens_);
+
         if (st->get_rope(dest) == nullptr)
             continue;
-        int ownership = st->get_internal_cell_ownership(dest);
-        if (ownership != player_id_ && ownership != -1)
-            continue;
-        st->set_nain_position_internal(nain.first, nain.second, dest);
+
+        int occupant = st->get_internal_cell_occupant(dest);
+        if (occupant == player_id_ || occupant == -1)
+            st->set_nain_position_internal(nain.first, nain.second, dest);
     }
 
     internal_action action;

@@ -123,7 +123,7 @@ TEST_F(ApiTest, Api_historique)
 {
     for (auto& player: players)
     {
-        EXPECT_EQ(player.api->historique().size(), 0);
+        EXPECT_EQ(player.api->historique().size(), (size_t) 0);
     }
 }
 

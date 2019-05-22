@@ -40,6 +40,7 @@ void ActionMiner::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_MINER);
     position dest = get_position_offset(nain->pos, dir_);
     case_type type = st->get_cell_type(dest);
+
     if (type == LIBRE)
     {
         const auto nains(st->get_nains_at(dest));
@@ -47,12 +48,19 @@ void ActionMiner::apply_on(GameState* st) const
             st->reduce_pv_internal(nains.first, nain_id, DEGAT_PIOCHE);
         return;
     }
+
     const minerai *minerai = st->get_minerai(dest);
     if (minerai != nullptr)
         if (!st->mine_minerai(dest, player_id_, id_nain_))
             return;
+
     st->set_cell_type(dest, LIBRE, player_id_);
-    position up = get_position_offset(dest, HAUT);
-    if (inside_map(up))
-        st->check_gravity(up, player_id_);
+
+    // TODO: discuss theses "safety redundancies" are relevant?
+    // NOTE: these are quite heavy functions
+    // position up = get_position_offset(dest, HAUT);
+    // if (inside_map(up)) {
+    //     st->check_nain_gravity(up, player_id_);
+    //     st->check_rope_gravity(up);
+    // }
 }

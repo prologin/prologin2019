@@ -33,7 +33,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
                                      false, 0 };
             map_.add_nain(nain, nains_[player][nain].pos, player);
         }
-        check_gravity(map_.get_spawn_point(player), player);
+        check_nain_gravity(map_.get_spawn_point(player), player);
     }
 }
 
@@ -203,8 +203,9 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
     {
         if (get_rope(up) != nullptr)
             check_rope_gravity(up);
+
         if (map_.get_nains_at(up).first != -1)
-            check_gravity(up, current_player);
+            check_nain_gravity(up, current_player);
     }
 }
 
@@ -241,17 +242,19 @@ const std::pair<int, std::unordered_set<int>>& GameState::get_nains_at(position 
     return map_.get_nains_at(pos);
 }
 
-int GameState::get_internal_cell_ownership(position pos) const
+int GameState::get_internal_cell_occupant(position pos) const
 {
     const auto& nains = map_.get_nains_at(pos);
     return nains.second.empty() ? -1 : nains.first;
 }
 
-int GameState::get_cell_ownership(position pos) const
+int GameState::get_cell_occupant(position pos) const
 {
-    int ownership = get_internal_cell_ownership(pos);
+    int ownership = get_internal_cell_occupant(pos);
+
     if (ownership == -1)
         return -1;
+
     return internal_to_external_id(ownership);
 }
 
@@ -300,7 +303,7 @@ int GameState::get_movement_cost(int player_id, int nain_id, direction dir) cons
         return -1;
     if (get_cell_type(dest) != LIBRE)
         return -1;
-    int dest_owner = get_cell_ownership(dest);
+    int dest_owner = get_cell_occupant(dest);
     if (dest_owner != -1 && dest_owner != player_id)
         return -1;
 
@@ -320,57 +323,73 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
     int internal_player_id = player_info_.at(player_id).get_internal_id();
     nains_[internal_player_id][nain_id].accroche = accroche;
     if (!accroche)
-        check_gravity(nains_[internal_player_id][nain_id].pos, player_id);
+        check_nain_gravity(nains_[internal_player_id][nain_id].pos, player_id);
 }
 
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
     if (player_id == -1 || nains_[player_id][nain_id].accroche)
         return 0;
+
     position pos = nains_[player_id][nain_id].pos;
     int fall = 0;
+
     for (;;)
     {
         position current = get_position_offset(pos, BAS);
+
         if (!inside_map(current) || map_.get_cell_type(current) != LIBRE)
             break;
-        if (get_cell_ownership(current) == player_id)
+
+        if (get_cell_occupant(current) == player_id)
             break;
+
         pos = current;
         ++fall;
     }
+
     return fall;
 }
 
-void GameState::check_gravity(position pos, int current_player)
+void GameState::check_nain_gravity(position pos, int current_player)
 {
-    if (get_rope(pos) != nullptr)
-        return;
-    position dest = get_position_offset(pos, BAS);
-    if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
-        return;
-    const auto& nains = map_.get_nains_at(pos);
-    int player_id = nains.first;
-    std::unordered_set<int> id_nains(nains.second);
-    for (int nain_id : std::unordered_set<int>(nains.second))
+    while (inside_map(pos))
     {
-        int fall = get_fall_distance(player_id, nain_id);
-        if (fall == 0)
-            continue;
-        set_nain_position_internal(player_id, nain_id, pos + (BAS * fall));
+        if (get_rope(pos) != nullptr)
+            return;
 
-        internal_action action;
-        action.type = 2;
-        action.fall = { player_id, nain_id, pos + (BAS * fall) };
-        add_to_internal_history(current_player, action);
+        position dest = get_position_offset(pos, BAS);
 
-        if (fall < 4)
-            continue;
-        reduce_pv_internal(player_id, nain_id, std::pow(2, fall - 4));
+        if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
+            return;
+
+        // Apply falling to each dwarf on current cell
+        const auto& nains = map_.get_nains_at(pos);
+        const int player_id = nains.first;
+        const auto id_nains = nains.second;
+
+        if (id_nains.empty())
+            return;
+
+        for (int nain_id : id_nains)
+        {
+            int fall = get_fall_distance(player_id, nain_id);
+            if (fall == 0)
+                continue;
+
+            set_nain_position_internal(player_id, nain_id, pos + (BAS * fall));
+
+            if (fall >= 4)
+                reduce_pv_internal(player_id, nain_id, std::pow(2, fall - 4));
+
+            internal_action action;
+            action.type = 2;
+            action.fall = { player_id, nain_id, pos + (BAS * fall) };
+            add_to_internal_history(current_player, action);
+        }
+
+        pos = get_position_offset(pos, HAUT);
     }
-    position up = get_position_offset(pos, HAUT);
-    if (inside_map(up))
-        check_gravity(up, current_player);
 }
 
 void GameState::reduce_pm(int player_id, int nain_id, int pm)
@@ -440,7 +459,7 @@ void GameState::respawn(int player_id)
             spawn = true;
         }
     if (spawn)
-        check_gravity(map_.get_spawn_point(internal_player_id), internal_player_id);
+        check_nain_gravity(map_.get_spawn_point(internal_player_id), internal_player_id);
     nains_respawn_.erase(std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
                    [&] (auto nain) { return nain.first == internal_player_id; }), nains_respawn_.end());
 }

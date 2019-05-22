@@ -79,7 +79,7 @@ void Map::load_minerai_info(std::istream& stream)
         stream >> resistance >> rendement;
 
         if (resistance <= 0)
-            FATAL("resistance must be a strictly positif int");
+            FATAL("resistance must be a strictly positive int");
 
         ores_[minerai] = { resistance, rendement };
         ores_pos_[minerai] = { l, c };
