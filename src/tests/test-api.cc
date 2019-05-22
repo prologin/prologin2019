@@ -34,7 +34,7 @@ TEST_F(ApiTest, Api_info_minerai)
 {
     for (auto& player : players)
     {
-        minerai minerai = player.api->info_minerai({ 10, 10 });
+        minerai minerai = player.api->info_minerai({10, 10});
         EXPECT_EQ(minerai.rendement, 10);
         EXPECT_EQ(minerai.resistance, 10);
     }
@@ -42,9 +42,9 @@ TEST_F(ApiTest, Api_info_minerai)
 
 TEST_F(ApiTest, Api_list_minerais)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
-        for (position pos: player.api->liste_minerais())
+        for (position pos : player.api->liste_minerais())
         {
             minerai minerai = player.api->info_minerai(pos);
             EXPECT_EQ(player.api->type_case(pos), GRANITE);
@@ -90,7 +90,7 @@ TEST_F(ApiTest, Api_info_nain)
 
 TEST_F(ApiTest, Api_cout_de_deplacement)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
         {
@@ -121,15 +121,15 @@ TEST_F(ApiTest, Api_position_taverne)
 
 TEST_F(ApiTest, Api_historique)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
-        EXPECT_EQ(player.api->historique().size(), (size_t) 0);
+        EXPECT_EQ(player.api->historique().size(), (size_t)0);
     }
 }
 
 TEST_F(ApiTest, Api_score)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         int player_id = player.api->moi();
         EXPECT_EQ(player.api->score(player_id), 0);
@@ -150,7 +150,7 @@ TEST_F(ApiTest, Api_moi_adversaire)
 
 TEST_F(ApiTest, Api_annuler)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         EXPECT_EQ(player.api->annuler(), false);
     }
@@ -158,7 +158,7 @@ TEST_F(ApiTest, Api_annuler)
 
 TEST_F(ApiTest, Api_tour_actuel)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         EXPECT_EQ(player.api->tour_actuel(), 0);
     }

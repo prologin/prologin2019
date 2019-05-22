@@ -39,6 +39,6 @@ void ActionPoserCorde::apply_on(GameState* st) const
 
     internal_action action;
     action.type = 1;
-    action.action = { ACTION_POSER_CORDE, id_nain_, dir_, ERREUR_DIRECTION };
+    action.action = {ACTION_POSER_CORDE, id_nain_, dir_, ERREUR_DIRECTION};
     st->add_to_internal_history(player_id_, action);
 }

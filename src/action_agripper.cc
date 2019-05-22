@@ -27,6 +27,7 @@ void ActionAgripper::apply_on(GameState* st) const
 
     internal_action action;
     action.type = 1;
-    action.action = { ACTION_AGRIPPER, id_nain_, ERREUR_DIRECTION, ERREUR_DIRECTION };
+    action.action = {ACTION_AGRIPPER, id_nain_, ERREUR_DIRECTION,
+                     ERREUR_DIRECTION};
     st->add_to_internal_history(player_id_, action);
 }

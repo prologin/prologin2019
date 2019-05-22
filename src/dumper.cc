@@ -114,7 +114,8 @@ static std::ostream& operator<<(std::ostream& ss, const position& pos)
 }
 
 template <typename T>
-static void dump_vector(std::vector<T> vector, std::ostream& ss, std::function<void(std::ostream&, T)> func)
+static void dump_vector(std::vector<T> vector, std::ostream& ss,
+                        std::function<void(std::ostream&, T)> func)
 {
     bool is_first = true;
     ss << "[";
@@ -130,27 +131,27 @@ static void dump_vector(std::vector<T> vector, std::ostream& ss, std::function<v
 
 static void dump_history(std::ostream& ss, const GameState& st, int player_id)
 {
-    dump_vector<internal_action>(st.get_internal_history(player_id), ss, [](auto& ss, auto action)
-        {
+    dump_vector<internal_action>(
+        st.get_internal_history(player_id), ss, [](auto& ss, auto action) {
             switch (action.type)
             {
-                case 0:
-                    ss << "{\"action\": " << -1;
-                    ss << ", \"drapeau\": " << action.debug_flag.ftype;
-                    ss << ", \"pos\": " << action.debug_flag.pos << "}";
-                    break;
-                case 1:
-                    ss << "{\"action\": " << action.action.atype;
-                    ss << ", \"id_nain\": " << action.action.id_nain;
-                    ss << ", \"dir\": " << action.action.dir;
-                    ss << ", \"sens\": " << action.action.sens << "}";
-                    break;
-                case 2:
-                    ss << "{\"action\": " << -2;
-                    ss << ", \"player_id\": " << action.fall.player_id;
-                    ss << ", \"id_nain\": " << action.fall.nain_id;
-                    ss << ", \"goal\": " << action.fall.goal << "}";
-                    break;
+            case 0:
+                ss << "{\"action\": " << -1;
+                ss << ", \"drapeau\": " << action.debug_flag.ftype;
+                ss << ", \"pos\": " << action.debug_flag.pos << "}";
+                break;
+            case 1:
+                ss << "{\"action\": " << action.action.atype;
+                ss << ", \"id_nain\": " << action.action.id_nain;
+                ss << ", \"dir\": " << action.action.dir;
+                ss << ", \"sens\": " << action.action.sens << "}";
+                break;
+            case 2:
+                ss << "{\"action\": " << -2;
+                ss << ", \"player_id\": " << action.fall.player_id;
+                ss << ", \"id_nain\": " << action.fall.nain_id;
+                ss << ", \"goal\": " << action.fall.goal << "}";
+                break;
             }
         });
 }
@@ -160,12 +161,12 @@ static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
     std::vector<std::pair<const nain*, int>> nains;
     for (int nain_id = 0; nain_id < NB_NAINS; ++nain_id)
     {
-        const nain *nain = st.get_nain(player_id, nain_id);
+        const nain* nain = st.get_nain(player_id, nain_id);
         if (nain != nullptr)
-            nains.push_back({ nain, nain_id });
+            nains.push_back({nain, nain_id});
     }
-    dump_vector<std::pair<const nain*, int>>(nains, ss, [](auto& ss, auto nain)
-        {
+    dump_vector<std::pair<const nain*, int>>(
+        nains, ss, [](auto& ss, auto nain) {
             ss << "{\"id_nain\": " << nain.second << ", ";
             ss << "\"pos\": " << nain.first->pos << ", ";
             ss << "\"vie\": " << nain.first->vie << ", ";
@@ -182,8 +183,8 @@ static void dump_players(std::ostream& ss, const GameState& st)
     std::vector<std::pair<int, PlayerInfo>> players_vec;
     for (auto player : players)
         players_vec.push_back(player);
-    dump_vector<std::pair<int, PlayerInfo>>(players_vec, ss, [&](auto& ss, auto player)
-        {
+    dump_vector<std::pair<int, PlayerInfo>>(
+        players_vec, ss, [&](auto& ss, auto player) {
             ss << "{ \"id\": " << player.first << ", \"name\": ";
             dump_string(ss, player.second.get_name());
             ss << ", \"score\": " << player.second.get_score();
@@ -201,24 +202,23 @@ static void dump_map(std::ostream& ss, const GameState& st)
     std::vector<case_type> cells;
     for (int l = 0; l < TAILLE_MINE; l++)
         for (int c = 0; c < TAILLE_MINE; c++)
-            cells.push_back(st.get_cell_type({ l, c }));
-    dump_vector<case_type>(cells, ss, [](auto& ss, case_type cell) { ss << cell; });
+            cells.push_back(st.get_cell_type({l, c}));
+    dump_vector<case_type>(cells, ss,
+                           [](auto& ss, case_type cell) { ss << cell; });
     ss << ", \"minerais\": ";
-    dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos)
-        {
-            const minerai *ore = st.get_minerai(pos);
-            ss << "{ \"pos\": " << pos;
-            ss << ", \"resistance\": " << ore->resistance;
-            ss << ", \"rendement\": " << ore->rendement << "}";
-        });
+    dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos) {
+        const minerai* ore = st.get_minerai(pos);
+        ss << "{ \"pos\": " << pos;
+        ss << ", \"resistance\": " << ore->resistance;
+        ss << ", \"rendement\": " << ore->rendement << "}";
+    });
     ss << ", \"cordes\": ";
-    dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope)
-        {
-            if (rope.get_positions().size() == 0)
-                return;
-            ss << "{ \"haut\": " << rope.get_anchor();
-            ss << ", \"bas\": " << rope.get_bottom() << "}";
-        });
+    dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope) {
+        if (rope.get_positions().size() == 0)
+            return;
+        ss << "{ \"haut\": " << rope.get_anchor();
+        ss << ", \"bas\": " << rope.get_bottom() << "}";
+    });
     ss << "}";
 }
 

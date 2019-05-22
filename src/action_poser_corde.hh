@@ -4,13 +4,18 @@
 #include <rules/action.hh>
 
 #include "actions.hh"
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 class ActionPoserCorde : public rules::Action<GameState>
 {
 public:
-    ActionPoserCorde(int id_nain, direction dir, int player_id) : id_nain_(id_nain), dir_(dir), player_id_(player_id) {}
+    ActionPoserCorde(int id_nain, direction dir, int player_id)
+        : id_nain_(id_nain)
+        , dir_(dir)
+        , player_id_(player_id)
+    {
+    }
     ActionPoserCorde() {} // for register_action()
 
     int check(const GameState* st) const override;

@@ -18,8 +18,8 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
             FATAL("This game does not support more than two players.");
         if (player->type == rules::PLAYER)
         {
-            player_info_.emplace(std::make_pair(player->id,
-                                                PlayerInfo(player, id)));
+            player_info_.emplace(
+                std::make_pair(player->id, PlayerInfo(player, id)));
             player_ids_[id] = player->id;
             ++id;
         }
@@ -28,9 +28,9 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     {
         for (int nain = 0; nain < NB_NAINS; ++nain)
         {
-            nains_[player][nain] = { map_.get_spawn_point(player), VIE_NAIN,
-                                     NB_POINTS_ACTION, NB_POINTS_DEPLACEMENT,
-                                     false, 0 };
+            nains_[player][nain] = {
+                map_.get_spawn_point(player), VIE_NAIN, NB_POINTS_ACTION,
+                NB_POINTS_DEPLACEMENT,        false,    0};
             map_.add_nain(nain, nains_[player][nain].pos, player);
         }
         check_nain_gravity(map_.get_spawn_point(player), player);
@@ -45,7 +45,8 @@ GameState::GameState(const GameState& st)
     , nains_(st.nains_)
     , nains_respawn_(st.nains_respawn_)
     , round_(st.round_)
-{ }
+{
+}
 
 rules::GameState* GameState::copy() const
 {
@@ -55,11 +56,11 @@ rules::GameState* GameState::copy() const
 std::vector<direction> GameState::get_shortest_path(position start,
                                                     position dest) const
 {
-    auto pos_id = [] (position pos) -> int {
+    auto pos_id = [](position pos) -> int {
         return pos.ligne * TAILLE_MINE + pos.colonne;
     };
 
-    auto pos_from_id = [] (int id) -> position {
+    auto pos_from_id = [](int id) -> position {
         position pos;
         pos.ligne = id / TAILLE_MINE;
         pos.colonne = id % TAILLE_MINE;
@@ -81,32 +82,39 @@ std::vector<direction> GameState::get_shortest_path(position start,
     std::queue<int> current_component;
     current_component.push(pos_id(start));
 
-    while (predecessor[dest_id] == -1 && !current_component.empty()) {
+    while (predecessor[dest_id] == -1 && !current_component.empty())
+    {
         // Blocks part of next connected component by mining exactly 1
         // unexplored block.
         std::queue<int> next_component;
 
         // Explore the current connected component by moving without digging
         // any block.
-        while (!current_component.empty()) {
+        while (!current_component.empty())
+        {
             int source_id = current_component.front();
             current_component.pop();
             position source = pos_from_id(source_id);
 
-            if (source_id == dest_id) {
+            if (source_id == dest_id)
+            {
                 break;
             }
 
-            for (int dir = 0 ; dir < 4 ; dir++) {
-                position target = get_position_offset(source, (direction) dir);
+            for (int dir = 0; dir < 4; dir++)
+            {
+                position target = get_position_offset(source, (direction)dir);
                 int target_id = pos_id(target);
 
-                if (inside_map(target) && predecessor[target_id] == -1) {
-                    if (!is_obstacle(target)) {
+                if (inside_map(target) && predecessor[target_id] == -1)
+                {
+                    if (!is_obstacle(target))
+                    {
                         predecessor[target_id] = source_id;
                         current_component.push(target_id);
                     }
-                    else if (is_minable(target)) {
+                    else if (is_minable(target))
+                    {
                         predecessor[target_id] = source_id;
                         next_component.push(target_id);
                     }
@@ -119,7 +127,8 @@ std::vector<direction> GameState::get_shortest_path(position start,
 
     // There might be no path to a cell if it is surrounded by unbreakable
     // blocks.
-    if (predecessor[dest_id] == -1) {
+    if (predecessor[dest_id] == -1)
+    {
         return {};
     }
 
@@ -127,7 +136,8 @@ std::vector<direction> GameState::get_shortest_path(position start,
     std::vector<int> rev_ret;
     rev_ret.push_back(dest_id);
 
-    while (rev_ret.back() != start_id) {
+    while (rev_ret.back() != start_id)
+    {
         int source_id = rev_ret.back();
         rev_ret.push_back(predecessor[source_id]);
     }
@@ -135,13 +145,16 @@ std::vector<direction> GameState::get_shortest_path(position start,
     // Reverse ret, convert to directions and return
     std::vector<direction> ret;
 
-    for (int i = rev_ret.size() - 1 ; i > 0 ; i--) {
-        for (int dir = 0 ; dir < 4 ; dir++) {
+    for (int i = rev_ret.size() - 1; i > 0; i--)
+    {
+        for (int dir = 0; dir < 4; dir++)
+        {
             position source = pos_from_id(rev_ret[i]);
-            position target = pos_from_id(rev_ret[i-1]);
+            position target = pos_from_id(rev_ret[i - 1]);
 
-            if (get_position_offset(source, (direction) dir) == target) {
-                ret.push_back((direction) dir);
+            if (get_position_offset(source, (direction)dir) == target)
+            {
+                ret.push_back((direction)dir);
             }
         }
     }
@@ -229,7 +242,8 @@ const nain* GameState::get_nain(int player_id, int nain_id) const
     return get_nain_internal(internal_player_id, nain_id);
 }
 
-const nain* GameState::get_nain_internal(int internal_player_id, int nain_id) const
+const nain* GameState::get_nain_internal(int internal_player_id,
+                                         int nain_id) const
 {
     nain nain = nains_[internal_player_id][nain_id];
     if (nain.vie <= 0)
@@ -237,7 +251,8 @@ const nain* GameState::get_nain_internal(int internal_player_id, int nain_id) co
     return &nains_[internal_player_id][nain_id];
 }
 
-const std::pair<int, std::unordered_set<int>>& GameState::get_nains_at(position pos) const
+const std::pair<int, std::unordered_set<int>>&
+GameState::get_nains_at(position pos) const
 {
     return map_.get_nains_at(pos);
 }
@@ -258,7 +273,8 @@ int GameState::get_cell_occupant(position pos) const
     return internal_to_external_id(ownership);
 }
 
-void GameState::set_nain_position_internal(int player_id, int nain_id, position dest)
+void GameState::set_nain_position_internal(int player_id, int nain_id,
+                                           position dest)
 {
     position from = nains_[player_id][nain_id].pos;
 
@@ -287,7 +303,8 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
                                nain_id, dest);
 }
 
-int GameState::get_movement_cost(int player_id, int nain_id, direction dir) const
+int GameState::get_movement_cost(int player_id, int nain_id,
+                                 direction dir) const
 {
     if (nain_id < 0 || nain_id >= NB_NAINS)
         return -1;
@@ -384,7 +401,7 @@ void GameState::check_nain_gravity(position pos, int current_player)
 
             internal_action action;
             action.type = 2;
-            action.fall = { player_id, nain_id, pos + (BAS * fall) };
+            action.fall = {player_id, nain_id, pos + (BAS * fall)};
             add_to_internal_history(current_player, action);
         }
 
@@ -424,7 +441,8 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage)
     reduce_pv_internal(internal_player_id, nain_id, damage);
 }
 
-void GameState::reduce_pv_internal(int internal_player_id, int nain_id, int damage)
+void GameState::reduce_pv_internal(int internal_player_id, int nain_id,
+                                   int damage)
 {
     const nain* nain = get_nain_internal(internal_player_id, nain_id);
     nains_[internal_player_id][nain_id].vie -= damage;
@@ -439,7 +457,7 @@ void GameState::reduce_pv_internal(int internal_player_id, int nain_id, int dama
 
         nains_[internal_player_id][nain_id].vie = 0;
         map_.remove_nain(nain_id, nains_[internal_player_id][nain_id].pos);
-        nains_respawn_.push_back({ internal_player_id, nain_id });
+        nains_respawn_.push_back({internal_player_id, nain_id});
     }
 }
 
@@ -450,18 +468,25 @@ void GameState::respawn(int player_id)
     for (auto nain : nains_respawn_)
         if (nain.first == internal_player_id)
         {
-            nains_[nain.first][nain.second] = { map_.get_spawn_point(nain.first),
-                                               VIE_NAIN, NB_POINTS_DEPLACEMENT,
-                                               NB_POINTS_ACTION, false, 0 };
+            nains_[nain.first][nain.second] = {map_.get_spawn_point(nain.first),
+                                               VIE_NAIN,
+                                               NB_POINTS_DEPLACEMENT,
+                                               NB_POINTS_ACTION,
+                                               false,
+                                               0};
             map_.add_nain(nain.second, nains_[nain.first][nain.second].pos,
                           nain.first);
 
             spawn = true;
         }
     if (spawn)
-        check_nain_gravity(map_.get_spawn_point(internal_player_id), internal_player_id);
-    nains_respawn_.erase(std::remove_if(nains_respawn_.begin(), nains_respawn_.end(),
-                   [&] (auto nain) { return nain.first == internal_player_id; }), nains_respawn_.end());
+        check_nain_gravity(map_.get_spawn_point(internal_player_id),
+                           internal_player_id);
+    nains_respawn_.erase(
+        std::remove_if(
+            nains_respawn_.begin(), nains_respawn_.end(),
+            [&](auto nain) { return nain.first == internal_player_id; }),
+        nains_respawn_.end());
 }
 
 const std::vector<position>& GameState::get_ropes() const
@@ -474,7 +499,8 @@ const std::vector<Rope> GameState::get_base_ropes() const
     return map_.get_base_ropes();
 }
 
-void GameState::check_rope_gravity(position pos) {
+void GameState::check_rope_gravity(position pos)
+{
     while (true)
     {
         if (!map_.try_extend_rope(pos))
@@ -491,7 +517,7 @@ void GameState::update_nains_on_rope(position pos)
     const int player_id = nains.first;
     const auto id_nains = nains.second;
 
-    for (int id_nain: id_nains) 
+    for (int id_nain : id_nains)
     {
         const nain* nain = get_nain_internal(player_id, id_nain);
 
@@ -543,7 +569,8 @@ void GameState::increment_round()
     ++round_;
 }
 
-const std::vector<internal_action>& GameState::get_internal_history(int player_id) const
+const std::vector<internal_action>&
+GameState::get_internal_history(int player_id) const
 {
     assert(player_info_.count(player_id) != 0);
     return player_info_.at(player_id).get_internal_history();
@@ -551,7 +578,8 @@ const std::vector<internal_action>& GameState::get_internal_history(int player_i
 
 const std::vector<action_hist> GameState::get_history(int player_id) const
 {
-    std::vector<internal_action> internal_hist = get_internal_history(player_id);
+    std::vector<internal_action> internal_hist =
+        get_internal_history(player_id);
     std::vector<action_hist> hist;
     for (auto action : internal_hist)
         if (action.type == 1)

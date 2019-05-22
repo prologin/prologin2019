@@ -4,13 +4,17 @@
 #include <rules/action.hh>
 
 #include "actions.hh"
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 class ActionAgripper : public rules::Action<GameState>
 {
 public:
-    ActionAgripper(int id_nain, int player_id) : id_nain_(id_nain), player_id_(player_id) {}
+    ActionAgripper(int id_nain, int player_id)
+        : id_nain_(id_nain)
+        , player_id_(player_id)
+    {
+    }
     ActionAgripper() {} // for register_action()
 
     int check(const GameState* st) const override;

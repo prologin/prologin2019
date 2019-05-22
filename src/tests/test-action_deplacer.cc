@@ -7,7 +7,7 @@
 
 TEST_F(ApiTest, ActionDeplacer_Effective)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
         {
@@ -25,14 +25,15 @@ TEST_F(ApiTest, ActionDeplacer_Effective)
             player.api->deplacer(nain_id, dir);
             nain_after = player.api->info_nain(player_id, nain_id);
             EXPECT_EQ(abs(nain_before.pos.colonne - nain_after.pos.colonne), 3);
-            EXPECT_EQ(nain_after.pm, NB_POINTS_DEPLACEMENT - 3 * COUT_DEPLACEMENT);
+            EXPECT_EQ(nain_after.pm,
+                      NB_POINTS_DEPLACEMENT - 3 * COUT_DEPLACEMENT);
         }
     }
 }
 
 TEST_F(ApiTest, ActionDeplacer_NotEnoughActionPoints)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
         {
@@ -54,7 +55,7 @@ TEST_F(ApiTest, ActionDeplacer_NotEnoughActionPoints)
 
 TEST_F(ApiTest, ActionDeplacer_InvalidDirections)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         for (int nain_id = 0; nain_id < NB_NAINS; nain_id++)
         {

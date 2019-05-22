@@ -5,7 +5,8 @@
 #include "actions.hh"
 
 Rules::Rules(const rules::Options opt)
-    : TurnBasedRules(opt), sandbox_(opt.time)
+    : TurnBasedRules(opt)
+    , sandbox_(opt.time)
 {
     if (!opt.champion_lib.empty())
     {
@@ -32,32 +33,23 @@ void Rules::register_actions()
 {
     api_->actions()->register_action(
         ID_ACTION_DEPLACER,
-        []() -> rules::IAction* { return new ActionDeplacer(); }
-        );
-    api_->actions()->register_action(
-        ID_ACTION_LACHER,
-        []() -> rules::IAction* { return new ActionLacher(); }
-        );
+        []() -> rules::IAction* { return new ActionDeplacer(); });
+    api_->actions()->register_action(ID_ACTION_LACHER, []() -> rules::IAction* {
+        return new ActionLacher();
+    });
     api_->actions()->register_action(
         ID_ACTION_AGRIPPER,
-        []() -> rules::IAction* { return new ActionAgripper(); }
-        );
+        []() -> rules::IAction* { return new ActionAgripper(); });
     api_->actions()->register_action(
-        ID_ACTION_MINER,
-        []() -> rules::IAction* { return new ActionMiner(); }
-        );
+        ID_ACTION_MINER, []() -> rules::IAction* { return new ActionMiner(); });
     api_->actions()->register_action(
-        ID_ACTION_TIRER,
-        []() -> rules::IAction* { return new ActionTirer(); }
-        );
+        ID_ACTION_TIRER, []() -> rules::IAction* { return new ActionTirer(); });
     api_->actions()->register_action(
         ID_ACTION_POSER_CORDE,
-        []() -> rules::IAction* { return new ActionPoserCorde(); }
-        );
+        []() -> rules::IAction* { return new ActionPoserCorde(); });
     api_->actions()->register_action(
         ID_ACTION_DEBUG_AFFICHER_DRAPEAU,
-        []() -> rules::IAction* { return new ActionDebugAfficherDrapeau(); }
-        );
+        []() -> rules::IAction* { return new ActionDebugAfficherDrapeau(); });
 }
 
 rules::Actions* Rules::get_actions()
@@ -152,9 +144,7 @@ void Rules::end_of_player_turn(unsigned int /* player_id */)
     api_->game_state()->clear_old_version();
 }
 
-void Rules::start_of_round()
-{
-}
+void Rules::start_of_round() {}
 
 void Rules::end_of_round()
 {

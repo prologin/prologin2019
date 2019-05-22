@@ -13,13 +13,13 @@
 #ifndef API_HH_
 #define API_HH_
 
-#include <vector>
+#include <rules/actions.hh>
 #include <rules/game-state.hh>
 #include <rules/player.hh>
-#include <rules/actions.hh>
+#include <vector>
 
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 /*!
 ** The methods of this class are exported through 'interface.cc'
@@ -30,7 +30,7 @@ class Api
 
 public:
     Api(GameState* game_state, rules::Player_sptr player);
-    virtual ~Api() { }
+    virtual ~Api() {}
 
     const rules::Player_sptr player() const { return player_; }
     void player_set(rules::Player_sptr player) { player_ = player; }
@@ -39,7 +39,8 @@ public:
 
     const GameState* game_state() const { return game_state_; }
     GameState* game_state() { return game_state_; }
-    void game_state_set(rules::GameState* gs) {
+    void game_state_set(rules::GameState* gs)
+    {
         game_state_ = dynamic_cast<GameState*>(gs);
     }
 
@@ -49,8 +50,8 @@ private:
     rules::Actions actions_;
 
 public:
-
-    /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
+    /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction
+    /// choisie.
     erreur deplacer(int id_nain, direction dir);
 
     /// Le nain (standard) ``id_nain`` lâche la paroi.
@@ -59,13 +60,15 @@ public:
     /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
     erreur agripper(int id_nain);
 
-    /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard) dans la direction indiquée.
+    /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain
+    /// (standard) dans la direction indiquée.
     erreur miner(int id_nain, direction dir);
 
     /// Le nain (standard) ``id_nain`` tire dans un sens sur la corde.
     erreur tirer(int id_nain, direction dir_corde, direction sens);
 
-    /// Le nain (standard) ``id_nain`` pose une corde dans la direction indiquée.
+    /// Le nain (standard) ``id_nain`` pose une corde dans la direction
+    /// indiquée.
     erreur poser_corde(int id_nain, direction dir);
 
     /// Affiche le drapeau spécifié sur la case indiquée.
@@ -80,31 +83,46 @@ public:
     /// Indique si une corde se trouve sur une case donnée.
     bool corde_sur_case(position pos);
 
-    /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
+    /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la
+    /// case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la
+    /// position est invalide.
     int nain_sur_case(position pos);
 
-    /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas présent sur la carte, tous les membres de la structure ``nain`` renvoyée sont initialisés à -1.
+    /// Renvoie la description du nain (standard) désigné par le numéro
+    /// ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)
+    /// n'est pas présent sur la carte, tous les membres de la structure
+    /// ``nain`` renvoyée sont initialisés à -1.
     nain info_nain(int id_joueur, int id_nain);
 
-    /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
+    /// Renvoie la description d'un minerai en fonction d'une position donnée.
+    /// Si le minerai n'est pas présent sur la carte, ou si la position est
+    /// invalide, tous les membres de la structure ``minerai`` renvoyée sont
+    /// initialisés à -1.
     minerai info_minerai(position pos);
 
     /// Renvoie la liste de tout les minerais dans la mine.
     std::vector<position> liste_minerais();
 
-    /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
+    /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
+    /// (standard) dans une direction donnée.
     int cout_de_deplacement(int id_nain, direction dir);
 
-    /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+    /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``.
+    /// Si le joueur n'existe pas, renvoie la position (-1, -1).
     position position_taverne(int id_joueur);
 
-    /// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
+    /// Renvoie le plus court chemin entre deux positions de la mine sous la
+    /// forme d'une suite de direction à emprunter. Si la position est invalide
+    /// ou que le chemin n'existe pas, le chemin renvoyé est vide.
     std::vector<direction> chemin(position pos1, position pos2);
 
-    /// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
+    /// Renvoie la liste des actions effectuées par l’adversaire durant son
+    /// tour, dans l'ordre chronologique. Les actions de débug n'apparaissent
+    /// pas dans cette liste.
     std::vector<action_hist> historique();
 
-    /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
+    /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est
+    /// invalide.
     int score(int id_joueur);
 
     /// Renvoie votre numéro de joueur.
@@ -113,13 +131,12 @@ public:
     /// Renvoie le numéro de joueur de votre adversaire.
     int adversaire();
 
-    /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
+    /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à
+    /// annuler ce tour ci.
     bool annuler();
 
     /// Retourne le numéro du tour actuel.
     int tour_actuel();
-
 };
-
 
 #endif /* !API_HH_ */

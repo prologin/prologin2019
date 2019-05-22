@@ -6,7 +6,7 @@ int ActionMiner::check(const GameState* st) const
 {
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
-    if (dir_ < 0 ||  dir_ >= 4)
+    if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
@@ -33,7 +33,7 @@ void ActionMiner::apply_on(GameState* st) const
 {
     internal_action action;
     action.type = 1;
-    action.action = { ACTION_MINER, id_nain_, dir_, ERREUR_DIRECTION };
+    action.action = {ACTION_MINER, id_nain_, dir_, ERREUR_DIRECTION};
     st->add_to_internal_history(player_id_, action);
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
@@ -49,7 +49,7 @@ void ActionMiner::apply_on(GameState* st) const
         return;
     }
 
-    const minerai *minerai = st->get_minerai(dest);
+    const minerai* minerai = st->get_minerai(dest);
     if (minerai != nullptr)
         if (!st->mine_minerai(dest, player_id_, id_nain_))
             return;

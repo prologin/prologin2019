@@ -12,19 +12,18 @@
 
 #include <stdlib.h>
 
-#include "api.hh"
 #include "actions.hh"
+#include "api.hh"
 
 // global used in interface.cc
 Api* api;
 
 Api::Api(GameState* game_state, rules::Player_sptr player)
-    : game_state_(game_state),
-      player_(player)
+    : game_state_(game_state)
+    , player_(player)
 {
     api = this;
 }
-
 
 /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
 erreur Api::deplacer(int id_nain, direction dir)
@@ -68,7 +67,8 @@ erreur Api::agripper(int id_nain)
     return OK;
 }
 
-/// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard) dans la direction indiquée.
+/// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain (standard)
+/// dans la direction indiquée.
 erreur Api::miner(int id_nain, direction dir)
 {
     rules::IAction_sptr action(new ActionMiner(id_nain, dir, player_->id));
@@ -85,7 +85,8 @@ erreur Api::miner(int id_nain, direction dir)
 /// Le nain (standard) ``id_nain`` tire dans un sens sur la corde.
 erreur Api::tirer(int id_nain, direction dir_corde, direction sens)
 {
-    rules::IAction_sptr action(new ActionTirer(id_nain, dir_corde, sens, player_->id));
+    rules::IAction_sptr action(
+        new ActionTirer(id_nain, dir_corde, sens, player_->id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -113,7 +114,8 @@ erreur Api::poser_corde(int id_nain, direction dir)
 /// Affiche le drapeau spécifié sur la case indiquée.
 erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
 {
-    rules::IAction_sptr action(new ActionDebugAfficherDrapeau(pos, drapeau, player_->id));
+    rules::IAction_sptr action(
+        new ActionDebugAfficherDrapeau(pos, drapeau, player_->id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -142,23 +144,28 @@ bool Api::corde_sur_case(position pos)
     return game_state_->get_rope(pos) != nullptr;
 }
 
-/// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est invalide.
+/// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case
+/// indiquée. Renvoie -1 s'il n'y a pas de nain (standard) ou si la position est
+/// invalide.
 int Api::nain_sur_case(position pos)
 {
     return game_state_->get_cell_occupant(pos);
 }
 
-/// Renvoie la description du nain (standard) désigné par le numéro ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas présent sur la carte, tous les membres de la structure ``nain`` renvoyée sont initialisés à -1.
+/// Renvoie la description du nain (standard) désigné par le numéro ``id_nain``
+/// appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas
+/// présent sur la carte, tous les membres de la structure ``nain`` renvoyée
+/// sont initialisés à -1.
 nain Api::info_nain(int id_joueur, int id_nain)
 {
-    const static nain default_value = { { -1, -1 }, -1, -1, -1, false, -1 };
+    const static nain default_value = {{-1, -1}, -1, -1, -1, false, -1};
 
     // TODO add false to func description
-    if ((id_joueur != moi() && id_joueur != adversaire())
-            || (id_nain < 0 || id_nain >= NB_NAINS))
+    if ((id_joueur != moi() && id_joueur != adversaire()) ||
+        (id_nain < 0 || id_nain >= NB_NAINS))
         return default_value;
 
-    const nain *nain = game_state_->get_nain(id_joueur, id_nain);
+    const nain* nain = game_state_->get_nain(id_joueur, id_nain);
 
     if (nain == nullptr)
         return default_value;
@@ -166,12 +173,14 @@ nain Api::info_nain(int id_joueur, int id_nain)
     return *nain;
 }
 
-/// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
+/// Renvoie la description d'un minerai en fonction d'une position donnée. Si le
+/// minerai n'est pas présent sur la carte, ou si la position est invalide, tous
+/// les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
     const minerai* minerai = game_state_->get_minerai(pos);
     if (minerai == nullptr)
-        return { -1, -1 };
+        return {-1, -1};
     return *minerai;
 }
 
@@ -181,33 +190,40 @@ std::vector<position> Api::liste_minerais()
     return game_state_->get_ores();
 }
 
-/// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
+/// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
+/// (standard) dans une direction donnée.
 int Api::cout_de_deplacement(int id_nain, direction dir)
 {
     return game_state_->get_movement_cost(player_->id, id_nain, dir);
 }
 
-/// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+/// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le
+/// joueur n'existe pas, renvoie la position (-1, -1).
 position Api::position_taverne(int id_joueur)
 {
     if (id_joueur != moi() && id_joueur != adversaire())
-        return { -1, -1 };
+        return {-1, -1};
     return game_state_->get_spawn_point(id_joueur);
 }
 
-/// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
+/// Renvoie le plus court chemin entre deux positions de la mine sous la forme
+/// d'une suite de direction à emprunter. Si la position est invalide ou que le
+/// chemin n'existe pas, le chemin renvoyé est vide.
 std::vector<direction> Api::chemin(position pos1, position pos2)
 {
     return game_state_->get_shortest_path(pos1, pos2);
 }
 
-/// Renvoie la liste des actions effectuées par l’adversaire durant son tour, dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans cette liste.
+/// Renvoie la liste des actions effectuées par l’adversaire durant son tour,
+/// dans l'ordre chronologique. Les actions de débug n'apparaissent pas dans
+/// cette liste.
 std::vector<action_hist> Api::historique()
 {
     return game_state_->get_history(adversaire());
 }
 
-/// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est invalide.
+/// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est
+/// invalide.
 int Api::score(int id_joueur)
 {
     if (id_joueur != moi() && id_joueur != adversaire())
@@ -227,7 +243,8 @@ int Api::adversaire()
     return game_state_->opponent(moi());
 }
 
-/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
+/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à
+/// annuler ce tour ci.
 bool Api::annuler()
 {
     if (!game_state_->can_cancel())

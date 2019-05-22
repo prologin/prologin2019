@@ -19,8 +19,8 @@
 
 #include <array>
 #include <istream>
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
 #include "constant.hh"
 #include "rope.hh"
@@ -44,7 +44,8 @@ public:
     void add_nain(int nain_id, position pos, int player_id);
     void move_nain(int nain_id, position from, position to);
     void remove_nain(int nain_id, position pos);
-    const std::pair<int, std::unordered_set<int>>& get_nains_at(position pos) const;
+    const std::pair<int, std::unordered_set<int>>&
+    get_nains_at(position pos) const;
 
     void add_rope(position pos);
     const Rope* get_rope(position pos) const;
@@ -64,7 +65,8 @@ private:
     void load_rope_info(std::istream& stream);
 
     std::array<std::array<std::pair<int, std::unordered_set<int>>, TAILLE_MINE>,
-               TAILLE_MINE> nains_;
+               TAILLE_MINE>
+        nains_;
 
     std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
     std::array<position, 2> spawn_point_;

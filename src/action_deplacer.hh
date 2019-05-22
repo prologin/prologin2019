@@ -4,13 +4,18 @@
 #include <rules/action.hh>
 
 #include "actions.hh"
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 class ActionDeplacer : public rules::Action<GameState>
 {
 public:
-    ActionDeplacer(int id_nain, direction dir, int player_id) : id_nain_(id_nain), dir_(dir), player_id_(player_id) {}
+    ActionDeplacer(int id_nain, direction dir, int player_id)
+        : id_nain_(id_nain)
+        , dir_(dir)
+        , player_id_(player_id)
+    {
+    }
     ActionDeplacer() {} // for register_action()
 
     int check(const GameState* st) const override;

@@ -4,13 +4,19 @@
 #include <rules/action.hh>
 
 #include "actions.hh"
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 class ActionTirer : public rules::Action<GameState>
 {
 public:
-    ActionTirer(int id_nain, direction dir_corde, direction sens, int player_id) : id_nain_(id_nain), dir_corde_(dir_corde), sens_(sens), player_id_(player_id) {}
+    ActionTirer(int id_nain, direction dir_corde, direction sens, int player_id)
+        : id_nain_(id_nain)
+        , dir_corde_(dir_corde)
+        , sens_(sens)
+        , player_id_(player_id)
+    {
+    }
     ActionTirer() {} // for register_action()
 
     int check(const GameState* st) const override;

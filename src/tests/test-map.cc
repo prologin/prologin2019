@@ -5,7 +5,7 @@
 
 TEST_F(ApiTest, Map_spawn_obsidienne)
 {
-    for (auto& player: players)
+    for (auto& player : players)
     {
         int id_player = player.api->moi();
         position spawn = player.api->position_taverne(id_player);

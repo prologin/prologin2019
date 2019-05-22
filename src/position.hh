@@ -38,8 +38,8 @@ inline position operator+(position lhs, position rhs)
 
 inline bool inside_map(const position& pos)
 {
-    return pos.ligne >= 0 && pos.ligne < TAILLE_MINE 
-        && pos.colonne >= 0 && pos.colonne < TAILLE_MINE;
+    return pos.ligne >= 0 && pos.ligne < TAILLE_MINE && pos.colonne >= 0 &&
+           pos.colonne < TAILLE_MINE;
 }
 
 static const position offset[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};

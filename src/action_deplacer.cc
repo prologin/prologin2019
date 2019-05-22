@@ -42,7 +42,8 @@ void ActionDeplacer::apply_on(GameState* st) const
     const nain* nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain->pos, dir_);
 
-    st->reduce_pm(player_id_, id_nain_, st->get_movement_cost(player_id_, id_nain_, dir_));
+    st->reduce_pm(player_id_, id_nain_,
+                  st->get_movement_cost(player_id_, id_nain_, dir_));
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_nain_gravity(dest, player_id_);
 
@@ -57,6 +58,6 @@ void ActionDeplacer::apply_on(GameState* st) const
 
     internal_action action;
     action.type = 1;
-    action.action = { ACTION_DEPLACER, id_nain_, dir_, ERREUR_DIRECTION };
+    action.action = {ACTION_DEPLACER, id_nain_, dir_, ERREUR_DIRECTION};
     st->add_to_internal_history(player_id_, action);
 }

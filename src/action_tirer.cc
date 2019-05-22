@@ -23,7 +23,7 @@ int ActionTirer::check(const GameState* st) const
         return HORS_LIMITES;
     if (st->get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
-    const Rope *rope = st->get_rope(dest);
+    const Rope* rope = st->get_rope(dest);
     if (rope == nullptr)
         return PAS_DE_CORDE;
     if (rope->get_nains().empty())
@@ -38,16 +38,15 @@ void ActionTirer::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
     position dest = get_position_offset(nain->pos, dir_corde_);
 
-    const Rope *rope = st->get_rope(dest);
+    const Rope* rope = st->get_rope(dest);
     auto nains(rope->get_nains());
-    std::sort(nains.begin(), nains.end(), [&] (const auto& a, const auto& b)
-        {
-            position pa = st->get_nain(a.first, a.second)->pos;
-            position pb = st->get_nain(b.first, b.second)->pos;
-            if (sens_ == HAUT)
-                return pa.ligne < pb.ligne;
-            return pb.ligne < pa.ligne;
-        });
+    std::sort(nains.begin(), nains.end(), [&](const auto& a, const auto& b) {
+        position pa = st->get_nain(a.first, a.second)->pos;
+        position pb = st->get_nain(b.first, b.second)->pos;
+        if (sens_ == HAUT)
+            return pa.ligne < pb.ligne;
+        return pb.ligne < pa.ligne;
+    });
 
     for (auto& nain : nains)
     {
@@ -64,6 +63,6 @@ void ActionTirer::apply_on(GameState* st) const
 
     internal_action action;
     action.type = 1;
-    action.action = { ACTION_TIRER, id_nain_, dir_corde_, sens_ };
+    action.action = {ACTION_TIRER, id_nain_, dir_corde_, sens_};
     st->add_to_internal_history(player_id_, action);
 }

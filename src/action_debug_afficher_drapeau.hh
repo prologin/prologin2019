@@ -4,13 +4,19 @@
 #include <rules/action.hh>
 
 #include "actions.hh"
-#include "game_state.hh"
 #include "constant.hh"
+#include "game_state.hh"
 
 class ActionDebugAfficherDrapeau : public rules::Action<GameState>
 {
 public:
-    ActionDebugAfficherDrapeau(position pos, debug_drapeau drapeau, int player_id) : pos_(pos), drapeau_(drapeau), player_id_(player_id) {}
+    ActionDebugAfficherDrapeau(position pos, debug_drapeau drapeau,
+                               int player_id)
+        : pos_(pos)
+        , drapeau_(drapeau)
+        , player_id_(player_id)
+    {
+    }
     ActionDebugAfficherDrapeau() {} // for register_action()
 
     int check(const GameState* st) const override;

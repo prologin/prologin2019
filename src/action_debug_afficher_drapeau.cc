@@ -15,6 +15,6 @@ void ActionDebugAfficherDrapeau::apply_on(GameState* st) const
 {
     internal_action action;
     action.type = 0;
-    action.debug_flag = { drapeau_, pos_ };
+    action.debug_flag = {drapeau_, pos_};
     st->add_to_internal_history(player_id_, action);
 }

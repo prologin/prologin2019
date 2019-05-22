@@ -11,7 +11,7 @@ void Map::load_map_cells(std::istream& stream)
     {
         std::string line;
         stream >> line;
-        if (line.length() != (size_t) TAILLE_MINE)
+        if (line.length() != (size_t)TAILLE_MINE)
             FATAL("map: line %d is not the right length "
                   "(is %d long, should be %d)",
                   l, line.length(), TAILLE_MINE);
@@ -43,7 +43,7 @@ void Map::load_spawn_point(std::istream& stream)
     {
         int l, c;
         stream >> l >> c;
-        spawn_point_[player] = { l, c };
+        spawn_point_[player] = {l, c};
         position down = get_position_offset(spawn_point_[player], BAS);
         if (inside_map(down))
             map_[down.ligne][down.colonne] = OBSIDIENNE;
@@ -61,7 +61,7 @@ void Map::load_minerai_info(std::istream& stream)
     {
         int l, c;
         stream >> l >> c;
-        position pos = { l, c };
+        position pos = {l, c};
 
         std::string error;
         if (std::find(seen.cbegin(), seen.cend(), pos) != seen.cend())
@@ -81,8 +81,8 @@ void Map::load_minerai_info(std::istream& stream)
         if (resistance <= 0)
             FATAL("resistance must be a strictly positive int");
 
-        ores_[minerai] = { resistance, rendement };
-        ores_pos_[minerai] = { l, c };
+        ores_[minerai] = {resistance, rendement};
+        ores_pos_[minerai] = {l, c};
         ore_[l][c] = minerai;
         seen.push_back(pos);
     }
@@ -96,7 +96,7 @@ void Map::load_rope_info(std::istream& stream)
     {
         int l, c;
         stream >> l >> c;
-        position pos = { l, c };
+        position pos = {l, c};
 
         std::string error;
         if (!inside_map(pos))
@@ -109,7 +109,8 @@ void Map::load_rope_info(std::istream& stream)
                   error.c_str());
 
         add_rope(pos);
-        while (try_extend_rope(pos));
+        while (try_extend_rope(pos))
+            ;
     }
 }
 
@@ -122,7 +123,7 @@ Map::Map(std::istream& stream)
         {
             ore_[y][x] = -1;
             rope_[y][x] = -1;
-            nains_[y][x] = { -1, std::unordered_set<int>() };
+            nains_[y][x] = {-1, std::unordered_set<int>()};
         }
 
     load_map_cells(stream);
@@ -183,7 +184,8 @@ inline bool operator==(const minerai& a, const minerai& b)
 
 void Map::remove_minerai(position pos)
 {
-    ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos), ores_pos_.end());
+    ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos),
+                    ores_pos_.end());
     ore_[pos.ligne][pos.colonne] = -1;
 }
 
@@ -202,7 +204,8 @@ void Map::add_nain(int nain_id, position pos, int player_id)
 void Map::move_nain(int nain_id, position from, position to)
 {
     if (nains_[to.ligne][to.colonne].second.empty())
-        nains_[to.ligne][to.colonne].first = nains_[from.ligne][from.colonne].first;
+        nains_[to.ligne][to.colonne].first =
+            nains_[from.ligne][from.colonne].first;
     nains_[from.ligne][from.colonne].second.erase(nain_id);
 
     if (nains_[from.ligne][from.colonne].second.empty())
@@ -217,7 +220,8 @@ void Map::remove_nain(int nain_id, position pos)
         nains_[pos.ligne][pos.colonne].first = -1;
 }
 
-const std::pair<int, std::unordered_set<int>>& Map::get_nains_at(position pos) const
+const std::pair<int, std::unordered_set<int>>&
+Map::get_nains_at(position pos) const
 {
     return nains_[pos.ligne][pos.colonne];
 }
@@ -266,7 +270,7 @@ const std::vector<Rope> Map::get_base_ropes() const
 
 bool Map::try_extend_rope(position pos)
 {
-    const Rope *rope = get_rope(pos);
+    const Rope* rope = get_rope(pos);
 
     if (rope == nullptr)
         return false;
@@ -289,7 +293,7 @@ bool Map::try_extend_rope(position pos)
     ropes_[rope_[pos.ligne][pos.colonne]].clear();
 
     for (position pos : positions)
-        rope_[pos.ligne][pos.colonne] =  rope_[dest.ligne][dest.colonne];
+        rope_[pos.ligne][pos.colonne] = rope_[dest.ligne][dest.colonne];
 
     for (const auto& nain : rope->get_nains())
         add_nain_to_rope(dest, nain.first, nain.second);
