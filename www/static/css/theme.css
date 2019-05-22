@@ -175,9 +175,15 @@ table {
 /* pre/inputs */
 /**************/
 
-pre, input[type=text], textarea.form-control {
+pre, input[type=text], input[type=password], textarea.form-control {
 	background: var(--background-darker);
 	border-color: var(--border-color);
+	color: var(--text-color);
+}
+
+.form-control:focus {
+	border-color: var(--border-color);
+	box-shadow: none;
 }
 
 /***********/
