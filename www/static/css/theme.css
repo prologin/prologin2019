@@ -139,7 +139,9 @@ a, a:hover, a:active {
 
 .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
 	background: transparent;
-	border: 1px solid var(--border-color);
+	border: 10px solid;
+	border-image: url("../img/border.png") 10;
+	padding: 0px 5px;
 }
 
 .nav > li > a:focus, .nav > li > a:hover {
