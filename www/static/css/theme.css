@@ -46,7 +46,7 @@ body {
 /* global stuff */
 
 body {
-	background: center / cover #000 url("../img/background.jpg");
+	background: center / cover fixed #000 url("../img/background.jpg");
 	color: var(--text-color);
 }
 
@@ -62,7 +62,15 @@ body {
 
 .navbar-default .navbar-text, .navbar-default .navbar-nav > li > a {
 	color: #ffffff;
-	text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+	text-shadow: 1px 1px 0 #000000;
+	background: rgba(0,0,0,0.6);
+	border-radius: 3px;
+	padding: 5px;
+	margin: 10px;
+}
+.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover {
+	color: #ffffff;
+	background: rgba(0,0,0,0.8)
 }
 
 /********/
