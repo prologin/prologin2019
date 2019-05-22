@@ -365,7 +365,7 @@ extern "C" minerai api_info_minerai(position pos)
   return api->info_minerai(pos);
 }
 
-/// Renvoie la liste de touts les minerais dans la mine.
+/// Renvoie la liste de tout les minerais dans la mine.
 extern "C" std::vector<position> api_liste_minerais()
 {
   return api->liste_minerais();
@@ -377,7 +377,7 @@ extern "C" int api_cout_de_deplacement(int id_nain, direction dir)
   return api->cout_de_deplacement(id_nain, dir);
 }
 
-/// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+/// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
 extern "C" position api_position_taverne(int id_joueur)
 {
   return api->position_taverne(id_joueur);
@@ -413,7 +413,7 @@ extern "C" int api_adversaire()
   return api->adversaire();
 }
 
-/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
+/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
 extern "C" bool api_annuler()
 {
   return api->annuler();

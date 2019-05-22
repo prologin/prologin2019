@@ -52,7 +52,7 @@ constant:
     cst_name: COUT_ESCALADER_CORDE
     cst_val: 1
     cst_comment: Nombre de points de déplacement pour qu'un nain (standard)
-                 grimpe d'une case lorsqu'il est aggripé à une corde.
+                 grimpe d'une case lorsqu'il est agrippé à une corde.
   -
     cst_name: COUT_MINER
     cst_val: 6
@@ -80,7 +80,7 @@ enum:
     enum_summary: "Types de cases"
     enum_field:
       - [libre, "Case libre (peut comporter une corde)"]
-      - [granite, "Granite standard (indépendament de s'il cache des minerais
+      - [granite, "Granite standard (indépendamment de s'il cache des minerais
                    ou non)"]
       - [obsidienne, "Obsidienne"]
       - [erreur_case, "Erreur"]
@@ -160,7 +160,7 @@ struct:
       - [pm, int, "Point(s) de déplacement restant du nain (standard)"]
       - [accroche, bool, "Le nain (standard) est accroché à la paroi ou à la
                           corde"]
-      - [butin, int, "Valeur marchande total que le nain (standard) possède"]
+      - [butin, int, "Valeur marchande totale que le nain (standard) possède"]
   -
     str_name: action_hist
     str_summary: Action de déplacement représentée dans l'historique.
@@ -268,7 +268,7 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: info_nain
-    fct_summary: Indique la position du nain (standar) dans la mine désigné par
+    fct_summary: Indique la position du nain (standard) dans la mine désigné par
                  le numéro ``id_nain`` appartenant au joueur ``id_joueur``.
                  Si la description du nain (standard) est incorrecte, la
                  position (-1, -1) est renvoyée.
@@ -293,7 +293,7 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: liste_minerais
-    fct_summary: Renvoie la liste de touts les minerais dans la mine.
+    fct_summary: Renvoie la liste de tous les minerais dans la mine.
     fct_ret_type: position array
     fct_arg: []
   -
@@ -307,9 +307,9 @@ function:
       - [dir, direction, "Direction visée"]
   -
     fct_name: position_taverne
-    fct_summary: Renvoie le position de la position taverne appartenant au
-                 joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la
-                 position (-1, -1).
+    fct_summary: Renvoie la position de la taverne appartenant au joueur
+                 ``id_joueur``. Si le joueur n'existe pas, renvoie la position
+                 (-1, -1).
     fct_ret_type: position
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]
@@ -356,7 +356,7 @@ function:
   -
     fct_name: annuler
     fct_summary: Annule la dernière action.
-                 Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
+                 Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
     fct_ret_type: bool
     fct_arg: []
   -

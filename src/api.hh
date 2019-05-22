@@ -89,13 +89,13 @@ public:
     /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le minerai n'est pas présent sur la carte, ou si la position est invalide, tous les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
     minerai info_minerai(position pos);
 
-    /// Renvoie la liste de touts les minerais dans la mine.
+    /// Renvoie la liste de tout les minerais dans la mine.
     std::vector<position> liste_minerais();
 
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain (standard) dans une direction donnée.
     int cout_de_deplacement(int id_nain, direction dir);
 
-    /// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+    /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
     position position_taverne(int id_joueur);
 
     /// Renvoie le plus court chemin entre deux positions de la mine sous la forme d'une suite de direction à emprunter. Si la position est invalide ou que le chemin n'existe pas, le chemin renvoyé est vide.
@@ -113,7 +113,7 @@ public:
     /// Renvoie le numéro de joueur de votre adversaire.
     int adversaire();
 
-    /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
+    /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
     bool annuler();
 
     /// Retourne le numéro du tour actuel.

@@ -1,5 +1,7 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright 2019 Martin Huvelle
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright 2018 Sacha Delanoue
+
+# This file has been generated, you should not edit it
 
 extends Node
 
@@ -32,20 +34,3 @@ const COUT_TIRER = 1
 const COUT_LACHER = 0
 
 const COUT_AGRIPPER = 0
-
-const ACTIONS = {
-	"ACTION_DEPLACER" : 0,
-	"ACTION_LACHER" : 1,
-	"ACTION_AGRIPPER" : 2,
-	"ACTION_MINER" : 3,
-	"ACTION_POSER_CORDE" : 4,
-	"ACTION_TIRER" : 5,
-	"ACTION_DEBUG_AFFICHER_DRAPEAU" : 6
-}
-
-enum flag {
-	NONE,
-	DRAPEAU_BLEU,
-	DRAPEAU_VERT,
-	DRAPEAU_ROUGE
-}

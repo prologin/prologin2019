@@ -171,7 +171,7 @@ minerai Api::info_minerai(position pos)
     return *minerai;
 }
 
-/// Renvoie la liste de touts les minerais dans la mine.
+/// Renvoie la liste de tout les minerais dans la mine.
 std::vector<position> Api::liste_minerais()
 {
     return game_state_->get_ores();
@@ -183,7 +183,7 @@ int Api::cout_de_deplacement(int id_nain, direction dir)
     return game_state_->get_movement_cost(player_->id, id_nain, dir);
 }
 
-/// Renvoie le position de la position taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
+/// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le joueur n'existe pas, renvoie la position (-1, -1).
 position Api::position_taverne(int id_joueur)
 {
     if (id_joueur != moi() && id_joueur != adversaire())
@@ -223,7 +223,7 @@ int Api::adversaire()
     return game_state_->opponent(moi());
 }
 
-/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour-ci.
+/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à annuler ce tour ci.
 bool Api::annuler()
 {
     if (!game_state_->can_cancel())

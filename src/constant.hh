@@ -46,7 +46,7 @@
 # define COUT_ESCALADER            2
 
 /// Nombre de points de déplacement pour qu'un nain (standard) grimpe d'une case
-/// lorsqu'il est aggripé à une corde.
+/// lorsqu'il est agrippé à une corde.
 # define COUT_ESCALADER_CORDE      1
 
 
@@ -65,7 +65,7 @@
 /// Types de cases
 typedef enum case_type {
   LIBRE, /* <- Case libre */
-  GRANITE, /* <- Granite standard */
+  GRANITE, /* <- Granite standard (indépendamment de s'il cache des minerais ou non) */
   OBSIDIENNE, /* <- Obsidienne */
   ERREUR_CASE, /* <- Erreur */
 } case_type;
