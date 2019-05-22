@@ -90,6 +90,22 @@ body>div.container {
 	padding-bottom: 20px;
 }
 
+/***************/
+/* breadcrumbs */
+/***************/
+
+.breadcrumb {
+	background: transparent;
+}
+
+.breadcrumb > li + li::before {
+	color: #333333;
+}
+
+.breadcrumb > .active {
+	color: #222222;
+}
+
 /**********/
 /* panels */
 /**********/
