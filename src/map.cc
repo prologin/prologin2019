@@ -196,32 +196,28 @@ void Map::set_minerai_resistance(position pos, int resistance)
 
 void Map::add_nain(int nain_id, position pos, int player_id)
 {
-    if (nains_[pos.ligne][pos.colonne].second.empty())
-        nains_[pos.ligne][pos.colonne].first = player_id;
-    nains_[pos.ligne][pos.colonne].second.insert(nain_id);
+    if (nains_[pos.ligne][pos.colonne].ids.empty())
+        nains_[pos.ligne][pos.colonne].player = player_id;
+
+    nains_[pos.ligne][pos.colonne].ids.insert(nain_id);
 }
 
 void Map::move_nain(int nain_id, position from, position to)
 {
-    if (nains_[to.ligne][to.colonne].second.empty())
-        nains_[to.ligne][to.colonne].first =
-            nains_[from.ligne][from.colonne].first;
-    nains_[from.ligne][from.colonne].second.erase(nain_id);
-
-    if (nains_[from.ligne][from.colonne].second.empty())
-        nains_[from.ligne][from.colonne].first = -1;
-    nains_[to.ligne][to.colonne].second.insert(nain_id);
+    const int player_id = nains_[from.ligne][from.colonne].player;
+    add_nain(nain_id, to, player_id);
+    remove_nain(nain_id, from);
 }
 
 void Map::remove_nain(int nain_id, position pos)
 {
-    nains_[pos.ligne][pos.colonne].second.erase(nain_id);
-    if (nains_[pos.ligne][pos.colonne].second.empty())
-        nains_[pos.ligne][pos.colonne].first = -1;
+    nains_[pos.ligne][pos.colonne].ids.erase(nain_id);
+
+    if (nains_[pos.ligne][pos.colonne].ids.empty())
+        nains_[pos.ligne][pos.colonne].player = -1;
 }
 
-const std::pair<int, std::unordered_set<int>>&
-Map::get_nains_at(position pos) const
+const NainsOnCell& Map::get_nains_at(position pos) const
 {
     return nains_[pos.ligne][pos.colonne];
 }
