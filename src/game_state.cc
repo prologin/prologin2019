@@ -251,8 +251,6 @@ void GameState::check_nain_gravity(position pos, int current_player)
             if (fall == 0)
                 continue;
 
-            std::cout << "AHHHHHHHH !" << std::endl;
-
             set_nain_position(player_id, nain_id, pos + (BAS * fall));
 
             if (fall >= 4)

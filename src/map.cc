@@ -327,7 +327,7 @@ std::vector<direction> Map::get_shortest_path(position start,
     // of moves to use, all cells in this queue are accessible with the same
     // minimal number of mined blocks (initialy 0).
     std::queue<position> current_component;
-    current_component.push(start);
+    current_component.push(dest);
 
     while (!current_component.empty())
     {
@@ -367,7 +367,7 @@ std::vector<direction> Map::get_shortest_path(position start,
                         continue;
                     }
 
-                    if (target == dest)
+                    if (target == start)
                         goto reverse_run;
                 }
             }
@@ -376,26 +376,23 @@ std::vector<direction> Map::get_shortest_path(position start,
         current_component = next_component;
     }
 
-    // There might be no path to a cell if it is surrounded by unbreakable
-    // blocks.
-    if (predecessor[dest.ligne][dest.colonne] == ERREUR_DIRECTION)
-        return {};
+    // If the previous block is left without a goto, it means start has not been
+    // reach
+    return {};
 
 reverse_run:
 
-    // Unroll the path from the end.
+    // Unroll the path from the start.
     std::vector<direction> ret;
-    position current_cell = dest;
+    position current_cell = start;
 
-    while (current_cell != start)
+    while (current_cell != dest)
     {
-        const direction dir =
-            predecessor[current_cell.ligne][current_cell.colonne];
-        current_cell =
-            get_position_offset(current_cell, reverse_direction(dir));
+        const direction dir = reverse_direction(
+            predecessor[current_cell.ligne][current_cell.colonne]);
+        current_cell = get_position_offset(current_cell, dir);
         ret.push_back(dir);
     }
 
-    std::reverse(ret.begin(), ret.end());
     return ret;
 }

@@ -21,15 +21,7 @@ int ActionDeplacer::check(const GameState* st) const
         return HORS_LIMITES;
 
     if (st->get_cell_type(dest) != LIBRE)
-    {
-
-        std::cout << "nopnopnop ça va pas" << std::endl;
         return OBSTACLE_MUR;
-    }
-    else
-        std::cout << "lololol ça va: " << dest.ligne << ", " << dest.colonne
-                  << " from " << nain->pos.ligne << ", " << nain->pos.colonne
-                  << std::endl;
 
     int dest_owner = st->get_cell_occupant(dest);
     if (dest_owner == st->get_opponent_id(player_id_))
