@@ -124,7 +124,7 @@ Map::Map(std::istream& stream)
         {
             ores_map_[y][x] = {-1, -1};
             rope_[y][x] = -1;
-            nains_[y][x] = {-1, std::unordered_set<int>()};
+            nains_[y][x] = {-1, {}};
         }
 
     load_map_cells(stream);
@@ -201,7 +201,7 @@ void Map::add_nain(int nain_id, position pos, int player_id)
     if (nains_[pos.ligne][pos.colonne].ids.empty())
         nains_[pos.ligne][pos.colonne].player = player_id;
 
-    nains_[pos.ligne][pos.colonne].ids.insert(nain_id);
+    nains_[pos.ligne][pos.colonne].ids.push_back(nain_id);
 }
 
 void Map::move_nain(int nain_id, position from, position to)
@@ -213,10 +213,14 @@ void Map::move_nain(int nain_id, position from, position to)
 
 void Map::remove_nain(int nain_id, position pos)
 {
-    nains_[pos.ligne][pos.colonne].ids.erase(nain_id);
+    NainsOnCell& cell = nains_[pos.ligne][pos.colonne];
 
-    if (nains_[pos.ligne][pos.colonne].ids.empty())
-        nains_[pos.ligne][pos.colonne].player = -1;
+    auto it = std::find(cell.ids.begin(), cell.ids.end(), nain_id);
+    *it = cell.ids.back();
+    cell.ids.pop_back();
+
+    if (cell.ids.empty())
+        cell.player = -1;
 }
 
 const NainsOnCell& Map::get_nains_at(position pos) const

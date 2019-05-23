@@ -18,7 +18,6 @@
 
 #include <array>
 #include <istream>
-#include <unordered_set>
 #include <vector>
 
 #include "constant.hh"
@@ -27,7 +26,7 @@
 typedef struct NainsOnCell
 {
     int player;
-    std::unordered_set<int> ids;
+    std::vector<int> ids;
 } NainsOnCell;
 
 class Map
