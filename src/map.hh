@@ -79,7 +79,6 @@ private:
     std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> rope_;
     std::vector<Rope> ropes_;
 
-    std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> ore_;
-    std::vector<minerai> ores_;
+    std::array<std::array<minerai, TAILLE_MINE>, TAILLE_MINE> ores_map_;
     std::vector<position> ores_pos_;
 };

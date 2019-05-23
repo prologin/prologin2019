@@ -55,9 +55,10 @@ void Map::load_minerai_info(std::istream& stream)
 {
     std::vector<position> seen;
     int nb_minerai;
+
     stream >> nb_minerai;
-    ores_.resize(nb_minerai);
     ores_pos_.resize(nb_minerai);
+
     for (int minerai = 0; minerai < nb_minerai; ++minerai)
     {
         int l, c;
@@ -82,9 +83,8 @@ void Map::load_minerai_info(std::istream& stream)
         if (resistance <= 0)
             FATAL("resistance must be a strictly positive int");
 
-        ores_[minerai] = {resistance, rendement};
+        ores_map_[l][c] = {resistance, rendement};
         ores_pos_[minerai] = {l, c};
-        ore_[l][c] = minerai;
         seen.push_back(pos);
     }
 }
@@ -122,7 +122,7 @@ Map::Map(std::istream& stream)
     for (int x = 0; x < TAILLE_MINE; ++x)
         for (int y = 0; y < TAILLE_MINE; ++y)
         {
-            ore_[y][x] = -1;
+            ores_map_[y][x] = {-1, -1};
             rope_[y][x] = -1;
             nains_[y][x] = {-1, std::unordered_set<int>()};
         }
@@ -139,8 +139,7 @@ Map::Map(const Map& map)
     , spawn_point_(map.spawn_point_)
     , rope_(map.rope_)
     , ropes_(map.ropes_)
-    , ore_(map.ore_)
-    , ores_(map.ores_)
+    , ores_map_(map.ores_map_)
     , ores_pos_(map.ores_pos_)
 {
 }
@@ -161,10 +160,13 @@ const minerai* Map::get_minerai(position pos) const
 {
     if (!inside_map(pos))
         return nullptr;
-    int index = ore_[pos.ligne][pos.colonne];
-    if (index == -1)
+
+    const minerai& ret = ores_map_[pos.ligne][pos.colonne];
+
+    if (ret.resistance == -1)
         return nullptr;
-    return &ores_[index];
+
+    return &ret;
 }
 
 const std::vector<position>& Map::get_ores() const
@@ -186,12 +188,12 @@ void Map::remove_minerai(position pos)
 {
     ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos),
                     ores_pos_.end());
-    ore_[pos.ligne][pos.colonne] = -1;
+    ores_map_[pos.ligne][pos.colonne] = {-1, -1};
 }
 
 void Map::set_minerai_resistance(position pos, int resistance)
 {
-    ores_[ore_[pos.ligne][pos.colonne]].resistance = resistance;
+    ores_map_[pos.ligne][pos.colonne].resistance = resistance;
 }
 
 void Map::add_nain(int nain_id, position pos, int player_id)
