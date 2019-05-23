@@ -56,6 +56,9 @@ rules::GameState* GameState::copy() const
 std::vector<direction> GameState::get_shortest_path(position start,
                                                     position dest) const
 {
+    if (!inside_map(start) || !inside_map(dest) || start == dest)
+        return {};
+
     auto pos_id = [](position pos) -> int {
         return pos.ligne * TAILLE_MINE + pos.colonne;
     };
@@ -67,14 +70,13 @@ std::vector<direction> GameState::get_shortest_path(position start,
         return pos;
     };
 
-    int dest_id = pos_id(dest);
-    int start_id = pos_id(start);
+    const int dest_id = pos_id(dest);
+    const int start_id = pos_id(start);
 
     // Keep track of the predecessor of each cell in a shortest path from start
     // to this cell.
-    std::vector<int> predecessor(TAILLE_MINE * TAILLE_MINE, -1);
-    // Marked to a different value from -1 to avoid a loop
-    predecessor[pos_id(start)] = -2;
+    std::array<direction, TAILLE_MINE * TAILLE_MINE> predecessor;
+    predecessor.fill(ERREUR_DIRECTION);
 
     // Current component to explore: the queue is ordered in increasing number
     // of moves to use, all cells in this queue are accessible with the same
@@ -82,7 +84,7 @@ std::vector<direction> GameState::get_shortest_path(position start,
     std::queue<int> current_component;
     current_component.push(pos_id(start));
 
-    while (predecessor[dest_id] == -1 && !current_component.empty())
+    while (!current_component.empty())
     {
         // Blocks part of next connected component by mining exactly 1
         // unexplored block.
@@ -96,29 +98,29 @@ std::vector<direction> GameState::get_shortest_path(position start,
             current_component.pop();
             position source = pos_from_id(source_id);
 
-            if (source_id == dest_id)
+            static const direction directions[] = {GAUCHE, DROITE, HAUT, BAS};
+            for (direction dir : directions)
             {
-                break;
-            }
+                const auto target = get_position_offset(source, (direction)dir);
+                const int target_id = pos_id(target);
 
-            for (int dir = 0; dir < 4; dir++)
-            {
-                position target = get_position_offset(source, (direction)dir);
-                int target_id = pos_id(target);
-
-                if (inside_map(target) && predecessor[target_id] == -1)
+                if (inside_map(target) &&
+                    predecessor[target_id] == ERREUR_DIRECTION)
                 {
                     if (!is_obstacle(target))
                     {
-                        predecessor[target_id] = source_id;
+                        predecessor[target_id] = dir;
                         current_component.push(target_id);
                     }
                     else if (is_minable(target))
                     {
-                        predecessor[target_id] = source_id;
+                        predecessor[target_id] = dir;
                         next_component.push(target_id);
                     }
                 }
+
+                if (target_id == dest_id)
+                    goto reverse_run;
             }
         }
 
@@ -127,38 +129,24 @@ std::vector<direction> GameState::get_shortest_path(position start,
 
     // There might be no path to a cell if it is surrounded by unbreakable
     // blocks.
-    if (predecessor[dest_id] == -1)
-    {
+    if (predecessor[dest_id] == ERREUR_DIRECTION)
         return {};
-    }
+
+reverse_run:
 
     // Unroll the path from the end.
-    std::vector<int> rev_ret;
-    rev_ret.push_back(dest_id);
-
-    while (rev_ret.back() != start_id)
-    {
-        int source_id = rev_ret.back();
-        rev_ret.push_back(predecessor[source_id]);
-    }
-
-    // Reverse ret, convert to directions and return
     std::vector<direction> ret;
+    int current_cell_id = dest_id;
 
-    for (int i = rev_ret.size() - 1; i > 0; i--)
+    while (current_cell_id != start_id)
     {
-        for (int dir = 0; dir < 4; dir++)
-        {
-            position source = pos_from_id(rev_ret[i]);
-            position target = pos_from_id(rev_ret[i - 1]);
-
-            if (get_position_offset(source, (direction)dir) == target)
-            {
-                ret.push_back((direction)dir);
-            }
-        }
+        const direction dir = predecessor[current_cell_id];
+        current_cell_id = pos_id(get_position_offset(
+            pos_from_id(current_cell_id), reverse_direction(dir)));
+        ret.push_back(dir);
     }
 
+    std::reverse(ret.begin(), ret.end());
     return ret;
 }
 

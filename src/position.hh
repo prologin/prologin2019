@@ -57,4 +57,21 @@ inline position operator*(direction dir, int scalar)
     return pos;
 }
 
+inline direction reverse_direction(const direction dir)
+{
+    switch (dir)
+    {
+    case HAUT:
+        return BAS;
+    case BAS:
+        return HAUT;
+    case GAUCHE:
+        return DROITE;
+    case DROITE:
+        return GAUCHE;
+    default:
+        return ERREUR_DIRECTION;
+    }
+}
+
 #endif
