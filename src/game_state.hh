@@ -26,8 +26,6 @@ public:
     int internal_to_external_id(int internal_id) const;
 
     case_type get_cell_type(position pos) const;
-    bool is_obstacle(position pos) const;
-    bool is_minable(position pos) const;
     position get_spawn_point(int player_id) const;
     const minerai* get_minerai(position pos) const;
     const std::vector<position>& get_ores() const;

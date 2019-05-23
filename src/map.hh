@@ -18,8 +18,6 @@
 
 #include <array>
 #include <istream>
-#include <list>
-#include <optional>
 #include <unordered_set>
 #include <vector>
 
@@ -63,6 +61,9 @@ public:
     /// Try to expend the rope 1 cell towards the bottom direction, return true
     /// when a new rope cell is created at the bottom of the rope.
     bool try_extend_rope(position pos);
+
+    std::vector<direction> get_shortest_path(position start,
+                                             position dest) const;
 
 private:
     void load_map_cells(std::istream& stream);
