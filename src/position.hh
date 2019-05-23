@@ -24,6 +24,11 @@ inline bool operator==(const position& a, const position& b)
     return a.ligne == b.ligne && a.colonne == b.colonne;
 }
 
+inline bool operator!=(const position& a, const position& b)
+{
+    return a.ligne != b.ligne || a.colonne != b.colonne;
+}
+
 inline position& operator+=(position& lhs, position rhs)
 {
     lhs.colonne += rhs.colonne;

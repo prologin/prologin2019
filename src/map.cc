@@ -315,70 +315,58 @@ std::vector<direction> Map::get_shortest_path(position start,
     if (!inside_map(start) || !inside_map(dest) || start == dest)
         return {};
 
-    auto pos_id = [](position pos) -> int {
-        return pos.ligne * TAILLE_MINE + pos.colonne;
-    };
-
-    auto pos_from_id = [](int id) -> position {
-        position pos;
-        pos.ligne = id / TAILLE_MINE;
-        pos.colonne = id % TAILLE_MINE;
-        return pos;
-    };
-
-    const int dest_id = pos_id(dest);
-    const int start_id = pos_id(start);
-
     // Keep track of the predecessor of each cell in a shortest path from start
     // to any cell.
-    std::array<direction, TAILLE_MINE * TAILLE_MINE> predecessor;
-    predecessor.fill(ERREUR_DIRECTION);
+    std::array<std::array<direction, TAILLE_MINE>, TAILLE_MINE> predecessor;
+
+    for (auto& ligne : predecessor)
+        ligne.fill(ERREUR_DIRECTION);
 
     // Current component to explore: the queue is ordered in increasing number
     // of moves to use, all cells in this queue are accessible with the same
     // minimal number of mined blocks (initialy 0).
-    std::queue<int> current_component;
-    current_component.push(pos_id(start));
+    std::queue<position> current_component;
+    current_component.push(start);
 
     while (!current_component.empty())
     {
         // Blocks part of next connected component by mining exactly 1
         // unexplored block.
-        std::queue<int> next_component;
+        std::queue<position> next_component;
 
         // Explore the current connected component by moving without digging
         // any block.
         while (!current_component.empty())
         {
-            int source_id = current_component.front();
+            position source = current_component.front();
             current_component.pop();
-            position source = pos_from_id(source_id);
 
             static const direction directions[] = {GAUCHE, DROITE, HAUT, BAS};
             for (direction dir : directions)
             {
-                const auto target = get_position_offset(source, (direction)dir);
-                const int target_id = pos_id(target);
+                const position target =
+                    get_position_offset(source, (direction)dir);
 
                 if (inside_map(target) &&
-                    predecessor[target_id] == ERREUR_DIRECTION)
+                    predecessor[target.ligne][target.colonne] ==
+                        ERREUR_DIRECTION)
                 {
                     switch (map_[target.ligne][target.colonne])
                     {
                     case LIBRE:
-                        predecessor[target_id] = dir;
-                        current_component.push(target_id);
+                        predecessor[target.ligne][target.colonne] = dir;
+                        current_component.push(target);
                         break;
                     case GRANITE:
-                        predecessor[target_id] = dir;
-                        next_component.push(target_id);
+                        predecessor[target.ligne][target.colonne] = dir;
+                        next_component.push(target);
                         break;
                     case OBSIDIENNE:
                     case ERREUR_CASE:
                         continue;
                     }
 
-                    if (target_id == dest_id)
+                    if (target == dest)
                         goto reverse_run;
                 }
             }
@@ -389,20 +377,21 @@ std::vector<direction> Map::get_shortest_path(position start,
 
     // There might be no path to a cell if it is surrounded by unbreakable
     // blocks.
-    if (predecessor[dest_id] == ERREUR_DIRECTION)
+    if (predecessor[dest.ligne][dest.colonne] == ERREUR_DIRECTION)
         return {};
 
 reverse_run:
 
     // Unroll the path from the end.
     std::vector<direction> ret;
-    int current_cell_id = dest_id;
+    position current_cell = dest;
 
-    while (current_cell_id != start_id)
+    while (current_cell != start)
     {
-        const direction dir = predecessor[current_cell_id];
-        current_cell_id = pos_id(get_position_offset(
-            pos_from_id(current_cell_id), reverse_direction(dir)));
+        const direction dir =
+            predecessor[current_cell.ligne][current_cell.colonne];
+        current_cell =
+            get_position_offset(current_cell, reverse_direction(dir));
         ret.push_back(dir);
     }
 
