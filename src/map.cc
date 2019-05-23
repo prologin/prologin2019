@@ -138,7 +138,6 @@ Map::Map(const Map& map)
     , spawn_point_(map.spawn_point_)
     , rope_(map.rope_)
     , ropes_(map.ropes_)
-    , ropes_pos_(map.ropes_pos_)
     , ore_(map.ore_)
     , ores_(map.ores_)
     , ores_pos_(map.ores_pos_)
@@ -230,7 +229,6 @@ inline bool operator==(const Rope& a, const Rope& b)
 void Map::add_rope(position pos)
 {
     ropes_.push_back(Rope(pos));
-    ropes_pos_.push_back(pos);
     rope_[pos.ligne][pos.colonne] = ropes_.size() - 1;
 }
 
@@ -254,9 +252,17 @@ void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
     ropes_[rope_[pos.ligne][pos.colonne]].remove_nain(player_id, nain_id);
 }
 
-const std::vector<position>& Map::get_ropes() const
+std::vector<position> Map::get_ropes_positions() const
 {
-    return ropes_pos_;
+    std::vector<position> result;
+
+    for (const Rope rope : get_base_ropes())
+    {
+        const std::vector<position> positions = rope.get_positions();
+        result.insert(result.end(), positions.begin(), positions.end());
+    }
+
+    return result;
 }
 
 const std::vector<Rope> Map::get_base_ropes() const
@@ -277,7 +283,6 @@ bool Map::try_extend_rope(position pos)
 
     if (get_rope(dest) == nullptr)
     {
-        ropes_pos_.push_back(dest);
         ropes_[rope_[pos.ligne][pos.colonne]].extends(dest);
         rope_[dest.ligne][dest.colonne] = rope_[pos.ligne][pos.colonne];
         return true;

@@ -14,11 +14,12 @@
 ** along with Prologin2019.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAP_HH
-#define MAP_HH
+#pragma once
 
 #include <array>
 #include <istream>
+#include <list>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 
@@ -56,8 +57,8 @@ public:
     const Rope* get_rope(position pos) const;
     void add_nain_to_rope(position pos, int player_id, int nain_id);
     void remove_nain_from_rope(position pos, int player_id, int nain_id);
-    const std::vector<position>& get_ropes() const;
     const std::vector<Rope> get_base_ropes() const;
+    std::vector<position> get_ropes_positions() const;
 
     /// Try to expend the rope 1 cell towards the bottom direction, return true
     /// when a new rope cell is created at the bottom of the rope.
@@ -76,11 +77,8 @@ private:
 
     std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> rope_;
     std::vector<Rope> ropes_;
-    std::vector<position> ropes_pos_;
 
     std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> ore_;
     std::vector<minerai> ores_;
     std::vector<position> ores_pos_;
 };
-
-#endif

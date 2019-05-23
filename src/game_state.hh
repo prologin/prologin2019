@@ -56,8 +56,8 @@ public:
     void reduce_pv_internal(int internal_player_id, int nain_id, int damage);
     void respawn(int player_id);
 
-    const std::vector<position>& get_ropes() const;
-    const std::vector<Rope> get_base_ropes() const;
+    std::vector<position> get_ropes() const;
+    std::vector<Rope> get_base_ropes() const;
     const Rope* get_rope(position pos) const;
     void add_rope(position pos);
     void add_nain_to_rope(position pos, int player_id, int nain_id);

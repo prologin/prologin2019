@@ -12,6 +12,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     , round_(0)
 {
     int id = 0;
+
     for (auto& player : players->players)
     {
         if (id > NB_JOUEURS)
@@ -24,6 +25,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
             ++id;
         }
     }
+
     for (int player = 0; player < NB_JOUEURS; ++player)
     {
         for (int nain = 0; nain < NB_NAINS; ++nain)
@@ -205,7 +207,7 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
         if (get_rope(up) != nullptr)
             check_rope_gravity(up);
 
-        if (map_.get_nains_at(up).player != -1)
+        if (get_internal_cell_occupant(up) != -1)
             check_nain_gravity(up, current_player);
     }
 }
@@ -482,12 +484,12 @@ void GameState::respawn(int player_id)
         nains_respawn_.end());
 }
 
-const std::vector<position>& GameState::get_ropes() const
+std::vector<position> GameState::get_ropes() const
 {
-    return map_.get_ropes();
+    return map_.get_ropes_positions();
 }
 
-const std::vector<Rope> GameState::get_base_ropes() const
+std::vector<Rope> GameState::get_base_ropes() const
 {
     return map_.get_base_ropes();
 }
