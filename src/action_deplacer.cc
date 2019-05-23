@@ -21,10 +21,18 @@ int ActionDeplacer::check(const GameState* st) const
         return HORS_LIMITES;
 
     if (st->get_cell_type(dest) != LIBRE)
+    {
+
+        std::cout << "nopnopnop ça va pas" << std::endl;
         return OBSTACLE_MUR;
+    }
+    else
+        std::cout << "lololol ça va: " << dest.ligne << ", " << dest.colonne
+                  << " from " << nain->pos.ligne << ", " << nain->pos.colonne
+                  << std::endl;
 
     int dest_owner = st->get_cell_occupant(dest);
-    if (dest_owner != -1 && dest_owner != player_id_)
+    if (dest_owner == st->get_opponent_id(player_id_))
         return OBSTACLE_NAIN;
 
     // Check cost
@@ -53,6 +61,7 @@ void ActionDeplacer::apply_on(GameState* st) const
 
     if (st->get_rope(nain->pos) != nullptr)
         st->remove_nain_from_rope(nain->pos, player_id_, id_nain_);
+
     if (st->get_rope(dest) != nullptr)
         st->add_nain_to_rope(dest, player_id_, id_nain_);
 

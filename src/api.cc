@@ -28,7 +28,8 @@ Api::Api(GameState* game_state, rules::Player_sptr player)
 /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
 erreur Api::deplacer(int id_nain, direction dir)
 {
-    rules::IAction_sptr action(new ActionDeplacer(id_nain, dir, player_->id));
+    const int player_id = game_state_->get_player_id(player_->id);
+    rules::IAction_sptr action(new ActionDeplacer(id_nain, dir, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -42,7 +43,8 @@ erreur Api::deplacer(int id_nain, direction dir)
 /// Le nain (standard) ``id_nain`` lâche la paroi.
 erreur Api::lacher(int id_nain)
 {
-    rules::IAction_sptr action(new ActionLacher(id_nain, player_->id));
+    const int player_id = game_state_->get_player_id(player_->id);
+    rules::IAction_sptr action(new ActionLacher(id_nain, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -56,7 +58,8 @@ erreur Api::lacher(int id_nain)
 /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
 erreur Api::agripper(int id_nain)
 {
-    rules::IAction_sptr action(new ActionAgripper(id_nain, player_->id));
+    const int player_id = game_state_->get_player_id(player_->id);
+    rules::IAction_sptr action(new ActionAgripper(id_nain, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -71,7 +74,8 @@ erreur Api::agripper(int id_nain)
 /// dans la direction indiquée.
 erreur Api::miner(int id_nain, direction dir)
 {
-    rules::IAction_sptr action(new ActionMiner(id_nain, dir, player_->id));
+    const int player_id = game_state_->get_player_id(player_->id);
+    rules::IAction_sptr action(new ActionMiner(id_nain, dir, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -85,8 +89,9 @@ erreur Api::miner(int id_nain, direction dir)
 /// Le nain (standard) ``id_nain`` tire dans un sens sur la corde.
 erreur Api::tirer(int id_nain, direction dir_corde, direction sens)
 {
+    const int player_id = game_state_->get_player_id(player_->id);
     rules::IAction_sptr action(
-        new ActionTirer(id_nain, dir_corde, sens, player_->id));
+        new ActionTirer(id_nain, dir_corde, sens, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -100,7 +105,8 @@ erreur Api::tirer(int id_nain, direction dir_corde, direction sens)
 /// Le nain (standard) ``id_nain`` pose une corde dans la direction indiquée.
 erreur Api::poser_corde(int id_nain, direction dir)
 {
-    rules::IAction_sptr action(new ActionPoserCorde(id_nain, dir, player_->id));
+    const int player_id = game_state_->get_player_id(player_->id);
+    rules::IAction_sptr action(new ActionPoserCorde(id_nain, dir, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -114,8 +120,9 @@ erreur Api::poser_corde(int id_nain, direction dir)
 /// Affiche le drapeau spécifié sur la case indiquée.
 erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
 {
+    const int player_id = game_state_->get_player_id(player_->id);
     rules::IAction_sptr action(
-        new ActionDebugAfficherDrapeau(pos, drapeau, player_->id));
+        new ActionDebugAfficherDrapeau(pos, drapeau, player_id));
 
     erreur err;
     if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
@@ -149,7 +156,12 @@ bool Api::corde_sur_case(position pos)
 /// invalide.
 int Api::nain_sur_case(position pos)
 {
-    return game_state_->get_cell_occupant(pos);
+    const int occupant = game_state_->get_cell_occupant(pos);
+
+    if (occupant == -1)
+        return -1;
+
+    return game_state_->get_player_key(occupant);
 }
 
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain``
@@ -165,7 +177,8 @@ nain Api::info_nain(int id_joueur, int id_nain)
         (id_nain < 0 || id_nain >= NB_NAINS))
         return default_value;
 
-    const nain* nain = game_state_->get_nain(id_joueur, id_nain);
+    const int player_id = game_state_->get_player_id(id_joueur);
+    const nain* nain = game_state_->get_nain(player_id, id_nain);
 
     if (nain == nullptr)
         return default_value;
@@ -179,8 +192,10 @@ nain Api::info_nain(int id_joueur, int id_nain)
 minerai Api::info_minerai(position pos)
 {
     const minerai* minerai = game_state_->get_minerai(pos);
+
     if (minerai == nullptr)
         return {-1, -1};
+
     return *minerai;
 }
 
@@ -194,7 +209,8 @@ std::vector<position> Api::liste_minerais()
 /// (standard) dans une direction donnée.
 int Api::cout_de_deplacement(int id_nain, direction dir)
 {
-    return game_state_->get_movement_cost(player_->id, id_nain, dir);
+    const int player_id = game_state_->get_player_id(player_->id);
+    return game_state_->get_movement_cost(player_id, id_nain, dir);
 }
 
 /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le
@@ -203,7 +219,9 @@ position Api::position_taverne(int id_joueur)
 {
     if (id_joueur != moi() && id_joueur != adversaire())
         return {-1, -1};
-    return game_state_->get_spawn_point(id_joueur);
+
+    const int player_id = game_state_->get_player_id(id_joueur);
+    return game_state_->get_spawn_point(player_id);
 }
 
 /// Renvoie le plus court chemin entre deux positions de la mine sous la forme
@@ -228,7 +246,9 @@ int Api::score(int id_joueur)
 {
     if (id_joueur != moi() && id_joueur != adversaire())
         return -1;
-    return game_state_->get_score(id_joueur);
+
+    const int player_id = game_state_->get_player_id(id_joueur);
+    return game_state_->get_score(player_id);
 }
 
 /// Renvoie votre numéro de joueur.
@@ -240,7 +260,8 @@ int Api::moi()
 /// Renvoie le numéro de joueur de votre adversaire.
 int Api::adversaire()
 {
-    return game_state_->opponent(moi());
+    const int player_id = game_state_->get_player_id(moi());
+    return game_state_->get_player_key(game_state_->get_opponent_id(player_id));
 }
 
 /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à
@@ -249,6 +270,7 @@ bool Api::annuler()
 {
     if (!game_state_->can_cancel())
         return false;
+
     actions_.cancel();
     game_state_ = rules::cancel(game_state_);
     return true;

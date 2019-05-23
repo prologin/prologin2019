@@ -6,10 +6,13 @@ int ActionAgripper::check(const GameState* st) const
         return ID_NAIN_INVALIDE;
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
+
     if (nain == nullptr)
         return NAIN_MORT;
+
     if (nain->pa < COUT_AGRIPPER)
         return PA_INSUFFISANTS;
+
     if (nain->accroche)
         return DEJA_ACCROCHE;
 
@@ -22,6 +25,7 @@ void ActionAgripper::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
+
     if (st->get_rope(nain->pos) != nullptr)
         st->add_nain_to_rope(nain->pos, player_id_, id_nain_);
 

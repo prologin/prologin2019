@@ -34,19 +34,25 @@ void Rules::register_actions()
     api_->actions()->register_action(
         ID_ACTION_DEPLACER,
         []() -> rules::IAction* { return new ActionDeplacer(); });
+
     api_->actions()->register_action(ID_ACTION_LACHER, []() -> rules::IAction* {
         return new ActionLacher();
     });
+
     api_->actions()->register_action(
         ID_ACTION_AGRIPPER,
         []() -> rules::IAction* { return new ActionAgripper(); });
+
     api_->actions()->register_action(
         ID_ACTION_MINER, []() -> rules::IAction* { return new ActionMiner(); });
+
     api_->actions()->register_action(
         ID_ACTION_TIRER, []() -> rules::IAction* { return new ActionTirer(); });
+
     api_->actions()->register_action(
         ID_ACTION_POSER_CORDE,
         []() -> rules::IAction* { return new ActionPoserCorde(); });
+
     api_->actions()->register_action(
         ID_ACTION_DEBUG_AFFICHER_DRAPEAU,
         []() -> rules::IAction* { return new ActionDebugAfficherDrapeau(); });
@@ -65,10 +71,12 @@ void Rules::apply_action(const rules::IAction_sptr& action)
     // consistent across the clients and the server.
 
     int err = action->check(api_->game_state());
+
     if (err)
         FATAL("Synchronization error: received action %d from player %d, but "
               "check() on current gamestate returned %d.",
               action->id(), action->player_id(), err);
+
     api_->game_state_set(action->apply(api_->game_state()));
 }
 
@@ -128,8 +136,9 @@ void Rules::spectator_turn()
     champion_jouer_tour_();
 }
 
-void Rules::start_of_player_turn(unsigned int player_id)
+void Rules::start_of_player_turn(unsigned int player_key)
 {
+    const int player_id = api_->game_state()->get_player_id(player_key);
     api_->game_state()->respawn(player_id);
     api_->game_state()->reset_pa(player_id);
     api_->game_state()->reset_pm(player_id);

@@ -50,7 +50,7 @@ void ActionMiner::apply_on(GameState* st) const
         const auto nains(st->get_nains_at(dest));
 
         for (int nain_id : nains.ids)
-            st->reduce_pv_internal(nains.player, nain_id, DEGAT_PIOCHE);
+            st->reduce_pv(nains.player, nain_id, DEGAT_PIOCHE);
 
         return;
     }

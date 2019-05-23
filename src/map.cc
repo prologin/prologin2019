@@ -153,6 +153,7 @@ case_type Map::get_cell_type(position pos) const
 {
     if (!inside_map(pos))
         return ERREUR_CASE;
+
     return map_[pos.ligne][pos.colonne];
 }
 

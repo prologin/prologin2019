@@ -181,8 +181,10 @@ static void dump_players(std::ostream& ss, const GameState& st)
 {
     const auto& players = st.get_player_info();
     std::vector<std::pair<int, PlayerInfo>> players_vec;
-    for (auto player : players)
-        players_vec.push_back(player);
+
+    for (size_t id = 0; id < NB_JOUEURS; id++)
+        players_vec.emplace_back(id, players[id]);
+
     dump_vector<std::pair<int, PlayerInfo>>(
         players_vec, ss, [&](auto& ss, auto player) {
             ss << "{ \"id\": " << player.first << ", \"name\": ";

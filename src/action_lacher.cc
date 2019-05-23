@@ -6,10 +6,13 @@ int ActionLacher::check(const GameState* st) const
         return ID_NAIN_INVALIDE;
 
     const nain* nain = st->get_nain(player_id_, id_nain_);
+
     if (nain == nullptr)
         return NAIN_MORT;
+
     if (nain->pa < COUT_LACHER)
         return PA_INSUFFISANTS;
+
     if (!nain->accroche)
         return PAS_ACCROCHE;
 
