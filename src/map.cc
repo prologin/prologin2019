@@ -309,8 +309,6 @@ bool Map::try_extend_rope(position pos)
 
     // Merge with the bottom rope
     ropes_[dest_index].merge_up(ropes_[rope_index]);
-    ropes_[rope_index].clear(); // TODO: just delete the rope instead
-
     const auto& positions = ropes_[rope_index].get_positions();
 
     for (position pos : positions)
@@ -318,6 +316,14 @@ bool Map::try_extend_rope(position pos)
 
     for (const auto nain : ropes_[rope_index].get_nains())
         add_nain_to_rope(dest, nain.first, nain.second);
+
+    // Remove the rope from the map
+    ropes_.erase(ropes_.begin() + rope_index);
+
+    for (auto& row : map_)
+        for (Cell& cell : row)
+            if (cell.rope > rope_index)
+                cell.rope--;
 
     return false;
 }

@@ -334,6 +334,9 @@ std::vector<Rope> GameState::get_base_ropes() const
 
 void GameState::check_rope_gravity(position pos, int current_player)
 {
+    if (!inside_map(pos))
+        return;
+
     while (true)
     {
         if (!map_.try_extend_rope(pos))
