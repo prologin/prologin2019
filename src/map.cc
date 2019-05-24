@@ -155,17 +155,16 @@ case_type Map::get_cell_type(position pos) const
     return map_[pos.ligne][pos.colonne].type;
 }
 
-const minerai* Map::get_minerai(position pos) const
+bool Map::has_minerai_at(position pos) const
 {
-    if (!inside_map(pos))
-        return nullptr;
+    assert(inside_map(pos));
+    return map_[pos.ligne][pos.colonne].ore.resistance != -1;
+}
 
-    const minerai& ret = map_[pos.ligne][pos.colonne].ore;
-
-    if (ret.resistance == -1)
-        return nullptr;
-
-    return &ret;
+minerai Map::get_minerai_at(position pos) const
+{
+    assert(inside_map(pos));
+    return map_[pos.ligne][pos.colonne].ore;
 }
 
 const std::vector<position>& Map::get_ores() const

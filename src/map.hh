@@ -42,7 +42,8 @@ public:
 
     // Cells
     case_type get_cell_type(position pos) const;
-    const minerai* get_minerai(position pos) const;
+    bool has_minerai_at(position pos) const;
+    minerai get_minerai_at(position pos) const;
     const std::vector<position>& get_ores() const;
 
     void set_cell_type(position pos, case_type type);

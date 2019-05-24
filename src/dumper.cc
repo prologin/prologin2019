@@ -209,10 +209,10 @@ static void dump_map(std::ostream& ss, const GameState& st)
                            [](auto& ss, case_type cell) { ss << cell; });
     ss << ", \"minerais\": ";
     dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos) {
-        const minerai* ore = st.get_minerai(pos);
+        minerai ore = st.get_minerai_at(pos);
         ss << "{ \"pos\": " << pos;
-        ss << ", \"resistance\": " << ore->resistance;
-        ss << ", \"rendement\": " << ore->rendement << "}";
+        ss << ", \"resistance\": " << ore.resistance;
+        ss << ", \"rendement\": " << ore.rendement << "}";
     });
     ss << ", \"cordes\": ";
     dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope) {

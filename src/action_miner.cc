@@ -55,8 +55,7 @@ void ActionMiner::apply_on(GameState* st) const
         return;
     }
 
-    const minerai* minerai = st->get_minerai(dest);
-    if (minerai != nullptr)
+    if (st->has_minerai_at(dest))
         if (!st->mine_minerai(dest, player_id_, id_nain_))
             return;
 

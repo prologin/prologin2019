@@ -183,12 +183,7 @@ nain Api::info_nain(int id_joueur, int id_nain)
 /// les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
-    const minerai* minerai = game_state_->get_minerai(pos);
-
-    if (minerai == nullptr)
-        return {-1, -1};
-
-    return *minerai;
+    return game_state_->get_minerai_at(pos);
 }
 
 /// Renvoie la liste de tout les minerais dans la mine.

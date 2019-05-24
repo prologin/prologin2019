@@ -75,9 +75,14 @@ position GameState::get_spawn_point(int player_id) const
     return map_.get_spawn_point(player_id);
 }
 
-const minerai* GameState::get_minerai(position pos) const
+bool GameState::has_minerai_at(position pos) const
 {
-    return map_.get_minerai(pos);
+    return map_.has_minerai_at(pos);
+}
+
+minerai GameState::get_minerai_at(position pos) const
+{
+    return map_.get_minerai_at(pos);
 }
 
 const std::vector<position>& GameState::get_ores() const
@@ -99,15 +104,16 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
 
 bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 {
-    const minerai* minerai = map_.get_minerai(pos);
+    assert(map_.has_minerai_at(pos));
+    minerai minerai = map_.get_minerai_at(pos);
 
-    if (minerai->resistance > 1)
+    if (minerai.resistance > 1)
     {
-        map_.set_minerai_resistance(pos, minerai->resistance - 1);
+        map_.set_minerai_resistance(pos, minerai.resistance - 1);
         return false;
     }
 
-    nains_[player_id][nain_id].butin += minerai->rendement;
+    nains_[player_id][nain_id].butin += minerai.rendement;
     map_.remove_minerai(pos);
     return true;
 }

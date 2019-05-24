@@ -29,7 +29,8 @@ public:
 
     case_type get_cell_type(position pos) const;
     position get_spawn_point(int player_id) const;
-    const minerai* get_minerai(position pos) const;
+    bool has_minerai_at(position pos) const;
+    minerai get_minerai_at(position pos) const;
     const std::vector<position>& get_ores() const;
     void set_cell_type(position pos, case_type type, int current_player);
     bool mine_minerai(position pos, int player_id, int nain_id);
