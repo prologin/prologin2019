@@ -119,7 +119,6 @@ body>div.container {
 	background-color: var(--accent-color);
 	border-color: var(--border-color);
 	color: var(--background-color);
-	text-decoration: underline;
 }
 
 .panel-default > .panel-heading {
