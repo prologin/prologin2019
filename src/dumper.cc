@@ -204,18 +204,18 @@ static void dump_map(std::ostream& ss, const GameState& st)
     std::vector<case_type> cells;
     for (int l = 0; l < TAILLE_MINE; l++)
         for (int c = 0; c < TAILLE_MINE; c++)
-            cells.push_back(st.get_cell_type({l, c}));
+            cells.push_back(st.map().get_cell_type({l, c}));
     dump_vector<case_type>(cells, ss,
                            [](auto& ss, case_type cell) { ss << cell; });
     ss << ", \"minerais\": ";
-    dump_vector<position>(st.get_ores(), ss, [&](auto& ss, position pos) {
-        minerai ore = st.get_minerai_at(pos);
+    dump_vector<position>(st.map().get_ores(), ss, [&](auto& ss, position pos) {
+        minerai ore = st.map().get_minerai_at(pos);
         ss << "{ \"pos\": " << pos;
         ss << ", \"resistance\": " << ore.resistance;
         ss << ", \"rendement\": " << ore.rendement << "}";
     });
     ss << ", \"cordes\": ";
-    dump_vector<Rope>(st.get_base_ropes(), ss, [](auto& ss, Rope rope) {
+    dump_vector<Rope>(st.map().get_base_ropes(), ss, [](auto& ss, Rope rope) {
         if (rope.get_positions().size() == 0)
             return;
         ss << "{ \"haut\": " << rope.get_anchor();

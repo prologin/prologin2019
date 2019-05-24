@@ -20,14 +20,16 @@ int ActionMiner::check(const GameState* st) const
 
     // Check position
     position dest = get_position_offset(nain.pos, dir_);
+
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    case_type type = st->get_cell_type(dest);
+    case_type type = st->map().get_cell_type(dest);
+
     if (type == OBSIDIENNE)
         return OBSTACLE_MUR;
 
-    if (type == LIBRE && st->get_cell_occupant(dest) == -1)
+    if (type == LIBRE && st->map().get_cell_occupant(dest) == -1)
         return PAS_DE_NAIN;
 
     return OK;
@@ -43,29 +45,21 @@ void ActionMiner::apply_on(GameState* st) const
     const nain nain = st->get_nain(player_id_, id_nain_);
     st->reduce_pa(player_id_, id_nain_, COUT_MINER);
     position dest = get_position_offset(nain.pos, dir_);
-    case_type type = st->get_cell_type(dest);
+    case_type type = st->map().get_cell_type(dest);
 
     if (type == LIBRE)
     {
-        const int player_id = st->get_cell_occupant(dest);
+        const int player_id = st->map().get_cell_occupant(dest);
 
-        for (int nain_id : st->get_nains_ids_at(dest))
+        for (int nain_id : st->map().get_nains_ids_at(dest))
             st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE, player_id_);
 
         return;
     }
 
-    if (st->has_minerai_at(dest))
+    if (st->map().has_minerai_at(dest))
         if (!st->mine_minerai(dest, player_id_, id_nain_))
             return;
 
     st->set_cell_type(dest, LIBRE, player_id_);
-
-    // TODO: are these "safety redundancies" are relevant?
-    // NOTE: these are quite heavy functions
-    // position up = get_position_offset(dest, HAUT);
-    // if (inside_map(up)) {
-    //     st->check_nain_gravity(up, player_id_);
-    //     st->check_rope_gravity(up);
-    // }
 }

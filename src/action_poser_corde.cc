@@ -21,13 +21,14 @@ int ActionPoserCorde::check(const GameState* st) const
 
     // Check positions
     position dest = get_position_offset(nain.pos, dir_);
+
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->has_rope_at(dest))
+    if (st->map().has_rope_at(dest))
         return OBSTACLE_CORDE;
 
-    if (st->get_cell_type(dest) != LIBRE)
+    if (st->map().get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 
     return OK;

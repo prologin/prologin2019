@@ -136,19 +136,25 @@ erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
 /// Renvoie le type d'une case donnée.
 case_type Api::type_case(position pos)
 {
-    return game_state_->get_cell_type(pos);
+    if (!inside_map(pos))
+        return ERREUR_CASE;
+
+    return game_state_->map().get_cell_type(pos);
 }
 
 /// Renvoie la liste de toutes les corde dans la mine.
 std::vector<position> Api::liste_cordes()
 {
-    return game_state_->get_ropes();
+    return game_state_->map().get_ropes_positions();
 }
 
 /// Indique si une corde se trouve sur une case donnée.
 bool Api::corde_sur_case(position pos)
 {
-    return game_state_->has_rope_at(pos);
+    if (!inside_map(pos))
+        return false;
+
+    return game_state_->map().has_rope_at(pos);
 }
 
 /// Renvoie le numéro du joueur à qui appartient le nain (standard) sur la case
@@ -156,7 +162,10 @@ bool Api::corde_sur_case(position pos)
 /// invalide.
 int Api::nain_sur_case(position pos)
 {
-    const int occupant = game_state_->get_cell_occupant(pos);
+    if (!inside_map(pos))
+        return -1;
+
+    const int occupant = game_state_->map().get_cell_occupant(pos);
 
     if (occupant == -1)
         return -1;
@@ -183,19 +192,23 @@ nain Api::info_nain(int id_joueur, int id_nain)
 /// les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
-    return game_state_->get_minerai_at(pos);
+    return game_state_->map().get_minerai_at(pos);
 }
 
 /// Renvoie la liste de tout les minerais dans la mine.
 std::vector<position> Api::liste_minerais()
 {
-    return game_state_->get_ores();
+    return game_state_->map().get_ores();
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
 /// (standard) dans une direction donnée.
 int Api::cout_de_deplacement(int id_nain, direction dir)
 {
+    // TODO: to functions
+    if (id_nain < 0 || id_nain >= NB_NAINS || dir < 0 || dir >= 4)
+        return -1;
+
     const int player_id = game_state_->get_player_id(player_->id);
     return game_state_->get_movement_cost(player_id, id_nain, dir);
 }
@@ -208,7 +221,7 @@ position Api::position_taverne(int id_joueur)
         return {-1, -1};
 
     const int player_id = game_state_->get_player_id(id_joueur);
-    return game_state_->get_spawn_point(player_id);
+    return game_state_->map().get_spawn_point(player_id);
 }
 
 /// Renvoie le plus court chemin entre deux positions de la mine sous la forme
@@ -216,7 +229,10 @@ position Api::position_taverne(int id_joueur)
 /// chemin n'existe pas, le chemin renvoyé est vide.
 std::vector<direction> Api::chemin(position pos1, position pos2)
 {
-    return game_state_->get_shortest_path(pos1, pos2);
+    if (!inside_map(pos1) || !inside_map(pos2))
+        return {};
+
+    return game_state_->map().get_shortest_path(pos1, pos2);
 }
 
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour,

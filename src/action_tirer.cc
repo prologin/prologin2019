@@ -33,14 +33,14 @@ int ActionTirer::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->get_cell_type(dest) != LIBRE)
+    if (st->map().get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 
     // Check rope
-    if (!st->has_rope_at(dest))
+    if (!st->map().has_rope_at(dest))
         return PAS_DE_CORDE;
 
-    if (st->get_rope_at(dest).get_nains().empty())
+    if (st->map().get_rope_at(dest).get_nains().empty())
         return PAS_DE_NAIN;
 
     return OK;
@@ -54,7 +54,7 @@ void ActionTirer::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
 
     // Build the ordered list of dwarfs
-    const Rope& rope = st->get_rope_at(dest);
+    const Rope& rope = st->map().get_rope_at(dest);
     auto nains = rope.get_nains();
 
     std::sort(nains.begin(), nains.end(), [&](const auto& a, const auto& b) {
@@ -73,10 +73,10 @@ void ActionTirer::apply_on(GameState* st) const
         position pos = st->get_nain(nain.first, nain.second).pos;
         position dest = get_position_offset(pos, sens_);
 
-        if (!st->has_rope_at(dest))
+        if (!st->map().has_rope_at(dest))
             continue;
 
-        int occupant = st->get_cell_occupant(dest);
+        int occupant = st->map().get_cell_occupant(dest);
         if (occupant != st->get_opponent_id(player_id_))
             st->set_nain_position(nain.first, nain.second, dest);
     }

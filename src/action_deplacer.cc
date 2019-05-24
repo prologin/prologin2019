@@ -20,10 +20,10 @@ int ActionDeplacer::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->get_cell_type(dest) != LIBRE)
+    if (st->map().get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 
-    int dest_owner = st->get_cell_occupant(dest);
+    int dest_owner = st->map().get_cell_occupant(dest);
     if (dest_owner == st->get_opponent_id(player_id_))
         return OBSTACLE_NAIN;
 
@@ -47,15 +47,15 @@ void ActionDeplacer::apply_on(GameState* st) const
     st->set_nain_position(player_id_, id_nain_, dest);
     st->check_nain_gravity(dest, player_id_);
 
+    if (st->map().has_rope_at(nain.pos))
+        st->map().remove_nain_from_rope(nain.pos, player_id_, id_nain_);
+
+    if (st->map().has_rope_at(dest))
+        st->map().add_nain_to_rope(dest, player_id_, id_nain_);
+
     position up = get_position_offset(nain.pos, HAUT);
     if (inside_map(up))
         st->check_nain_gravity(up, player_id_);
-
-    if (st->has_rope_at(nain.pos))
-        st->remove_nain_from_rope(nain.pos, player_id_, id_nain_);
-
-    if (st->has_rope_at(dest))
-        st->add_nain_to_rope(dest, player_id_, id_nain_);
 
     internal_action action;
     action.type = 1;

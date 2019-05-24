@@ -20,6 +20,7 @@
 
 #include "constant.hh"
 #include "game_state.hh"
+#include "position.hh"
 
 /*!
 ** The methods of this class are exported through 'interface.cc'

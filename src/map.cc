@@ -149,9 +149,7 @@ position Map::get_spawn_point(int player_id) const
 
 case_type Map::get_cell_type(position pos) const
 {
-    if (!inside_map(pos))
-        return ERREUR_CASE;
-
+    assert(inside_map(pos));
     return map_[pos.ligne][pos.colonne].type;
 }
 
@@ -174,6 +172,7 @@ const std::vector<position>& Map::get_ores() const
 
 void Map::set_cell_type(position pos, case_type type)
 {
+    assert(inside_map(pos));
     map_[pos.ligne][pos.colonne].type = type;
 }
 
@@ -184,6 +183,7 @@ inline bool operator==(const minerai& a, const minerai& b)
 
 void Map::remove_minerai(position pos)
 {
+    assert(inside_map(pos));
     map_[pos.ligne][pos.colonne].ore = {-1, -1};
     ores_pos_.erase(std::remove(ores_pos_.begin(), ores_pos_.end(), pos),
                     ores_pos_.end());
@@ -191,11 +191,15 @@ void Map::remove_minerai(position pos)
 
 void Map::set_minerai_resistance(position pos, int resistance)
 {
+    assert(inside_map(pos));
     map_[pos.ligne][pos.colonne].ore.resistance = resistance;
 }
 
 void Map::add_nain(int nain_id, position pos, int player_id)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(inside_map(pos));
+
     Cell& cell = map_[pos.ligne][pos.colonne];
     assert(cell.occupant == -1 || !cell.nains_ids.empty());
 
@@ -205,6 +209,10 @@ void Map::add_nain(int nain_id, position pos, int player_id)
 
 void Map::move_nain(int nain_id, position from, position to)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(inside_map(from));
+    assert(inside_map(to));
+
     const int player_id = map_[from.ligne][from.colonne].occupant;
     add_nain(nain_id, to, player_id);
     remove_nain(nain_id, from);
@@ -212,6 +220,9 @@ void Map::move_nain(int nain_id, position from, position to)
 
 void Map::remove_nain(int nain_id, position pos)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(inside_map(pos));
+
     Cell& cell = map_[pos.ligne][pos.colonne];
 
     cell.nains_ids.erase(
@@ -224,11 +235,13 @@ void Map::remove_nain(int nain_id, position pos)
 
 const std::vector<int>& Map::get_nains_ids_at(position pos) const
 {
+    assert(inside_map(pos));
     return map_[pos.ligne][pos.colonne].nains_ids;
 }
 
 int Map::get_cell_occupant(position pos) const
 {
+    assert(inside_map(pos));
     return map_[pos.ligne][pos.colonne].occupant;
 }
 
@@ -239,30 +252,38 @@ inline bool operator==(const Rope& a, const Rope& b)
 
 void Map::add_rope(position pos)
 {
+    assert(inside_map(pos));
     map_[pos.ligne][pos.colonne].rope = ropes_.size();
     ropes_.push_back(Rope(pos));
 }
 
 bool Map::has_rope_at(position pos) const
 {
+    assert(inside_map(pos));
     return map_[pos.ligne][pos.colonne].rope != -1;
 }
 
 const Rope& Map::get_rope_at(position pos) const
 {
-    assert(has_rope_at(pos));
+    assert(inside_map(pos) && has_rope_at(pos));
     const int index = map_[pos.ligne][pos.colonne].rope;
     return ropes_[index];
 }
 
 void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
 {
+    assert(inside_map(pos));
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+
     const int index = map_[pos.ligne][pos.colonne].rope;
     ropes_[index].add_nain(player_id, nain_id);
 }
 
 void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
 {
+    assert(inside_map(pos));
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+
     const int index = map_[pos.ligne][pos.colonne].rope;
     ropes_[index].remove_nain(player_id, nain_id);
 }
@@ -287,6 +308,7 @@ const std::vector<Rope> Map::get_base_ropes() const
 
 bool Map::try_extend_rope(position pos)
 {
+    assert(inside_map(pos));
     const int rope_index = map_[pos.ligne][pos.colonne].rope;
 
     if (rope_index == -1)
@@ -329,7 +351,10 @@ bool Map::try_extend_rope(position pos)
 std::vector<direction> Map::get_shortest_path(position start,
                                               position dest) const
 {
-    if (!inside_map(start) || !inside_map(dest) || start == dest)
+    assert(inside_map(start));
+    assert(inside_map(dest));
+
+    if (start == dest)
         return {};
 
     // Keep track of the predecessor of each cell in a shortest path from start

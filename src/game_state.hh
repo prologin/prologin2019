@@ -19,33 +19,30 @@ public:
     GameState(const GameState& st);
     rules::GameState* copy() const override;
 
-    std::vector<direction> get_shortest_path(position start,
-                                             position dest) const;
-
     // Player ids manipulation
     int get_player_id(int player_key) const;
     int get_player_key(int player_id) const;
     int get_opponent_id(int player_id) const;
 
-    case_type get_cell_type(position pos) const;
-    position get_spawn_point(int player_id) const;
-    bool has_minerai_at(position pos) const;
-    minerai get_minerai_at(position pos) const;
-    const std::vector<position>& get_ores() const;
+    // Map manipulation
+    Map& map();
+    const Map& map() const;
+
     void set_cell_type(position pos, case_type type, int current_player);
     bool mine_minerai(position pos, int player_id, int nain_id);
-
     const nain& get_nain(int player_id, int nain_id) const;
-    const std::vector<int>& get_nains_ids_at(position pos) const;
-    int get_cell_occupant(position pos) const;
 
+    // Dwarfs movements
     void set_nain_position(int player_id, int nain_id, position dest);
     int get_movement_cost(int player_id, int nain_id, direction dir) const;
     void set_nain_accroche(int player_id, int nain_id, bool accroche);
+
     void check_nain_gravity(position pos, int current_player);
+
     void check_rope_gravity(position pos, int current_player);
     void update_nains_on_rope(position pos);
 
+    // Nain's ressources
     void reduce_pm(int player_id, int nain_id, int pm);
     void reset_pm(int player_id);
     void reduce_pa(int player_id, int nain_id, int pa);
@@ -53,21 +50,19 @@ public:
     void reduce_pv(int player_id, int nain_id, int damage, int current_player);
     void respawn(int player_id);
 
-    std::vector<position> get_ropes() const;
-    std::vector<Rope> get_base_ropes() const;
-    bool has_rope_at(position pos) const;
-    const Rope& get_rope_at(position pos) const;
+    // Ropes
     void add_rope(position pos, int current_player);
-    void add_nain_to_rope(position pos, int player_id, int nain_id);
-    void remove_nain_from_rope(position pos, int player_id, int nain_id);
 
+    // Score
     int get_score(int player_id) const;
     bool is_finished() const;
     int get_round() const;
     void increment_round();
 
-    const auto& get_player_info() const { return player_info_; };
+    // NOTE: usefull for the dumper
+    const std::array<PlayerInfo, 2>& get_player_info() const;
 
+    // History
     const std::vector<internal_action>&
     get_internal_history(int player_id) const;
     const std::vector<action_hist> get_history(int player_id) const;

@@ -44,59 +44,45 @@ rules::GameState* GameState::copy() const
     return new GameState(*this);
 }
 
-std::vector<direction> GameState::get_shortest_path(position start,
-                                                    position dest) const
-{
-    return map_.get_shortest_path(start, dest);
-}
-
 int GameState::get_player_id(int player_key) const
 {
-    return (get_player_key(0) == player_key) ? 0 : 1;
+    for (int player_id = 0; player_id < 2; player_id++)
+        if (get_player_key(player_id) == player_key)
+            return player_id;
+
+    return -1;
 }
 
 int GameState::get_player_key(int player_id) const
 {
+    assert(player_id == 0 || player_id == 1);
     return player_info_[player_id].get_key();
 }
 
 int GameState::get_opponent_id(int player_id) const
 {
+    assert(player_id == 0 || player_id == 1);
     return 1 - player_id;
 }
 
-case_type GameState::get_cell_type(position pos) const
+Map& GameState::map()
 {
-    return map_.get_cell_type(pos);
+    return map_;
 }
 
-position GameState::get_spawn_point(int player_id) const
+const Map& GameState::map() const
 {
-    return map_.get_spawn_point(player_id);
-}
-
-bool GameState::has_minerai_at(position pos) const
-{
-    return map_.has_minerai_at(pos);
-}
-
-minerai GameState::get_minerai_at(position pos) const
-{
-    return map_.get_minerai_at(pos);
-}
-
-const std::vector<position>& GameState::get_ores() const
-{
-    return map_.get_ores();
+    return map_;
 }
 
 void GameState::set_cell_type(position pos, case_type type, int current_player)
 {
+    assert(inside_map(pos));
     map_.set_cell_type(pos, type);
-    position up = get_position_offset(pos, HAUT);
 
     if (type == LIBRE)
     {
+        const position up = get_position_offset(pos, HAUT);
         check_rope_gravity(up, current_player);
         check_nain_gravity(up, current_player);
     }
@@ -104,7 +90,9 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
 
 bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 {
-    assert(map_.has_minerai_at(pos));
+    assert(inside_map(pos) && map_.has_minerai_at(pos));
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+
     minerai minerai = map_.get_minerai_at(pos);
 
     if (minerai.resistance > 1)
@@ -120,21 +108,15 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 
 const nain& GameState::get_nain(int player_id, int nain_id) const
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     return nains_[player_id][nain_id];
-}
-
-const std::vector<int>& GameState::get_nains_ids_at(position pos) const
-{
-    return map_.get_nains_ids_at(pos);
-}
-
-int GameState::get_cell_occupant(position pos) const
-{
-    return map_.get_cell_occupant(pos);
 }
 
 void GameState::set_nain_position(int player_id, int nain_id, position dest)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(inside_map(dest));
+
     position from = nains_[player_id][nain_id].pos;
 
     if (map_.has_rope_at(from))
@@ -151,12 +133,15 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
     }
 
     if (map_.has_rope_at(dest) && nains_[player_id][nain_id].accroche)
-        add_nain_to_rope(dest, player_id, nain_id);
+        map_.add_nain_to_rope(dest, player_id, nain_id);
 }
 
 int GameState::get_movement_cost(int player_id, int nain_id,
                                  direction dir) const
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(0 <= dir && dir < 4);
+
     if (nain_id < 0 || nain_id >= NB_NAINS || dir < 0 || dir >= 4 ||
         nains_[player_id][nain_id].vie <= 0)
         return -1;
@@ -164,10 +149,10 @@ int GameState::get_movement_cost(int player_id, int nain_id,
     const nain& nain = nains_[player_id][nain_id];
     position dest = get_position_offset(nain.pos, dir);
 
-    if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
+    if (!inside_map(dest) || map_.get_cell_type(dest) != LIBRE)
         return -1;
 
-    int dest_owner = get_cell_occupant(dest);
+    int dest_owner = map_.get_cell_occupant(dest);
 
     if (dest_owner != -1 && dest_owner != player_id)
         return -1;
@@ -175,7 +160,7 @@ int GameState::get_movement_cost(int player_id, int nain_id,
     if (nain.accroche)
     {
 
-        if (has_rope_at(dest))
+        if (map_.has_rope_at(dest))
             return COUT_ESCALADER_CORDE;
         else
             return COUT_ESCALADER;
@@ -186,6 +171,7 @@ int GameState::get_movement_cost(int player_id, int nain_id,
 
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     nains_[player_id][nain_id].accroche = accroche;
 
     if (!accroche)
@@ -194,6 +180,7 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     if (nains_[player_id][nain_id].accroche)
         return 0;
 
@@ -207,7 +194,7 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
         if (!inside_map(current) || map_.get_cell_type(current) != LIBRE)
             break;
 
-        if (get_cell_occupant(current) != player_id)
+        if (map_.get_cell_occupant(current) != player_id)
             break;
 
         pos = current;
@@ -223,17 +210,17 @@ void GameState::check_nain_gravity(position pos, int current_player)
     {
         position dest = get_position_offset(pos, BAS);
 
-        if (!inside_map(dest) || get_cell_type(dest) != LIBRE)
+        if (!inside_map(dest) || map_.get_cell_type(dest) != LIBRE)
             return;
 
         // Apply falling to each dwarf on current cell
-        const int player_id = get_cell_occupant(pos);
+        const int player_id = map_.get_cell_occupant(pos);
 
         if (player_id == -1)
             return;
 
         // TODO: avoid this (heavy?) copy
-        const std::vector<int> nains_ids = get_nains_ids_at(pos);
+        const std::vector<int> nains_ids = map_.get_nains_ids_at(pos);
         for (const int nain_id : nains_ids)
         {
             int fall = get_fall_distance(player_id, nain_id);
@@ -258,7 +245,9 @@ void GameState::check_nain_gravity(position pos, int current_player)
 
 void GameState::reduce_pm(int player_id, int nain_id, int pm)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pm >= pm);
+
     nains_[player_id][nain_id].pm -= pm;
 }
 
@@ -270,7 +259,9 @@ void GameState::reset_pm(int player_id)
 
 void GameState::reduce_pa(int player_id, int nain_id, int pa)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pa >= pa);
+
     nains_[player_id][nain_id].pa -= pa;
 }
 
@@ -283,13 +274,14 @@ void GameState::reset_pa(int player_id)
 void GameState::reduce_pv(int player_id, int nain_id, int damage,
                           int current_player)
 {
+    assert(0 <= nain_id && nain_id < NB_NAINS);
     nain& nain = nains_[player_id][nain_id];
     nain.vie -= damage;
 
     if (nain.vie <= 0)
     {
         if (map_.has_rope_at(nain.pos))
-            remove_nain_from_rope(nain.pos, player_id, nain_id);
+            map_.remove_nain_from_rope(nain.pos, player_id, nain_id);
 
         nain.vie = 0;
         map_.remove_nain(nain_id, nain.pos);
@@ -330,19 +322,9 @@ void GameState::respawn(int player_id)
         nains_respawn_.end());
 }
 
-std::vector<position> GameState::get_ropes() const
-{
-    return map_.get_ropes_positions();
-}
-
-std::vector<Rope> GameState::get_base_ropes() const
-{
-    return map_.get_base_ropes();
-}
-
 void GameState::check_rope_gravity(position pos, int current_player)
 {
-    if (!inside_map(pos) || !has_rope_at(pos))
+    if (!inside_map(pos) || !map_.has_rope_at(pos))
         return;
 
     while (true)
@@ -350,7 +332,7 @@ void GameState::check_rope_gravity(position pos, int current_player)
         if (!map_.try_extend_rope(pos))
             break;
 
-        const Rope& rope = get_rope_at(pos);
+        const Rope& rope = map_.get_rope_at(pos);
         update_nains_on_rope(rope.get_bottom());
 
         internal_action action;
@@ -362,39 +344,25 @@ void GameState::check_rope_gravity(position pos, int current_player)
 
 void GameState::update_nains_on_rope(position pos)
 {
-    const int player_id = get_cell_occupant(pos);
-    const auto nains = get_nains_ids_at(pos);
+    if (!inside_map(pos))
+        return;
+
+    const int player_id = map_.get_cell_occupant(pos);
+    const auto nains = map_.get_nains_ids_at(pos);
 
     for (int id_nain : nains)
         if (nains_[player_id][id_nain].accroche)
             map_.add_nain_to_rope(pos, player_id, id_nain);
 }
 
-const Rope& GameState::get_rope_at(position pos) const
-{
-    return map_.get_rope_at(pos);
-}
-
-bool GameState::has_rope_at(position pos) const
-{
-    return inside_map(pos) && map_.has_rope_at(pos);
-}
-
 void GameState::add_rope(position pos, int current_player)
 {
+    if (!inside_map(pos))
+        return;
+
     map_.add_rope(pos);
     update_nains_on_rope(pos);
     check_rope_gravity(pos, current_player);
-}
-
-void GameState::add_nain_to_rope(position pos, int player_id, int nain_id)
-{
-    map_.add_nain_to_rope(pos, player_id, nain_id);
-}
-
-void GameState::remove_nain_from_rope(position pos, int player_id, int nain_id)
-{
-    map_.remove_nain_from_rope(pos, player_id, nain_id);
 }
 
 int GameState::get_score(int player_id) const
@@ -415,6 +383,11 @@ int GameState::get_round() const
 void GameState::increment_round()
 {
     ++round_;
+}
+
+const std::array<PlayerInfo, 2>& GameState::get_player_info() const
+{
+    return player_info_;
 }
 
 const std::vector<internal_action>&
