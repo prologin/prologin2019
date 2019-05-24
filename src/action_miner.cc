@@ -27,7 +27,7 @@ int ActionMiner::check(const GameState* st) const
     if (type == OBSIDIENNE)
         return OBSTACLE_MUR;
 
-    if (type == LIBRE && st->get_nains_at(dest).ids.empty())
+    if (type == LIBRE && st->get_cell_occupant(dest) == -1)
         return PAS_DE_NAIN;
 
     return OK;
@@ -47,10 +47,10 @@ void ActionMiner::apply_on(GameState* st) const
 
     if (type == LIBRE)
     {
-        const auto nains(st->get_nains_at(dest));
+        const int player_id = st->get_cell_occupant(dest);
 
-        for (int nain_id : nains.ids)
-            st->reduce_pv(nains.player, nain_id, DEGAT_PIOCHE);
+        for (int nain_id : st->get_nains_ids_at(dest))
+            st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE);
 
         return;
     }

@@ -35,7 +35,7 @@ public:
     bool mine_minerai(position pos, int player_id, int nain_id);
 
     const nain* get_nain(int player_id, int nain_id) const;
-    const NainsOnCell& get_nains_at(position pos) const;
+    const std::vector<int>& get_nains_ids_at(position pos) const;
     int get_cell_occupant(position pos) const;
 
     void set_nain_position(int player_id, int nain_id, position dest);

@@ -122,19 +122,14 @@ const nain* GameState::get_nain(int player_id, int nain_id) const
     return &nain;
 }
 
-const NainsOnCell& GameState::get_nains_at(position pos) const
+const std::vector<int>& GameState::get_nains_ids_at(position pos) const
 {
-    return map_.get_nains_at(pos);
+    return map_.get_nains_ids_at(pos);
 }
 
 int GameState::get_cell_occupant(position pos) const
 {
-    const auto nains = get_nains_at(pos);
-
-    if (nains.ids.empty())
-        return -1;
-
-    return nains.player;
+    return map_.get_cell_occupant(pos);
 }
 
 void GameState::set_nain_position(int player_id, int nain_id, position dest)
@@ -234,16 +229,14 @@ void GameState::check_nain_gravity(position pos, int current_player)
             return;
 
         // Apply falling to each dwarf on current cell
-        const auto& nains = map_.get_nains_at(pos);
-        const int player_id = nains.player;
+        const int player_id = get_cell_occupant(pos);
 
-        if (nains.ids.empty())
+        if (player_id == -1)
             return;
 
         // TODO: avoid this (heavy?) copy
-        const std::vector<int> nains_ids_cpy(nains.ids.begin(),
-                                             nains.ids.end());
-        for (const int nain_id : nains_ids_cpy)
+        const std::vector<int> nains_ids = get_nains_ids_at(pos);
+        for (const int nain_id : nains_ids)
         {
             int fall = get_fall_distance(player_id, nain_id);
             if (fall == 0)
@@ -347,22 +340,22 @@ void GameState::check_rope_gravity(position pos)
         if (!map_.try_extend_rope(pos))
             break;
 
-        // TODO: this is probably false
-        update_nains_on_rope(pos);
+        update_nains_on_rope(get_rope(pos)->get_bottom());
     }
 }
 
 void GameState::update_nains_on_rope(position pos)
 {
-    const Rope* rope = get_rope(pos);
-    const auto nains = get_nains_at(rope->get_bottom());
+    const int player_id = get_cell_occupant(pos);
+    const auto nains = get_nains_ids_at(pos);
 
-    for (int id_nain : nains.ids)
+    for (int id_nain : nains)
     {
-        const nain* nain = get_nain(nains.player, id_nain);
+        std::cout << id_nain << std::endl;
+        const nain* nain = get_nain(player_id, id_nain);
 
         if (nain->accroche)
-            map_.add_nain_to_rope(pos, nains.player, id_nain);
+            map_.add_nain_to_rope(pos, player_id, id_nain);
     }
 }
 

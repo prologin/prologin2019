@@ -23,11 +23,14 @@
 #include "constant.hh"
 #include "rope.hh"
 
-typedef struct NainsOnCell
+typedef struct Cell
 {
-    int player;
-    std::vector<int> ids;
-} NainsOnCell;
+    case_type type;
+    int rope;     // -1 if there is none
+    minerai ore;  // attributes set to -1 if there is no mineral
+    int occupant; // -1 when there isn't any dwarf
+    std::vector<int> nains_ids;
+} Cell;
 
 class Map
 {
@@ -37,6 +40,7 @@ public:
 
     position get_spawn_point(int player_id) const;
 
+    // Cells
     case_type get_cell_type(position pos) const;
     const minerai* get_minerai(position pos) const;
     const std::vector<position>& get_ores() const;
@@ -45,11 +49,14 @@ public:
     void remove_minerai(position pos);
     void set_minerai_resistance(position pos, int resistance);
 
+    // Nains
     void add_nain(int nain_id, position pos, int player_id);
     void move_nain(int nain_id, position from, position to);
     void remove_nain(int nain_id, position pos);
-    const NainsOnCell& get_nains_at(position pos) const;
+    const std::vector<int>& get_nains_ids_at(position pos) const;
+    int get_cell_occupant(position pos) const;
 
+    // Ropes
     void add_rope(position pos);
     const Rope* get_rope(position pos) const;
     void add_nain_to_rope(position pos, int player_id, int nain_id);
@@ -70,14 +77,8 @@ private:
     void load_minerai_info(std::istream& stream);
     void load_rope_info(std::istream& stream);
 
-    std::array<std::array<NainsOnCell, TAILLE_MINE>, TAILLE_MINE> nains_;
-
-    std::array<std::array<case_type, TAILLE_MINE>, TAILLE_MINE> map_;
+    std::array<std::array<Cell, TAILLE_MINE>, TAILLE_MINE> map_;
     std::array<position, 2> spawn_point_;
-
-    std::array<std::array<int, TAILLE_MINE>, TAILLE_MINE> rope_;
-    std::vector<Rope> ropes_;
-
-    std::array<std::array<minerai, TAILLE_MINE>, TAILLE_MINE> ores_map_;
     std::vector<position> ores_pos_;
+    std::vector<Rope> ropes_;
 };

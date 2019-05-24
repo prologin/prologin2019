@@ -19,9 +19,10 @@ void Rope::extends(position pos)
     pos_.push_back(pos);
 }
 
-void Rope::merge_up(const Rope* rope)
+void Rope::merge_up(const Rope& rope)
 {
-    const auto& poss(rope->get_positions());
+    const auto& poss(rope.get_positions());
+
     for (auto pos = poss.rbegin(); pos != poss.rend(); ++pos)
         pos_.insert(pos_.begin(), *pos);
 }
