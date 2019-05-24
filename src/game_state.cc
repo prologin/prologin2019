@@ -237,7 +237,7 @@ void GameState::check_nain_gravity(position pos, int current_player)
             set_nain_position(player_id, nain_id, pos + (BAS * fall));
 
             if (fall >= 4)
-                reduce_pv(player_id, nain_id, std::pow(2, fall - 4));
+                reduce_pv(player_id, nain_id, std::pow(2, fall - 4), current_player);
 
             internal_action action;
             action.type = 2;
@@ -273,7 +273,7 @@ void GameState::reset_pa(int player_id)
         nains_[player_id][nain].pa = NB_POINTS_ACTION;
 }
 
-void GameState::reduce_pv(int player_id, int nain_id, int damage)
+void GameState::reduce_pv(int player_id, int nain_id, int damage, int current_player)
 {
     nain& nain = nains_[player_id][nain_id];
     nain.vie -= damage;
@@ -286,6 +286,11 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage)
         nain.vie = 0;
         map_.remove_nain(nain_id, nain.pos);
         nains_respawn_.push_back({player_id, nain_id});
+
+        internal_action action;
+        action.type = 3;
+        action.fall = {player_id, nain_id, nain.pos};
+        add_to_internal_history(current_player, action);
     }
 }
 

@@ -49,7 +49,7 @@ public:
     void reset_pm(int player_id);
     void reduce_pa(int player_id, int nain_id, int pa);
     void reset_pa(int player_id);
-    void reduce_pv(int player_id, int nain_id, int damage);
+    void reduce_pv(int player_id, int nain_id, int damage, int current_player);
     void respawn(int player_id);
 
     std::vector<position> get_ropes() const;

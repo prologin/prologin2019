@@ -50,7 +50,7 @@ void ActionMiner::apply_on(GameState* st) const
         const int player_id = st->get_cell_occupant(dest);
 
         for (int nain_id : st->get_nains_ids_at(dest))
-            st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE);
+            st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE, player_id_);
 
         return;
     }
