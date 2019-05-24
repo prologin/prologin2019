@@ -26,7 +26,7 @@ void ActionAgripper::apply_on(GameState* st) const
 
     const nain nain = st->get_nain(player_id_, id_nain_);
 
-    if (st->get_rope(nain.pos) != nullptr)
+    if (st->has_rope_at(nain.pos))
         st->add_nain_to_rope(nain.pos, player_id_, id_nain_);
 
     internal_action action;

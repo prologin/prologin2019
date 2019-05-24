@@ -51,10 +51,10 @@ void ActionDeplacer::apply_on(GameState* st) const
     if (inside_map(up))
         st->check_nain_gravity(up, player_id_);
 
-    if (st->get_rope(nain.pos) != nullptr)
+    if (st->has_rope_at(nain.pos))
         st->remove_nain_from_rope(nain.pos, player_id_, id_nain_);
 
-    if (st->get_rope(dest) != nullptr)
+    if (st->has_rope_at(dest))
         st->add_nain_to_rope(dest, player_id_, id_nain_);
 
     internal_action action;

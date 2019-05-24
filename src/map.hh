@@ -58,7 +58,8 @@ public:
 
     // Ropes
     void add_rope(position pos);
-    const Rope* get_rope(position pos) const;
+    bool has_rope_at(position pos) const;
+    const Rope& get_rope_at(position pos) const;
     void add_nain_to_rope(position pos, int player_id, int nain_id);
     void remove_nain_from_rope(position pos, int player_id, int nain_id);
     const std::vector<Rope> get_base_ropes() const;

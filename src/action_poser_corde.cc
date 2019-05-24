@@ -24,7 +24,7 @@ int ActionPoserCorde::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->get_rope(dest) != nullptr)
+    if (st->has_rope_at(dest))
         return OBSTACLE_CORDE;
 
     if (st->get_cell_type(dest) != LIBRE)

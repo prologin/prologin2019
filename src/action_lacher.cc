@@ -25,7 +25,8 @@ void ActionLacher::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_LACHER);
 
     const nain nain = st->get_nain(player_id_, id_nain_);
-    if (st->get_rope(nain.pos) != nullptr)
+
+    if (st->has_rope_at(nain.pos))
         st->remove_nain_from_rope(nain.pos, player_id_, id_nain_);
 
     internal_action action;

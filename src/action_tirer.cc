@@ -37,12 +37,10 @@ int ActionTirer::check(const GameState* st) const
         return OBSTACLE_MUR;
 
     // Check rope
-    const Rope* rope = st->get_rope(dest);
-
-    if (rope == nullptr)
+    if (!st->has_rope_at(dest))
         return PAS_DE_CORDE;
 
-    if (rope->get_nains().empty())
+    if (st->get_rope_at(dest).get_nains().empty())
         return PAS_DE_NAIN;
 
     return OK;
@@ -56,8 +54,8 @@ void ActionTirer::apply_on(GameState* st) const
     st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
 
     // Build the ordered list of dwarfs
-    const Rope* rope = st->get_rope(dest);
-    auto nains = rope->get_nains();
+    const Rope& rope = st->get_rope_at(dest);
+    auto nains = rope.get_nains();
 
     std::sort(nains.begin(), nains.end(), [&](const auto& a, const auto& b) {
         position pa = st->get_nain(a.first, a.second).pos;
@@ -75,7 +73,7 @@ void ActionTirer::apply_on(GameState* st) const
         position pos = st->get_nain(nain.first, nain.second).pos;
         position dest = get_position_offset(pos, sens_);
 
-        if (st->get_rope(dest) == nullptr)
+        if (!st->has_rope_at(dest))
             continue;
 
         int occupant = st->get_cell_occupant(dest);

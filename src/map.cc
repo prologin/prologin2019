@@ -244,17 +244,16 @@ void Map::add_rope(position pos)
     ropes_.push_back(Rope(pos));
 }
 
-const Rope* Map::get_rope(position pos) const
+bool Map::has_rope_at(position pos) const
 {
-    if (!inside_map(pos))
-        return nullptr;
+    return map_[pos.ligne][pos.colonne].rope != -1;
+}
 
+const Rope& Map::get_rope_at(position pos) const
+{
+    assert(has_rope_at(pos));
     const int index = map_[pos.ligne][pos.colonne].rope;
-
-    if (index == -1)
-        return nullptr;
-
-    return &ropes_[index];
+    return ropes_[index];
 }
 
 void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
@@ -300,7 +299,7 @@ bool Map::try_extend_rope(position pos)
 
     const int dest_index = map_[dest.ligne][dest.colonne].rope;
 
-    if (get_rope(dest) == nullptr)
+    if (dest_index == -1)
     {
         ropes_[rope_index].extends(dest);
         map_[dest.ligne][dest.colonne].rope = rope_index;

@@ -131,7 +131,7 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
 {
     position from = nains_[player_id][nain_id].pos;
 
-    if (map_.get_rope(from) != nullptr)
+    if (map_.has_rope_at(from))
         map_.remove_nain_from_rope(from, player_id, nain_id);
 
     nains_[player_id][nain_id].pos = dest;
@@ -144,7 +144,7 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
         nains_[player_id][nain_id].vie = VIE_NAIN;
     }
 
-    if (map_.get_rope(dest) != nullptr && nains_[player_id][nain_id].accroche)
+    if (map_.has_rope_at(dest) && nains_[player_id][nain_id].accroche)
         add_nain_to_rope(dest, player_id, nain_id);
 }
 
@@ -169,10 +169,10 @@ int GameState::get_movement_cost(int player_id, int nain_id,
     if (nain.accroche)
     {
 
-        if (get_rope(dest) == nullptr)
-            return COUT_ESCALADER;
-        else
+        if (has_rope_at(dest))
             return COUT_ESCALADER_CORDE;
+        else
+            return COUT_ESCALADER;
     }
 
     return COUT_DEPLACEMENT;
@@ -237,7 +237,8 @@ void GameState::check_nain_gravity(position pos, int current_player)
             set_nain_position(player_id, nain_id, pos + (BAS * fall));
 
             if (fall >= 4)
-                reduce_pv(player_id, nain_id, std::pow(2, fall - 4), current_player);
+                reduce_pv(player_id, nain_id, std::pow(2, fall - 4),
+                          current_player);
 
             internal_action action;
             action.type = 2;
@@ -273,14 +274,15 @@ void GameState::reset_pa(int player_id)
         nains_[player_id][nain].pa = NB_POINTS_ACTION;
 }
 
-void GameState::reduce_pv(int player_id, int nain_id, int damage, int current_player)
+void GameState::reduce_pv(int player_id, int nain_id, int damage,
+                          int current_player)
 {
     nain& nain = nains_[player_id][nain_id];
     nain.vie -= damage;
 
     if (nain.vie <= 0)
     {
-        if (map_.get_rope(nain.pos) != nullptr)
+        if (map_.has_rope_at(nain.pos))
             remove_nain_from_rope(nain.pos, player_id, nain_id);
 
         nain.vie = 0;
@@ -334,7 +336,7 @@ std::vector<Rope> GameState::get_base_ropes() const
 
 void GameState::check_rope_gravity(position pos, int current_player)
 {
-    if (!inside_map(pos))
+    if (!inside_map(pos) || !has_rope_at(pos))
         return;
 
     while (true)
@@ -342,12 +344,13 @@ void GameState::check_rope_gravity(position pos, int current_player)
         if (!map_.try_extend_rope(pos))
             break;
 
+        const Rope& rope = get_rope_at(pos);
+        update_nains_on_rope(rope.get_bottom());
+
         internal_action action;
         action.type = 4;
-        action.fall = {current_player, -1, get_rope(pos)->get_bottom()};
+        action.fall = {current_player, -1, rope.get_bottom()};
         add_to_internal_history(current_player, action);
-
-        update_nains_on_rope(get_rope(pos)->get_bottom());
     }
 }
 
@@ -361,9 +364,14 @@ void GameState::update_nains_on_rope(position pos)
             map_.add_nain_to_rope(pos, player_id, id_nain);
 }
 
-const Rope* GameState::get_rope(position pos) const
+const Rope& GameState::get_rope_at(position pos) const
 {
-    return map_.get_rope(pos);
+    return map_.get_rope_at(pos);
+}
+
+bool GameState::has_rope_at(position pos) const
+{
+    return inside_map(pos) && map_.has_rope_at(pos);
 }
 
 void GameState::add_rope(position pos, int current_player)
