@@ -7,9 +7,8 @@
 
 GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
     : rules::GameState()
-    , player_info_({PlayerInfo(players->players[0], 0),
-                    PlayerInfo(players->players[1], 1)})
-    , player_keys_({players->players[0]->id, players->players[1]->id})
+    , player_info_(
+          {PlayerInfo(players->players[0]), PlayerInfo(players->players[1])})
     , map_(map_stream)
     , round_(0)
 {
@@ -33,7 +32,6 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
 GameState::GameState(const GameState& st)
     : rules::GameState(st)
     , player_info_(st.player_info_)
-    , player_keys_(st.player_keys_)
     , map_(st.map_)
     , nains_(st.nains_)
     , nains_respawn_(st.nains_respawn_)
@@ -54,12 +52,12 @@ std::vector<direction> GameState::get_shortest_path(position start,
 
 int GameState::get_player_id(int player_key) const
 {
-    return (player_keys_[0] == player_key) ? 0 : 1;
+    return (get_player_key(0) == player_key) ? 0 : 1;
 }
 
 int GameState::get_player_key(int player_id) const
 {
-    return player_keys_[player_id];
+    return player_info_[player_id].get_key();
 }
 
 int GameState::get_opponent_id(int player_id) const

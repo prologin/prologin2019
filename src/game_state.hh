@@ -77,7 +77,6 @@ private:
     void increase_score(int player_id, int delta);
 
     std::array<PlayerInfo, 2> player_info_;
-    std::array<int, 2> player_keys_;
 
     Map map_;
     std::array<std::array<nain, NB_NAINS>, 2> nains_;

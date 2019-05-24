@@ -29,16 +29,20 @@
 class PlayerInfo
 {
 public:
-    PlayerInfo(rules::Player_sptr player, int internal_id);
+    PlayerInfo(rules::Player_sptr player);
 
-    int get_internal_id() const;
+    // Id
+    int get_key() const;
 
+    // Score
     int get_score() const;
     void increase_score(int delta);
 
+    // Name
     const std::string& get_name() const;
     void set_name(const std::string& name);
 
+    // History
     const std::vector<internal_action>& get_internal_history() const;
     void reset_internal_history();
     void add_internal_action(internal_action action);
@@ -46,7 +50,6 @@ public:
 private:
     rules::Player_sptr player_;
     std::vector<internal_action> internal_hist_;
-    int internal_id_;
 };
 
 #endif

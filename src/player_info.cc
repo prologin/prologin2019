@@ -16,17 +16,16 @@
 
 #include "player_info.hh"
 
-PlayerInfo::PlayerInfo(rules::Player_sptr player, int internal_id)
+PlayerInfo::PlayerInfo(rules::Player_sptr player)
     : player_(std::move(player))
-    , internal_id_(internal_id)
 {
     assert(player_);
     player_->score = 0;
 }
 
-int PlayerInfo::get_internal_id() const
+int PlayerInfo::get_key() const
 {
-    return internal_id_;
+    return player_->id;
 }
 
 int PlayerInfo::get_score() const
