@@ -36,7 +36,7 @@ int ActionPoserCorde::check(const GameState* st) const
 void ActionPoserCorde::apply_on(GameState* st) const
 {
     const nain nain = st->get_nain(player_id_, id_nain_);
-    st->add_rope(get_position_offset(nain.pos, dir_));
+    st->add_rope(get_position_offset(nain.pos, dir_), player_id_);
 
     for (int nain_id = 0; nain_id < NB_NAINS; ++nain_id)
     {

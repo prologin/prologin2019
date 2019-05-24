@@ -92,7 +92,7 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
 
     if (type == LIBRE)
     {
-        check_rope_gravity(up);
+        check_rope_gravity(up, current_player);
         check_nain_gravity(up, current_player);
     }
 }
@@ -332,12 +332,17 @@ std::vector<Rope> GameState::get_base_ropes() const
     return map_.get_base_ropes();
 }
 
-void GameState::check_rope_gravity(position pos)
+void GameState::check_rope_gravity(position pos, int current_player)
 {
     while (true)
     {
         if (!map_.try_extend_rope(pos))
             break;
+
+        internal_action action;
+        action.type = 4;
+        action.fall = {current_player, -1, get_rope(pos)->get_bottom()};
+        add_to_internal_history(current_player, action);
 
         update_nains_on_rope(get_rope(pos)->get_bottom());
     }
@@ -358,11 +363,11 @@ const Rope* GameState::get_rope(position pos) const
     return map_.get_rope(pos);
 }
 
-void GameState::add_rope(position pos)
+void GameState::add_rope(position pos, int current_player)
 {
     map_.add_rope(pos);
     update_nains_on_rope(pos);
-    check_rope_gravity(pos);
+    check_rope_gravity(pos, current_player);
 }
 
 void GameState::add_nain_to_rope(position pos, int player_id, int nain_id)

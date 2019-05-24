@@ -42,7 +42,7 @@ public:
     int get_movement_cost(int player_id, int nain_id, direction dir) const;
     void set_nain_accroche(int player_id, int nain_id, bool accroche);
     void check_nain_gravity(position pos, int current_player);
-    void check_rope_gravity(position pos);
+    void check_rope_gravity(position pos, int current_player);
     void update_nains_on_rope(position pos);
 
     void reduce_pm(int player_id, int nain_id, int pm);
@@ -55,7 +55,7 @@ public:
     std::vector<position> get_ropes() const;
     std::vector<Rope> get_base_ropes() const;
     const Rope* get_rope(position pos) const;
-    void add_rope(position pos);
+    void add_rope(position pos, int current_player);
     void add_nain_to_rope(position pos, int player_id, int nain_id);
     void remove_nain_from_rope(position pos, int player_id, int nain_id);
 
