@@ -170,20 +170,12 @@ int Api::nain_sur_case(position pos)
 /// sont initialisés à -1.
 nain Api::info_nain(int id_joueur, int id_nain)
 {
-    const static nain default_value = {{-1, -1}, -1, -1, -1, false, -1};
-
-    // TODO add false to func description
     if ((id_joueur != moi() && id_joueur != adversaire()) ||
         (id_nain < 0 || id_nain >= NB_NAINS))
-        return default_value;
+        return {{-1, -1}, -1, -1, -1, false, -1};
 
     const int player_id = game_state_->get_player_id(id_joueur);
-    const nain* nain = game_state_->get_nain(player_id, id_nain);
-
-    if (nain == nullptr)
-        return default_value;
-
-    return *nain;
+    return game_state_->get_nain(player_id, id_nain);
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le

@@ -10,13 +10,16 @@ int ActionTirer::check(const GameState* st) const
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 
-    const nain* nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st->get_nain(player_id_, id_nain_);
 
-    if (nain == nullptr)
+    if (nain.vie <= 0)
         return NAIN_MORT;
 
-    if (nain->accroche)
+    if (nain.accroche)
         return DEJA_ACCROCHE;
+
+    if (nain.pa < COUT_TIRER)
+        return PA_INSUFFISANTS;
 
     // Check positions
     if (dir_corde_ < 0 || dir_corde_ >= 4)
@@ -25,7 +28,7 @@ int ActionTirer::check(const GameState* st) const
     if (sens_ != HAUT && sens_ != BAS)
         return DIRECTION_INVALIDE;
 
-    position dest = get_position_offset(nain->pos, dir_corde_);
+    position dest = get_position_offset(nain.pos, dir_corde_);
 
     if (!inside_map(dest))
         return HORS_LIMITES;
@@ -47,8 +50,8 @@ int ActionTirer::check(const GameState* st) const
 
 void ActionTirer::apply_on(GameState* st) const
 {
-    const nain* nain = st->get_nain(player_id_, id_nain_);
-    position dest = get_position_offset(nain->pos, dir_corde_);
+    const nain nain = st->get_nain(player_id_, id_nain_);
+    position dest = get_position_offset(nain.pos, dir_corde_);
 
     st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
 
@@ -57,8 +60,8 @@ void ActionTirer::apply_on(GameState* st) const
     auto nains = rope->get_nains();
 
     std::sort(nains.begin(), nains.end(), [&](const auto& a, const auto& b) {
-        position pa = st->get_nain(a.first, a.second)->pos;
-        position pb = st->get_nain(b.first, b.second)->pos;
+        position pa = st->get_nain(a.first, a.second).pos;
+        position pb = st->get_nain(b.first, b.second).pos;
 
         if (sens_ == HAUT)
             return pa.ligne < pb.ligne;
@@ -69,7 +72,7 @@ void ActionTirer::apply_on(GameState* st) const
     // Apply
     for (auto& nain : nains)
     {
-        position pos = st->get_nain(nain.first, nain.second)->pos;
+        position pos = st->get_nain(nain.first, nain.second).pos;
         position dest = get_position_offset(pos, sens_);
 
         if (st->get_rope(dest) == nullptr)

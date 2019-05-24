@@ -11,15 +11,15 @@ int ActionMiner::check(const GameState* st) const
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 
-    const nain* nain = st->get_nain(player_id_, id_nain_);
-    if (nain == nullptr)
+    const nain nain = st->get_nain(player_id_, id_nain_);
+    if (nain.vie <= 0)
         return NAIN_MORT;
 
-    if (nain->pa < COUT_MINER)
+    if (nain.pa < COUT_MINER)
         return PA_INSUFFISANTS;
 
     // Check position
-    position dest = get_position_offset(nain->pos, dir_);
+    position dest = get_position_offset(nain.pos, dir_);
     if (!inside_map(dest))
         return HORS_LIMITES;
 
@@ -40,9 +40,9 @@ void ActionMiner::apply_on(GameState* st) const
     action.action = {ACTION_MINER, id_nain_, dir_, ERREUR_DIRECTION};
     st->add_to_internal_history(player_id_, action);
 
-    const nain* nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st->get_nain(player_id_, id_nain_);
     st->reduce_pa(player_id_, id_nain_, COUT_MINER);
-    position dest = get_position_offset(nain->pos, dir_);
+    position dest = get_position_offset(nain.pos, dir_);
     case_type type = st->get_cell_type(dest);
 
     if (type == LIBRE)

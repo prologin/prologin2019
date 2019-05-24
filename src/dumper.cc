@@ -158,23 +158,23 @@ static void dump_history(std::ostream& ss, const GameState& st, int player_id)
 
 static void dump_nains(std::ostream& ss, const GameState& st, int player_id)
 {
-    std::vector<std::pair<const nain*, int>> nains;
+    std::vector<std::pair<nain, int>> nains;
+
     for (int nain_id = 0; nain_id < NB_NAINS; ++nain_id)
     {
-        const nain* nain = st.get_nain(player_id, nain_id);
-        if (nain != nullptr)
-            nains.push_back({nain, nain_id});
+        const nain nain = st.get_nain(player_id, nain_id);
+        nains.push_back({nain, nain_id});
     }
-    dump_vector<std::pair<const nain*, int>>(
-        nains, ss, [](auto& ss, auto nain) {
-            ss << "{\"id_nain\": " << nain.second << ", ";
-            ss << "\"pos\": " << nain.first->pos << ", ";
-            ss << "\"vie\": " << nain.first->vie << ", ";
-            ss << "\"pa\": " << nain.first->pa << ", ";
-            ss << "\"pm\": " << nain.first->pm << ", ";
-            ss << "\"accroche\": " << nain.first->accroche << ", ";
-            ss << "\"butin\": " << nain.first->butin << "}";
-        });
+
+    dump_vector<std::pair<nain, int>>(nains, ss, [](auto& ss, auto nain) {
+        ss << "{\"id_nain\": " << nain.second << ", ";
+        ss << "\"pos\": " << nain.first.pos << ", ";
+        ss << "\"vie\": " << nain.first.vie << ", ";
+        ss << "\"pa\": " << nain.first.pa << ", ";
+        ss << "\"pm\": " << nain.first.pm << ", ";
+        ss << "\"accroche\": " << nain.first.accroche << ", ";
+        ss << "\"butin\": " << nain.first.butin << "}";
+    });
 }
 
 static void dump_players(std::ostream& ss, const GameState& st)

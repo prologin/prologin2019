@@ -34,7 +34,7 @@ public:
     void set_cell_type(position pos, case_type type, int current_player);
     bool mine_minerai(position pos, int player_id, int nain_id);
 
-    const nain* get_nain(int player_id, int nain_id) const;
+    const nain& get_nain(int player_id, int nain_id) const;
     const std::vector<int>& get_nains_ids_at(position pos) const;
     int get_cell_occupant(position pos) const;
 
