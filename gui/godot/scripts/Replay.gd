@@ -16,7 +16,6 @@ func jump_turn(input_turn):
 	current_turn = DUMP_READER.parse_turn(dump[turn])
 	$GameState.init(current_turn, self, true)
 	is_animating = false
-	print(input_turn)
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
 	get_tree().paused = false
 

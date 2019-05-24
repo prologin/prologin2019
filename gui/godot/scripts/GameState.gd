@@ -33,9 +33,17 @@ func replay_action(action, player_id):
 	if action["action"] == -2:
 		return fall(action)
 	if action["action"] == -3:
+		return die(action, player_id)
+	if action["action"] == -4:
 		return extand_rope(action) 
 	print("unknown action: ", action["action"])
 	return false
+
+func die(action, player_id):
+	var dwarf_id = int(action["id_nain"])
+	var dwarf = dwarfs[player_id][dwarf_id]
+	dwarf.die()
+	return true
 
 func set_rope(action, player_id):
 	var dwarf_id = int(action["id_nain"])
@@ -90,7 +98,6 @@ func spawn_dwarf(player_id, pos, parent_node):
 
 func redraw(turn, players, ropes):
 	if (turn % 2 == 0):
-		print(turn)
 		$Info/Turn.text = str(turn / 2 + 1) + " / 100"
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)

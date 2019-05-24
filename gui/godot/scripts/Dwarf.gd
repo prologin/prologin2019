@@ -76,7 +76,11 @@ func set_rope_to(external_to, map):
 	#assert not moving
 	#assert not roping
 	roping = true
-	
+
+func die():
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
+	$AnimatedSprite.play("die")
+
 func grab_to(map):
 	assert not mining
 	stick = true
