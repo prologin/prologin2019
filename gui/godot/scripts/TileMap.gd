@@ -20,10 +20,14 @@ func draw_rope(begin, end):
 func get_tile(x, y):
 	return get_cell(x,y)
 
-func set_ore_color(value):
+func get_ore_color(value):
 	if value == 10:
-		modulate_color = Color(0.5, 0.75, 1, 1)
-	get_tileset().tile_set_modulate(3, modulate_color)
+		return 7
+	if value == 20:
+		return 8
+	return 7
+		#modulate_color = Color(0.5, 0.75, 1, 1)
+	#get_tileset().tile_set_modulate(3, modulate_color)
 
 func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 	for y in range(Constants.TAILLE_MINE):
@@ -44,8 +48,8 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 					break
 					
 			if is_ore:
-				set_ore_color(ore_o.value)
-				set_cell(x, y, 3)
+				#set_ore_color(ore_o.value)
+				set_cell(x, y, get_ore_color(ore_o.value))
 			elif not reset and (Vector2(x, y) == spawn1 or Vector2(x, y) == spawn2):
 				set_cell(x, y, 5)
 			elif is_rope:

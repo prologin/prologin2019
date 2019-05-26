@@ -31,7 +31,6 @@ func _ready():
 	$GameState.init(current_turn, self)
 
 func next_turn():
-
 	if turn + 1 == Constants.NB_TOURS * 2:
 		return
 	turn += 1
@@ -47,7 +46,9 @@ func _process(delta):
 	if $GameState/Info/Jump.pressed:
 		$GameState.finish_action()
 		jump_turn($GameState/Info/Jump/TurnIndex.get_line(0))
-
+		
+	if Input.is_action_just_pressed("toggle_screen"):
+    	OS.window_fullscreen = !OS.window_fullscreen
 	#print("actions.size(): ", actions.size())
 	while actions.size() != 0 and not is_animating:
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
