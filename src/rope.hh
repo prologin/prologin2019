@@ -13,7 +13,7 @@ public:
     Rope(position pos);
 
     void extends(position pos);
-    void merge_up(const Rope& rope);
+    void merge_down(const Rope& down);
     void remove_nain(int player_id, int nain_id);
     void add_nain(int player_id, int nain_id);
     void clear();

@@ -19,12 +19,13 @@ void Rope::extends(position pos)
     pos_.push_back(pos);
 }
 
-void Rope::merge_up(const Rope& rope)
+void Rope::merge_down(const Rope& other)
 {
-    const auto& poss(rope.get_positions());
+    pos_.reserve(pos_.size() + other.pos_.size());
+    pos_.insert(pos_.end(), other.pos_.begin(), other.pos_.end());
 
-    for (auto pos = poss.rbegin(); pos != poss.rend(); ++pos)
-        pos_.insert(pos_.begin(), *pos);
+    nains_.reserve(nains_.size() + other.nains_.size());
+    nains_.insert(nains_.end(), other.nains_.begin(), other.nains_.end());
 }
 
 void Rope::remove_nain(int player_id, int nain_id)

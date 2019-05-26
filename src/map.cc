@@ -328,21 +328,18 @@ bool Map::try_extend_rope(position pos)
     }
 
     // Merge with the bottom rope
-    ropes_[dest_index].merge_up(ropes_[rope_index]);
-    const auto& positions = ropes_[rope_index].get_positions();
+    ropes_[rope_index].merge_down(ropes_[dest_index]);
+    const auto& positions = ropes_[dest_index].get_positions();
 
     for (position pos : positions)
-        map_[pos.ligne][pos.colonne].rope = dest_index;
-
-    for (const auto nain : ropes_[rope_index].get_nains())
-        add_nain_to_rope(dest, nain.first, nain.second);
+        map_[pos.ligne][pos.colonne].rope = rope_index;
 
     // Remove the rope from the map
-    ropes_.erase(ropes_.begin() + rope_index);
+    ropes_.erase(ropes_.begin() + dest_index);
 
     for (auto& row : map_)
         for (Cell& cell : row)
-            if (cell.rope > rope_index)
+            if (cell.rope > dest_index)
                 cell.rope--;
 
     return false;
