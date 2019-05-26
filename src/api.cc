@@ -15,6 +15,22 @@
 #include "actions.hh"
 #include "api.hh"
 
+// Little helpers
+inline bool dir_valid(direction dir)
+{
+    return 0 <= dir && dir < 4;
+}
+
+inline bool nain_valid(int nain_id)
+{
+    return 0 <= nain_id && nain_id < NB_NAINS;
+}
+
+inline bool player_valid(int player_id)
+{
+    return player_id != -1;
+}
+
 // global used in interface.cc
 Api* api;
 
@@ -179,11 +195,11 @@ int Api::nain_sur_case(position pos)
 /// sont initialisés à -1.
 nain Api::info_nain(int id_joueur, int id_nain)
 {
-    if ((id_joueur != moi() && id_joueur != adversaire()) ||
-        (id_nain < 0 || id_nain >= NB_NAINS))
+    const int player_id = game_state_->get_player_id(id_joueur);
+
+    if (!player_valid(player_id) || !nain_valid(id_nain))
         return {{-1, -1}, -1, -1, -1, false, -1};
 
-    const int player_id = game_state_->get_player_id(id_joueur);
     return game_state_->get_nain(player_id, id_nain);
 }
 
@@ -192,6 +208,9 @@ nain Api::info_nain(int id_joueur, int id_nain)
 /// les membres de la structure ``minerai`` renvoyée sont initialisés à -1.
 minerai Api::info_minerai(position pos)
 {
+    if (!inside_map(pos))
+        return {-1, -1};
+
     return game_state_->map().get_minerai_at(pos);
 }
 
@@ -205,11 +224,20 @@ std::vector<position> Api::liste_minerais()
 /// (standard) dans une direction donnée.
 int Api::cout_de_deplacement(int id_nain, direction dir)
 {
+    const int player_id = game_state_->get_player_id(player_->id);
+
     // TODO: to functions
-    if (id_nain < 0 || id_nain >= NB_NAINS || dir < 0 || dir >= 4)
+    if (!nain_valid(id_nain) || !dir_valid(dir))
         return -1;
 
-    const int player_id = game_state_->get_player_id(player_->id);
+    const nain nain = game_state_->get_nain(player_id, id_nain);
+    const position dest = get_position_offset(nain.pos, dir);
+
+    if (!inside_map(dest) || game_state_->map().get_cell_type(dest) != LIBRE ||
+        game_state_->map().get_cell_occupant(dest) ==
+            game_state_->get_opponent_id(player_id))
+        return -1;
+
     return game_state_->get_movement_cost(player_id, id_nain, dir);
 }
 
@@ -217,10 +245,11 @@ int Api::cout_de_deplacement(int id_nain, direction dir)
 /// joueur n'existe pas, renvoie la position (-1, -1).
 position Api::position_taverne(int id_joueur)
 {
-    if (id_joueur != moi() && id_joueur != adversaire())
+    const int player_id = game_state_->get_player_id(id_joueur);
+
+    if (!player_valid(player_id))
         return {-1, -1};
 
-    const int player_id = game_state_->get_player_id(id_joueur);
     return game_state_->map().get_spawn_point(player_id);
 }
 
@@ -247,10 +276,11 @@ std::vector<action_hist> Api::historique()
 /// invalide.
 int Api::score(int id_joueur)
 {
-    if (id_joueur != moi() && id_joueur != adversaire())
+    const int player_id = game_state_->get_player_id(id_joueur);
+
+    if (!player_valid(id_joueur))
         return -1;
 
-    const int player_id = game_state_->get_player_id(id_joueur);
     return game_state_->get_score(player_id);
 }
 

@@ -139,23 +139,16 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
 int GameState::get_movement_cost(int player_id, int nain_id,
                                  direction dir) const
 {
-    assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(0 <= nain_id && nain_id < NB_NAINS &&
+           nains_[player_id][nain_id].vie > 0);
     assert(0 <= dir && dir < 4);
 
-    if (nain_id < 0 || nain_id >= NB_NAINS || dir < 0 || dir >= 4 ||
-        nains_[player_id][nain_id].vie <= 0)
-        return -1;
-
     const nain& nain = nains_[player_id][nain_id];
-    position dest = get_position_offset(nain.pos, dir);
+    const position dest = get_position_offset(nain.pos, dir);
 
-    if (!inside_map(dest) || map_.get_cell_type(dest) != LIBRE)
-        return -1;
-
-    int dest_owner = map_.get_cell_occupant(dest);
-
-    if (dest_owner != -1 && dest_owner != player_id)
-        return -1;
+    assert(inside_map(dest) && map_.get_cell_type(dest) == LIBRE);
+    assert(map_.get_cell_occupant(dest) == -1 ||
+           map_.get_cell_occupant(dest) == player_id);
 
     if (nain.accroche)
     {
@@ -247,7 +240,6 @@ void GameState::reduce_pm(int player_id, int nain_id, int pm)
 {
     assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pm >= pm);
-
     nains_[player_id][nain_id].pm -= pm;
 }
 
@@ -261,7 +253,6 @@ void GameState::reduce_pa(int player_id, int nain_id, int pa)
 {
     assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pa >= pa);
-
     nains_[player_id][nain_id].pa -= pa;
 }
 
@@ -357,9 +348,7 @@ void GameState::update_nains_on_rope(position pos)
 
 void GameState::add_rope(position pos, int current_player)
 {
-    if (!inside_map(pos))
-        return;
-
+    assert(inside_map(pos));
     map_.add_rope(pos);
     update_nains_on_rope(pos);
     check_rope_gravity(pos, current_player);

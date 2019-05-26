@@ -16,7 +16,8 @@ int ActionDeplacer::check(const GameState* st) const
         return DIRECTION_INVALIDE;
 
     // Check cell
-    position dest = get_position_offset(nain.pos, dir_);
+    const position dest = get_position_offset(nain.pos, dir_);
+
     if (!inside_map(dest))
         return HORS_LIMITES;
 
@@ -29,7 +30,6 @@ int ActionDeplacer::check(const GameState* st) const
 
     // Check cost
     int cost = st->get_movement_cost(player_id_, id_nain_, dir_);
-    assert(cost >= 0);
 
     if (nain.pm < cost)
         return PM_INSUFFISANTS;
