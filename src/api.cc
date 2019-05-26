@@ -41,6 +41,17 @@ Api::Api(GameState* game_state, rules::Player_sptr player)
     api = this;
 }
 
+/// Renvoie le plus court chemin entre deux positions de la mine sous la forme
+/// d'une suite de direction à emprunter. Si la position est invalide ou que le
+/// chemin n'existe pas, le chemin renvoyé est vide.
+std::vector<direction> Api::chemin(position pos1, position pos2)
+{
+    if (!inside_map(pos1) || !inside_map(pos2))
+        return {};
+
+    return game_state_->map().get_shortest_path(pos1, pos2);
+}
+
 /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
 erreur Api::deplacer(int id_nain, direction dir)
 {
@@ -74,10 +85,6 @@ erreur Api::lacher(int id_nain)
 /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
 erreur Api::agripper(int id_nain)
 {
-#ifndef NDEBUG
-    std::cout << "lol" << std::endl;
-#endif
-
     const int player_id = game_state_->get_player_id(player_->id);
     rules::IAction_sptr action(new ActionAgripper(id_nain, player_id));
 
@@ -162,7 +169,8 @@ case_type Api::type_case(position pos)
     return game_state_->map().get_cell_type(pos);
 }
 
-/// Renvoie la liste de toutes les corde dans la mine.
+/// Renvoie la liste de toutes les positions occupées par une corde dans la
+/// mine.
 std::vector<position> Api::liste_cordes()
 {
     return game_state_->map().get_ropes_positions();
@@ -196,7 +204,7 @@ int Api::nain_sur_case(position pos)
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain``
 /// appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas
 /// présent sur la carte, tous les membres de la structure ``nain`` renvoyée
-/// sont initialisés à -1.
+/// sont initialisés à -1 (et le champ ``accroche`` à `false`).
 nain Api::info_nain(int id_joueur, int id_nain)
 {
     const int player_id = game_state_->get_player_id(id_joueur);
@@ -225,8 +233,9 @@ std::vector<position> Api::liste_minerais()
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
-/// (standard) dans une direction donnée.
-int Api::cout_de_deplacement(int id_nain, direction dir)
+/// (standard) dans une direction donnée. Renvoie -1 si le déplacement n'est
+/// pas possible.
+int Api::cout_deplacement(int id_nain, direction dir)
 {
     const int player_id = game_state_->get_player_id(player_->id);
 
@@ -255,17 +264,6 @@ position Api::position_taverne(int id_joueur)
         return {-1, -1};
 
     return game_state_->map().get_spawn_point(player_id);
-}
-
-/// Renvoie le plus court chemin entre deux positions de la mine sous la forme
-/// d'une suite de direction à emprunter. Si la position est invalide ou que le
-/// chemin n'existe pas, le chemin renvoyé est vide.
-std::vector<direction> Api::chemin(position pos1, position pos2)
-{
-    if (!inside_map(pos1) || !inside_map(pos2))
-        return {};
-
-    return game_state_->map().get_shortest_path(pos1, pos2);
 }
 
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour,

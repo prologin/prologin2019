@@ -88,7 +88,7 @@ TEST_F(ApiTest, Api_info_nain)
     }
 }
 
-TEST_F(ApiTest, Api_cout_de_deplacement)
+TEST_F(ApiTest, Api_cout_deplacement)
 {
     for (auto& player : players)
     {
@@ -99,12 +99,12 @@ TEST_F(ApiTest, Api_cout_de_deplacement)
 
             // Try moving towards correct direction
             direction dir = (nain.pos.colonne < 15) ? DROITE : GAUCHE;
-            EXPECT_EQ(player.api->cout_de_deplacement(nain_id, dir),
+            EXPECT_EQ(player.api->cout_deplacement(nain_id, dir),
                       COUT_DEPLACEMENT);
 
             // Try moving towards the ground, moving an invalid dwarf id
-            EXPECT_EQ(player.api->cout_de_deplacement(nain_id, BAS), -1);
-            EXPECT_EQ(player.api->cout_de_deplacement(NB_NAINS, dir), -1);
+            EXPECT_EQ(player.api->cout_deplacement(nain_id, BAS), -1);
+            EXPECT_EQ(player.api->cout_deplacement(NB_NAINS, dir), -1);
         }
     }
 }

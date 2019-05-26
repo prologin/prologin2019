@@ -383,6 +383,15 @@ std::string convert_to_string(std::vector<action_hist> in)
         return "[]";
     }
 }
+
+/// Renvoie le plus court chemin entre deux positions de la mine sous la forme
+/// d'une suite de direction à emprunter. Si la position est invalide ou que le
+/// chemin n'existe pas, le chemin renvoyé est vide.
+extern "C" std::vector<direction> api_chemin(position pos1, position pos2)
+{
+    return api->chemin(pos1, pos2);
+}
+
 /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction choisie.
 extern "C" erreur api_deplacer(int id_nain, direction dir)
 {
@@ -433,7 +442,8 @@ extern "C" case_type api_type_case(position pos)
     return api->type_case(pos);
 }
 
-/// Renvoie la liste de toutes les corde dans la mine.
+/// Renvoie la liste de toutes les positions occupées par une corde dans la
+/// mine.
 extern "C" std::vector<position> api_liste_cordes()
 {
     return api->liste_cordes();
@@ -456,7 +466,7 @@ extern "C" int api_nain_sur_case(position pos)
 /// Renvoie la description du nain (standard) désigné par le numéro ``id_nain``
 /// appartenant au joueur ``id_joueur``. Si le nain (standard)  n'est pas
 /// présent sur la carte, tous les membres de la structure ``nain`` renvoyée
-/// sont initialisés à -1.
+/// sont initialisés à -1 (et le champ ``accroche`` à `false`).
 extern "C" nain api_info_nain(int id_joueur, int id_nain)
 {
     return api->info_nain(id_joueur, id_nain);
@@ -477,10 +487,11 @@ extern "C" std::vector<position> api_liste_minerais()
 }
 
 /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
-/// (standard) dans une direction donnée.
-extern "C" int api_cout_de_deplacement(int id_nain, direction dir)
+/// (standard) dans une direction donnée. Renvoie -1 si le déplacement n'est
+/// pas possible.
+extern "C" int api_cout_deplacement(int id_nain, direction dir)
 {
-    return api->cout_de_deplacement(id_nain, dir);
+    return api->cout_deplacement(id_nain, dir);
 }
 
 /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``. Si le
@@ -488,14 +499,6 @@ extern "C" int api_cout_de_deplacement(int id_nain, direction dir)
 extern "C" position api_position_taverne(int id_joueur)
 {
     return api->position_taverne(id_joueur);
-}
-
-/// Renvoie le plus court chemin entre deux positions de la mine sous la forme
-/// d'une suite de direction à emprunter. Si la position est invalide ou que le
-/// chemin n'existe pas, le chemin renvoyé est vide.
-extern "C" std::vector<direction> api_chemin(position pos1, position pos2)
-{
-    return api->chemin(pos1, pos2);
 }
 
 /// Renvoie la liste des actions effectuées par l’adversaire durant son tour,

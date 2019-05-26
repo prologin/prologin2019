@@ -84,9 +84,8 @@ enum:
     enum_name: case_type
     enum_summary: "Types de cases"
     enum_field:
-      - [libre, "Case libre (peut comporter une corde)"]
-      - [granite, "Granite standard (indépendamment de s'il cache des minerais
-                   ou non)"]
+      - [libre, "Case libre, qui peut abriter une corde et des nains"]
+      - [granite, "Granite (standard), qui peut cacher du minerai"]
       - [obsidienne, "Obsidienne"]
       - [erreur_case, "Erreur"]
   -
@@ -111,7 +110,7 @@ enum:
       - [direction_invalide, "La direction spécifiée n'existe pas."]
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
       - [obstacle_mur, "La position spécifiée est un mur."]
-      - [obstacle_nain, "La position spécifiée est un nain (standard)."]
+      - [obstacle_nain, "La position spécifiée est un nain (standard) adverse."]
       - [obstacle_corde, "Il y a déjà une corde dans la direction spécifiée."]
       - [pas_de_nain, "Il n'y a pas de nain (standard) sur la position
                        spécifiée."]
@@ -175,9 +174,25 @@ struct:
       - [id_nain, int, "Numéro du nain (standard) concerné par l'action"]
       - [dir, direction, "Direction visée par le nain (standard) durant le
                           déplacement"]
-      - [sens, direction, "Sens de l'action"]
+      - [sens, direction, "Sens de l'action, utilée par exemple pour préciser
+                           si l'on doit tirer une corde vers le bas ou vers le
+                           haut."]
 
 function:
+
+# Utilitaire
+
+  -
+    fct_name: chemin
+    fct_summary: Renvoie un chemin entre deux positions de la mine sous la
+                 forme d'une suite de direction à emprunter. Ce chemin
+                 minimise le nombre de blocs de granite nécessaire à casser. Si
+                 la position est invalide ou que le chemin n'existe pas, le
+                 chemin renvoyé est vide.
+    fct_ret_type: direction array
+    fct_arg:
+      - [pos1, position, "Position de départ"]
+      - [pos2, position, "Position d'arrivée"]
 
 # Actions
 
@@ -253,7 +268,8 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: liste_cordes
-    fct_summary: Renvoie la liste de toutes les corde dans la mine.
+    fct_summary: Renvoie la liste de toutes les positions occupées par une
+                 corde dans la mine.
     fct_ret_type: position array
     fct_arg: []
   -
@@ -273,15 +289,11 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: info_nain
-    fct_summary: Indique la position du nain (standard) dans la mine désigné par
-                 le numéro ``id_nain`` appartenant au joueur ``id_joueur``.
-                 Si la description du nain (standard) est incorrecte, la
-                 position (-1, -1) est renvoyée.
     fct_summary: Renvoie la description du nain (standard) désigné par le
                  numéro ``id_nain`` appartenant au joueur ``id_joueur``.
                  Si le nain (standard)  n'est pas présent sur la carte, tous
                  les membres de la structure ``nain`` renvoyée sont initialisés
-                 à -1.
+                 à -1 (et le champ ``accroche`` à `false`).
     fct_ret_type: nain
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]
@@ -302,10 +314,10 @@ function:
     fct_ret_type: position array
     fct_arg: []
   -
-    fct_name: cout_de_deplacement
+    fct_name: cout_deplacement
     fct_summary: Renvoie le nombre de points de déplacement pour le déplacement
-                 d'un nain (standard) dans une direction donnée. Si le
-                 déplacement n'est pas position, renvoie -1.
+                 d'un nain (standard) dans une direction donnée. Renvoie -1 si
+                 le déplacement n'est pas possible.
     fct_ret_type: int
     fct_arg:
       - [id_nain, int, "Numéro du nain (standard)"]
@@ -318,16 +330,6 @@ function:
     fct_ret_type: position
     fct_arg:
       - [id_joueur, int, "Numéro du joueur"]
-  -
-    fct_name: chemin
-    fct_summary: Renvoie le plus court chemin entre deux positions de la
-                 mine sous la forme d'une suite de direction à emprunter. Si la
-                 position est invalide ou que le chemin n'existe pas, le chemin
-                 renvoyé est vide.
-    fct_ret_type: direction array
-    fct_arg:
-      - [pos1, position, "Position de départ"]
-      - [pos2, position, "Position d'arrivée"]
 
 # Historique (actions de l'adversaire durant le tour précédent)
 

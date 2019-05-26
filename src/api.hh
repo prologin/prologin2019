@@ -51,6 +51,11 @@ private:
     rules::Actions actions_;
 
 public:
+    /// Renvoie le plus court chemin entre deux positions de la mine sous la
+    /// forme d'une suite de direction à emprunter. Si la position est invalide
+    /// ou que le chemin n'existe pas, le chemin renvoyé est vide.
+    std::vector<direction> chemin(position pos1, position pos2);
+
     /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction
     /// choisie.
     erreur deplacer(int id_nain, direction dir);
@@ -78,7 +83,8 @@ public:
     /// Renvoie le type d'une case donnée.
     case_type type_case(position pos);
 
-    /// Renvoie la liste de toutes les corde dans la mine.
+    /// Renvoie la liste de toutes les positions occupées par une corde dans la
+    /// mine.
     std::vector<position> liste_cordes();
 
     /// Indique si une corde se trouve sur une case donnée.
@@ -92,7 +98,8 @@ public:
     /// Renvoie la description du nain (standard) désigné par le numéro
     /// ``id_nain`` appartenant au joueur ``id_joueur``. Si le nain (standard)
     /// n'est pas présent sur la carte, tous les membres de la structure
-    /// ``nain`` renvoyée sont initialisés à -1.
+    /// ``nain`` renvoyée sont initialisés à -1 (et le champ ``accroche`` à
+    /// `false`).
     nain info_nain(int id_joueur, int id_nain);
 
     /// Renvoie la description d'un minerai en fonction d'une position donnée.
@@ -105,17 +112,13 @@ public:
     std::vector<position> liste_minerais();
 
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
-    /// (standard) dans une direction donnée.
-    int cout_de_deplacement(int id_nain, direction dir);
+    /// (standard) dans une direction donnée. Renvoie -1 si le déplacement n'est
+    /// pas possible.
+    int cout_deplacement(int id_nain, direction dir);
 
     /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``.
     /// Si le joueur n'existe pas, renvoie la position (-1, -1).
     position position_taverne(int id_joueur);
-
-    /// Renvoie le plus court chemin entre deux positions de la mine sous la
-    /// forme d'une suite de direction à emprunter. Si la position est invalide
-    /// ou que le chemin n'existe pas, le chemin renvoyé est vide.
-    std::vector<direction> chemin(position pos1, position pos2);
 
     /// Renvoie la liste des actions effectuées par l’adversaire durant son
     /// tour, dans l'ordre chronologique. Les actions de débug n'apparaissent

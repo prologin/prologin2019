@@ -70,9 +70,8 @@
 /// Types de cases
 typedef enum case_type
 {
-    LIBRE,   /* <- Case libre */
-    GRANITE, /* <- Granite standard (indépendamment de s'il cache des minerais
-                ou non) */
+    LIBRE,       /* <- Case libre, qui peut abriter une corde et des nains */
+    GRANITE,     /* <- Granite (standard), qui peut cacher du minerai */
     OBSIDIENNE,  /* <- Obsidienne */
     ERREUR_CASE, /* <- Erreur */
 } case_type;
@@ -121,7 +120,8 @@ typedef enum erreur
     DIRECTION_INVALIDE, /* <- La direction spécifiée n'existe pas. */
     ID_NAIN_INVALIDE,   /* <- Le nain (standard) spécifié n'existe pas. */
     OBSTACLE_MUR,       /* <- La position spécifiée est un mur. */
-    OBSTACLE_NAIN,      /* <- La position spécifiée est un nain (standard). */
+    OBSTACLE_NAIN, /* <- La position spécifiée est un nain (standard) adverse.
+                    */
     OBSTACLE_CORDE, /* <- Il y a déjà une corde dans la direction spécifiée. */
     PAS_DE_NAIN,    /* <- Il n'y a pas de nain (standard) sur la position
                        spécifiée. */
@@ -218,7 +218,8 @@ typedef struct action_hist
     int id_nain;    /* <- Numéro du nain (standard) concerné par l'action */
     direction dir;  /* <- Direction visée par le nain (standard) durant le
                        déplacement */
-    direction sens; /* <- Sens de l'action */
+    direction sens; /* <- Sens de l'action, utilée par exemple pour préciser si
+                       l'on doit tirer une corde vers le bas ou vers le haut. */
 } action_hist;
 
 #endif // !CONSTANT_HH_
