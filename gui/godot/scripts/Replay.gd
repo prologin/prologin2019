@@ -39,8 +39,6 @@ func next_turn():
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
 
 func _process(delta):
-	if turn == 1:
-		$GameState/Info._end()
 		
 	if Input.is_action_pressed("ui_escape") and not get_tree().paused:
 		get_tree().paused = true

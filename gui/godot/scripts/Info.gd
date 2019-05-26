@@ -10,18 +10,6 @@ func _speed_slider(value):
 	var v = 1 << int(value)
 	Global.speed_factor = v
 	$SpeedSlider/Speed.text = "Vitesse: " + str(Global.speed_factor)
-	
-func _end():
-	var name_winner = ""
-	var is_end = 1
-	if $"Score 1" == $"Score 2":
-		$End.text = "Egalité\n\n Appuyer sur Esc pour quitter"
-		return
-	if $"Score 1" > $"Score 2":
-		name_winner = $"Name 1".text
-	else:
-		name_winner = $"Name 2".text
-	$End.text = name_winner + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
 
 func _process(delta):
 	if is_end:

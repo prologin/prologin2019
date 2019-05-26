@@ -5,7 +5,6 @@ extends KinematicBody2D
 
 signal finished_moving
 
-var modulate_color = Color(1, 1, 1, 1)
 var moving = false
 var mining = false
 var stick = false
@@ -16,22 +15,9 @@ var external_pos = Vector2()
 
 const SPEED = 100
 
-func set_team(player_id):
-	if player_id == 0:
-		modulate_color = Color(0.5, 0.75, 1, 1)
-	else:
-		modulate_color = Color(1, 0.75, 0.5, 1)
-	set_modulate(modulate_color)
-
 func set_external_position(pos, map):
 	external_pos = pos
 	position = map.world_position(pos)
-
-func focus():
-	set_modulate(modulate_color.lightened(0.7))
-
-func unfocus():
-	set_modulate(modulate_color)
 
 func move_to(external_to, map):
 	#assert not moving

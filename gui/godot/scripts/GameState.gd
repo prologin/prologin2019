@@ -1,6 +1,7 @@
 extends Node
 
-onready var dwarf_scene = preload("res://scenes/Dwarf.tscn")
+onready var dwarf_g_scene = preload("res://scenes/Dwarf_green.tscn")
+onready var dwarf_b_scene = preload("res://scenes/Dwarf_blue.tscn")
 
 var dwarfs = []
 
@@ -18,7 +19,7 @@ func finish_action():
 		is_mining = Vector2(-1, -1)
 		
 	if is_roping != Vector2(-1, -1):
-		$TileMap.rope(is_roping)
+		$TileMap.set_rope(is_roping)
 		is_roping = Vector2(-1, -1)
 
 func replay_action(action, player_id):
@@ -89,9 +90,12 @@ func grab(action, player_id):
 	return true
 
 func spawn_dwarf(player_id, pos, parent_node):
-	var dwarf = dwarf_scene.instance()
+	var dwarf = null
+	if player_id == 0:
+		dwarf = dwarf_b_scene.instance()
+	else:
+		dwarf = dwarf_g_scene.instance()
 	dwarf.set_external_position(pos, $TileMap)
-	dwarf.set_team(player_id)
 	dwarf.connect("finished_moving", parent_node, "finish_animating")
 	add_child(dwarf)
 	return dwarf
@@ -104,9 +108,9 @@ func redraw(turn, players, ropes):
 
 	if turn / 2 + 1 == 100:
 		if players[0].score > players[1].score:
-			$Info/End.text = "Victoire de " + players[0].name
+			$Info/End.text = players[0].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
 		else:
-			$Info/End.text = "Victoire de " + players[1].name
+			$Info/End.text = "Victoire de " + players[1].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
 
 func teleport(dwarf, pos):
 	dwarf.set_external_position(pos, $TileMap)
