@@ -19,6 +19,11 @@ timelines = [
     'climb_horizontal',
     'fall',
     'pull_rope']
+if sys.argv[3]:
+    timelines = [timelines[int(sys.argv[3])]]
+y_plus = [0]*len(timelines)
+if sys.argv[3]:
+    y_plus[0] += int(sys.argv[3])
 tile_width = 30
 tile_height = 30
 
@@ -29,7 +34,8 @@ width, height = img.size
 if not os.path.exists(path):
             os.makedirs(path)
 
-for y, frame_y in enumerate(timelines):
+for y_, frame_y in enumerate(timelines):
+    y = y_ + y_plus[y_]
     for x in range(100):
         # Extract a non-empty area
         area = (x * tile_width, y * tile_height, (x + 1) * tile_width,
@@ -40,7 +46,7 @@ for y, frame_y in enumerate(timelines):
             break
 
         # Save the file
-        if not os.path.exists(path+'/'+timelines[y]):
-            os.makedirs(path+'/'+timelines[y])
+        if not os.path.exists(path+'/'+timelines[y_]):
+            os.makedirs(path+'/'+timelines[y_])
 
-        cropped.save(f'{path}/{timelines[y]}/{x}.png')
+        cropped.save(f'{path}/{timelines[y_]}/{x}.png')
