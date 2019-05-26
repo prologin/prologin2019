@@ -90,10 +90,11 @@ void GameState::set_cell_type(position pos, case_type type, int current_player)
 
 bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 {
-    assert(inside_map(pos) && map_.has_minerai_at(pos));
+    assert(inside_map(pos) && map_.has_minerai_at(pos) &&
+           map_.get_cell_type(pos) == GRANITE);
     assert(0 <= nain_id && nain_id < NB_NAINS);
 
-    minerai minerai = map_.get_minerai_at(pos);
+    const minerai minerai = map_.get_minerai_at(pos);
 
     if (minerai.resistance > 1)
     {
@@ -101,8 +102,12 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
         return false;
     }
 
-    nains_[player_id][nain_id].butin += minerai.rendement;
+    // The mineral broke
+    nains_[player_id][nain_id].butin = std::min(
+        nains_[player_id][nain_id].butin + minerai.rendement, BUTIN_MAX);
+
     map_.remove_minerai(pos);
+    set_cell_type(pos, LIBRE, player_id);
     return true;
 }
 

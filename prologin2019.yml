@@ -33,11 +33,16 @@ constant:
   -
     cst_name: NB_NAINS
     cst_val: 6
-    cst_comment: Nombre de nains (standard) par joueur.
+    cst_comment: Nombre de nains (standards) par joueur.
   -
     cst_name: DEGAT_PIOCHE
     cst_val: 3
     cst_comment: Dégât infligé par un coup de pioche à un nain (standard).
+  -
+    cst_name: BUTIN_MAX
+    cst_val: 25
+    cst_comment: Valeur cumulée maximale des minerais qu'un nain (standard)
+                 peut emporter avec lui.
   -
     cst_name: COUT_DEPLACEMENT
     cst_val: 1

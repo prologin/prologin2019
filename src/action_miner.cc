@@ -49,17 +49,18 @@ void ActionMiner::apply_on(GameState* st) const
 
     if (type == LIBRE)
     {
+        // Handle an attack
         const int player_id = st->map().get_cell_occupant(dest);
 
         for (int nain_id : st->map().get_nains_ids_at(dest))
             st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE, player_id_);
-
-        return;
     }
-
-    if (st->map().has_minerai_at(dest))
-        if (!st->mine_minerai(dest, player_id_, id_nain_))
-            return;
-
-    st->set_cell_type(dest, LIBRE, player_id_);
+    else
+    {
+        // Handle mining
+        if (st->map().has_minerai_at(dest))
+            st->mine_minerai(dest, player_id_, id_nain_);
+        else
+            st->set_cell_type(dest, LIBRE, player_id_);
+    }
 }

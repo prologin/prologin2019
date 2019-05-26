@@ -74,6 +74,10 @@ erreur Api::lacher(int id_nain)
 /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
 erreur Api::agripper(int id_nain)
 {
+#ifndef NDEBUG
+    std::cout << "lol" << std::endl;
+#endif
+
     const int player_id = game_state_->get_player_id(player_->id);
     rules::IAction_sptr action(new ActionAgripper(id_nain, player_id));
 

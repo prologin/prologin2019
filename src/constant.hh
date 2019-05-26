@@ -33,11 +33,15 @@
 /// Nombre de joueurs.
 #define NB_JOUEURS 2
 
-/// Nombre de nains (standard) par joueur.
+/// Nombre de nains (standards) par joueur.
 #define NB_NAINS 6
 
 /// Dégât infligé par un coup de pioche à un nain (standard).
 #define DEGAT_PIOCHE 3
+
+/// Valeur cumulée maximale des minerais qu'un nain (standard) peut emporter
+/// avec lui.
+#define BUTIN_MAX 25
 
 /// Nombre de points de déplacement pour qu'un nain (standard) se déplace d'une
 /// case.
