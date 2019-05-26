@@ -78,6 +78,8 @@ const Map& GameState::map() const
 void GameState::set_cell_type(position pos, case_type type, int current_player)
 {
     assert(inside_map(pos));
+    assert(current_player == 0 || current_player == 1);
+
     map_.set_cell_type(pos, type);
 
     if (type == LIBRE)
@@ -92,6 +94,7 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 {
     assert(inside_map(pos) && map_.has_minerai_at(pos) &&
            map_.get_cell_type(pos) == GRANITE);
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
 
     const minerai minerai = map_.get_minerai_at(pos);
@@ -114,6 +117,7 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
 const nain& GameState::get_nain(int player_id, int nain_id) const
 {
     assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(player_id == 0 || player_id == 1);
     return nains_[player_id][nain_id];
 }
 
@@ -144,6 +148,7 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
 int GameState::get_movement_cost(int player_id, int nain_id,
                                  direction dir) const
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS &&
            nains_[player_id][nain_id].vie > 0);
     assert(0 <= dir && dir < 4);
@@ -157,7 +162,6 @@ int GameState::get_movement_cost(int player_id, int nain_id,
 
     if (nain.accroche)
     {
-
         if (map_.has_rope_at(dest))
             return COUT_ESCALADER_CORDE;
         else
@@ -169,6 +173,7 @@ int GameState::get_movement_cost(int player_id, int nain_id,
 
 void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
     nains_[player_id][nain_id].accroche = accroche;
 
@@ -178,7 +183,9 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
 
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
+
     if (nains_[player_id][nain_id].accroche)
         return 0;
 
@@ -192,8 +199,7 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
         if (!inside_map(current) || map_.get_cell_type(current) != LIBRE)
             break;
 
-        int current_cell_occupant = map_.get_cell_occupant(current);
-        if (current_cell_occupant != -1 && current_cell_occupant != player_id)
+        if (map_.get_cell_occupant(current) == 1 - player_id)
             break;
 
         pos = current;
@@ -205,6 +211,8 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
 
 void GameState::check_nain_gravity(position pos, int current_player)
 {
+    assert(current_player == 0 || current_player == 1);
+
     while (inside_map(pos))
     {
         position dest = get_position_offset(pos, BAS);
@@ -218,11 +226,12 @@ void GameState::check_nain_gravity(position pos, int current_player)
         if (player_id == -1)
             return;
 
-        // TODO: avoid this (heavy?) copy
         const std::vector<int> nains_ids = map_.get_nains_ids_at(pos);
+
         for (const int nain_id : nains_ids)
         {
             int fall = get_fall_distance(player_id, nain_id);
+
             if (fall == 0)
                 continue;
 
@@ -244,26 +253,34 @@ void GameState::check_nain_gravity(position pos, int current_player)
 
 void GameState::reduce_pm(int player_id, int nain_id, int pm)
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pm >= pm);
+
     nains_[player_id][nain_id].pm -= pm;
 }
 
 void GameState::reset_pm(int player_id)
 {
+    assert(player_id == 0 || player_id == 1);
+
     for (int nain = 0; nain < NB_NAINS; ++nain)
         nains_[player_id][nain].pm = NB_POINTS_DEPLACEMENT;
 }
 
 void GameState::reduce_pa(int player_id, int nain_id, int pa)
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
     assert(nains_[player_id][nain_id].pa >= pa);
+
     nains_[player_id][nain_id].pa -= pa;
 }
 
 void GameState::reset_pa(int player_id)
 {
+    assert(player_id == 0 || player_id == 1);
+
     for (int nain = 0; nain < NB_NAINS; ++nain)
         nains_[player_id][nain].pa = NB_POINTS_ACTION;
 }
@@ -271,7 +288,10 @@ void GameState::reset_pa(int player_id)
 void GameState::reduce_pv(int player_id, int nain_id, int damage,
                           int current_player)
 {
+    assert(player_id == 0 || player_id == 1);
     assert(0 <= nain_id && nain_id < NB_NAINS);
+    assert(current_player == 0 || current_player == 1);
+
     nain& nain = nains_[player_id][nain_id];
     nain.vie -= damage;
 
@@ -293,6 +313,7 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
 
 void GameState::respawn(int player_id)
 {
+    assert(player_id == 0 || player_id == 1);
     bool spawn = false;
 
     for (auto nain : nains_respawn_)
@@ -321,6 +342,8 @@ void GameState::respawn(int player_id)
 
 void GameState::check_rope_gravity(position pos, int current_player)
 {
+    assert(current_player == 0 || current_player == 1);
+
     if (!inside_map(pos) || !map_.has_rope_at(pos))
         return;
 
@@ -355,6 +378,8 @@ void GameState::update_nains_on_rope(position pos)
 void GameState::add_rope(position pos, int current_player)
 {
     assert(inside_map(pos));
+    assert(current_player == 0 || current_player == 1);
+
     map_.add_rope(pos);
     update_nains_on_rope(pos);
     check_rope_gravity(pos, current_player);
@@ -362,6 +387,7 @@ void GameState::add_rope(position pos, int current_player)
 
 int GameState::get_score(int player_id) const
 {
+    assert(player_id == 0 || player_id == 1);
     return player_info_[player_id].get_score();
 }
 
@@ -388,11 +414,14 @@ const std::array<PlayerInfo, 2>& GameState::get_player_info() const
 const std::vector<internal_action>&
 GameState::get_internal_history(int player_id) const
 {
+    assert(player_id == 0 || player_id == 1);
     return player_info_[player_id].get_internal_history();
 }
 
 const std::vector<action_hist> GameState::get_history(int player_id) const
 {
+    assert(player_id == 0 || player_id == 1);
+
     std::vector<action_hist> hist;
     std::vector<internal_action> internal_hist =
         get_internal_history(player_id);
@@ -406,15 +435,18 @@ const std::vector<action_hist> GameState::get_history(int player_id) const
 
 void GameState::reset_internal_history(int player_id)
 {
+    assert(player_id == 0 || player_id == 1);
     player_info_[player_id].reset_internal_history();
 }
 
 void GameState::add_to_internal_history(int player_id, internal_action action)
 {
+    assert(player_id == 0 || player_id == 1);
     player_info_[player_id].add_internal_action(action);
 }
 
 void GameState::increase_score(int player_id, int delta)
 {
+    assert(player_id == 0 || player_id == 1);
     player_info_[player_id].increase_score(delta);
 }

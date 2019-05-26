@@ -39,6 +39,8 @@ Api::Api(GameState* game_state, rules::Player_sptr player)
     , player_(player)
 {
     api = this;
+    std::cout << "Api@" << this << ": got a gamestate: " << game_state
+              << std::endl;
 }
 
 /// Renvoie le plus court chemin entre deux positions de la mine sous la forme
@@ -271,7 +273,7 @@ position Api::position_taverne(int id_joueur)
 /// cette liste.
 std::vector<action_hist> Api::historique()
 {
-    return game_state_->get_history(adversaire());
+    return game_state_->get_history(game_state_->get_player_id(adversaire()));
 }
 
 /// Renvoie le score du joueur ``id_joueur``. Renvoie -1 si le joueur est

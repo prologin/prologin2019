@@ -45,10 +45,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 1 0
 1 30
-1
+3
+3 1 5 1000
+3 29 5 1000
 10 10 10 10
-1
-0 15
+2
+0 2
+0 28
 )";
 
 static rules::Players_sptr make_players(int id_p1, int id_p2)
@@ -93,9 +96,11 @@ protected:
         // Players values are not 0 and 1, because that would be too simple
         int player_id_1 = 1337;
         int player_id_2 = 42;
+
         utils::Logger::get().level() = utils::Logger::DEBUG_LEVEL;
         auto players_ptr = make_players(player_id_1, player_id_2);
         st = make_test_gamestate(test_map, players_ptr);
+
         players[0].id = player_id_1;
         players[0].api = new Api(st, players_ptr->players[0]);
         players[1].id = player_id_2;

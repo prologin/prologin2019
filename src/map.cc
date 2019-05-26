@@ -201,7 +201,8 @@ void Map::add_nain(int nain_id, position pos, int player_id)
     assert(inside_map(pos));
 
     Cell& cell = map_[pos.ligne][pos.colonne];
-    assert(cell.occupant == -1 || !cell.nains_ids.empty());
+    assert(cell.occupant == -1 ||
+           (!cell.nains_ids.empty() && cell.occupant == player_id));
 
     cell.occupant = player_id;
     cell.nains_ids.push_back(nain_id);
@@ -215,7 +216,7 @@ void Map::move_nain(int nain_id, position from, position to)
 
     const int player_id = map_[from.ligne][from.colonne].occupant;
     add_nain(nain_id, to, player_id);
-    remove_nain(nain_id, from);
+    // remove_nain(nain_id, from);
 }
 
 void Map::remove_nain(int nain_id, position pos)
