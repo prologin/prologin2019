@@ -176,6 +176,7 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
         check_nain_gravity(nains_[player_id][nain_id].pos, player_id);
 }
 
+#include <iostream>
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
     assert(0 <= nain_id && nain_id < NB_NAINS);
@@ -192,7 +193,8 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
         if (!inside_map(current) || map_.get_cell_type(current) != LIBRE)
             break;
 
-        if (map_.get_cell_occupant(current) != player_id)
+        int current_cell_occupant = map_.get_cell_occupant(current);
+        if (current_cell_occupant == player_id)
             break;
 
         pos = current;
