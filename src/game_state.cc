@@ -193,7 +193,7 @@ int GameState::get_fall_distance(int player_id, int nain_id) const
             break;
 
         int current_cell_occupant = map_.get_cell_occupant(current);
-        if (current_cell_occupant == player_id)
+        if (current_cell_occupant != -1 && current_cell_occupant != player_id)
             break;
 
         pos = current;
