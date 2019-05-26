@@ -21,7 +21,6 @@ var dwarfs = []
 
 var is_mining = Vector2(-1, -1)
 var is_roping = Vector2(-1, -1)
-var is_prev_rope = Vector2(-1,-1)
 
 const DIRS = [ Vector2(0, -1), Vector2(0, 1), Vector2(-1, 0), Vector2(1, 0) ]
 func get_position_offset(pos, dir):
@@ -65,7 +64,6 @@ func set_rope(action, player_id):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
 	dwarf.set_rope_to(dest, $TileMap)
-	is_prev_rope = dest
 	is_roping = dest
 	return true
 
@@ -85,8 +83,7 @@ func mine(action, player_id):
 	return true
 
 func extand_rope(action):
-	$TileMap.draw_rope(action["pos"], is_prev_rope)
-	is_prev_rope = Vector2(-1,-1)
+	$TileMap.draw_rope(Vector2(action["pos"]["c"], action["pos"]["l"]))
 	return true
 
 func fall(action):

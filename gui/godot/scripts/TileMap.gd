@@ -18,11 +18,8 @@ func mine(pos):
 func set_rope(pos):
 	set_cell(pos.x, pos.y, 4)
 
-func draw_rope(begin, end):
-	var i = begin.y
-	while i >= end.y:
-		set_cell(begin.x,i,4)
-		i += 1
+func draw_rope(begin):
+	set_cell(begin.x, begin.y, 4)
 
 func get_tile(x, y):
 	return get_cell(x,y)

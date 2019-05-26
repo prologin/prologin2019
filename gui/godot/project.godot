@@ -24,9 +24,14 @@ config/icon="res://assets/icon.png"
 Constants="*res://scripts/Constants.gd"
 Global="*res://scripts/Global.gd"
 
+[display]
+
+window/size/width=1242
+window/size/height=1024
+
 [editor]
 
-main_run_args="-json=/home/bfor/download/dump-38159.json"
+main_run_args="-json=/home/bfor/download/dump-38175.json"
 
 [input]
 
