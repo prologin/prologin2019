@@ -3,6 +3,20 @@ extends Node
 onready var dwarf_g_scene = preload("res://scenes/Dwarf_green.tscn")
 onready var dwarf_b_scene = preload("res://scenes/Dwarf_blue.tscn")
 
+#ONLY FOR SPECTATOR MODE#
+var selected_dwarf = -1
+
+func select_dwarf(dwarf):
+	if dwarf == selected_dwarf:
+		dwarf = -1
+	if selected_dwarf != -1:
+		$TileMap.dwarfs[selected_dwarf].unfocus()
+	if dwarf != -1:
+		$TileMap.dwarfs[dwarf].focus()
+	selected_dwarf = dwarf
+
+########################
+
 var dwarfs = []
 
 var is_mining = Vector2(-1, -1)

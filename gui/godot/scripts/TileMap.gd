@@ -2,6 +2,13 @@ extends TileMap
 
 var modulate_color = Color(1, 1, 1, 1)
 
+#ONLY FOR SPECTATOR#
+
+var dwarfs = []
+var ores = []
+
+###################
+
 func world_position(pos):
 	return map_to_world(pos) + (get_cell_size() / 2)
 
