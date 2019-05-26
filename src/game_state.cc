@@ -176,7 +176,6 @@ void GameState::set_nain_accroche(int player_id, int nain_id, bool accroche)
         check_nain_gravity(nains_[player_id][nain_id].pos, player_id);
 }
 
-#include <iostream>
 int GameState::get_fall_distance(int player_id, int nain_id) const
 {
     assert(0 <= nain_id && nain_id < NB_NAINS);
@@ -229,14 +228,14 @@ void GameState::check_nain_gravity(position pos, int current_player)
 
             set_nain_position(player_id, nain_id, pos + (BAS * fall));
 
-            if (fall >= 4)
-                reduce_pv(player_id, nain_id, std::pow(2, fall - 4),
-                          current_player);
-
             internal_action action;
             action.type = 2;
             action.fall = {player_id, nain_id, pos + (BAS * fall)};
             add_to_internal_history(current_player, action);
+
+            if (fall >= 4)
+                reduce_pv(player_id, nain_id, std::pow(2, fall - 4),
+                          current_player);
         }
 
         pos = get_position_offset(pos, HAUT);
