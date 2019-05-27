@@ -72,7 +72,7 @@
   Bref, comme vous le savez déjà, le granit (standard) est présent en abondace
   sur le site. Cependant, il a une valeur marchande de très exactement 0 pièces
   d'or\footnote{Avec 20\% de taxes, on peut mieux faire en terme de
-  rentabilité.}, et requiert un coup de pioche pour être cassé.
+  rentabilité.}, et requiert un seul coup de pioche pour être cassé.
 
 \subsection{Le minerai}
 
@@ -161,9 +161,12 @@
   Ces cordes permettent au nains de se déplacer verticalement plus rapidement
   qu'en s'agrippant aux parois et plus surement qu'en chutant.
 
-  Une fois la poulie posée, la corde descend jusqu'au prochain bloc. En
-  revanche, poser une corde est une entreprise complexe, qui nécessite la
-  totalité des \textit{points d'action} de toute l'équipe combinée.
+  Une fois la poulie posée, la corde descend jusqu'au prochain bloc, de plus
+  votre équipe de nains s'assurera de prévoir suffisamment de jeu afin que la
+  corde puisse toujours se dérouler jusqu'au sol lorsque de nouveaux blocs de
+  granite sont creusés en dessous de celle-ci. En revanche, poser une corde est
+  une entreprise complexe, qui nécessite la totalité des \textit{points
+  d'action} de toute l'équipe combinée.
 
   De plus les cordes peuvent être actionnées par un autre nain qui n'est pas
   sur la corde, s'il a les deux pieds au sol. En consommant des points
@@ -173,12 +176,16 @@
 \subsection{Déplacements}
 
   Le personnel minier peut se déplacer dans deux dimensions: verticalement et
-  transversalement, en marchant au sol, en s'agrippant à la paroi, en
-  descendant le long d'une corde ou en chutant.
+  transversalement, en marchant au sol, en s'agrippant à la paroi, ou en
+  chutant.
 
   Un déplacement n'est possible que vers une position libre\footnote{C'est
   évident mais ça va toujours mieux en le disant.}, et nécessite des
-  \textit{points de déplacement}.
+  \textit{points de déplacement}. De plus, nous rappelons aux nains que les
+  effets de la gravité existe\footnote{Nos scientifiques ont rapporté que les
+  nains qui en oubliaient l'existence affichaient un rendement plus faible,
+  voir nul.}, nous vous recommandant donc de lire attentivement la section
+  dédié
 
   Il est également à noter que la promiscuité ne pose pas de problème aux
   mineurs\footnote{C'est un critère de recrutement.}, ils peuvent donc se
@@ -200,7 +207,7 @@
   chute, selon la formule ci-dessous.
 
   \[
-    \text{Dégâts} = 
+    \text{Dégâts} =
     \left\{
       \begin{array}{l l}
         0         & \quad \text{pour $h < 4$}  \\
@@ -211,13 +218,18 @@
 
   avec $h$ la hauteur de chute.
 
-  Les déplacements (dans les deux sens) peuvent être réalisés :
+  Cependant il est possible d'échapper à ça: un nain agrippé à la paroi, libéré
+  de l'emprise de la gravité, peut se déplacer dans toutes les directions, ce
+  qui lui demandera plus de \textit{points d'action} que de se déplacement au
+  sol. Il y a alors plusieurs manière de se déplacer à distinguer pour un nain
+  accroché à la paroi:
 
   \begin{itemize}
-    \item en grimpant à la paroi (relativement lent)
-    \item en grimpant à une corde (normal)
-    \item en s'accrochant à une corde qui sera ensuite manipulée par un
-      personnel en tête de corde. (rapide mais dangereux et à sens unique)
+    \item déplacement standard (relativement lent)
+    \item déplacement dans une direction occupée par une corde (plus rapide)
+    \item rester agrippé sur une case occupée par une corde actionnée par un
+      autre nain (ce qui peut faire gagner beaucoup de temps si vous avez
+      confiance en l'opérateur de cette corde)
   \end{itemize}
 
   Vous ne pouvez pas pousser les nains dans les trous (i.e. les putsch sont
@@ -237,6 +249,14 @@
   d'être pris en compte par le département trading (et être mis en
   sécurité\ldots{}), le minerai doit être rapporté à la taverne.
 
+  Notez que comme les nains ne peuvent porter qu'une quantité limitée de
+  minerai\footnote{Tous leurs points de compétences dédiés ayant été investis
+  dans le transport de bière.}, ils devront régulièrement faire un retour à la
+  taverne pour décharger celui-ci. Si un nain extrait du minerai qu'il ne peut
+  pas porter, il détruit immédiatement ce qu'il y a de trop pour qu'il ne tombe
+  pas entre de mauvaises mains\footnote{Ami ou ennemi, un nain nai jamais trop
+  prudent.}.
+
 \subsection{Cas particulier des rencontres malveillantes}
 
   Il est rappelé à l'ensemble du personnel que la pioche (standard) qui est
@@ -252,5 +272,10 @@
   assure qu'un nain aura toujours un point de destin disponible pour lui dans
   cette situation, au risque d'un prélèvement de salaire.} est automatiquement
   utilisé. Le mineur ainsi ressuscité regagne la mine dans la taverne du
-  chantier à son prochain tour, mais ayant perdu tout son butin sur
-  lace\ldots{}
+  chantier à son prochain tour, mais ayant perdu tout son butin sur le coup
+  \ldots{}
+
+  Le nain qui a donné le coup de pioche s'empresse alors de récupérer le butin
+  du nain éliminé, dans la limite de la \textit{capacité} qu'il a à le
+  transporter, comme expliqué dans la section précédente, il détruira tous ce
+  qu'il n'arrive pas à emporter avec lui.
