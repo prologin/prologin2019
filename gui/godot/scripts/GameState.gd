@@ -44,6 +44,8 @@ func replay_action(action, player_id):
 		return mine(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_POSER_CORDE"):
 		return set_rope(action, player_id)
+	if action["action"] == Constants.ACTIONS.get("ACTION_DEBUG_AFFICHER_DRAPEAU"):
+		return flag(action, player_id)
 	if action["action"] == -2:
 		return fall(action)
 	if action["action"] == -3:
@@ -52,6 +54,12 @@ func replay_action(action, player_id):
 		return extand_rope(action) 
 	print("unknown action: ", action["action"])
 	return false
+
+func flag(action, player_id):
+	var dwarf_id = int(action["id_nain"])
+	var dwarf = dwarfs[player_id][dwarf_id]
+	$TileMap.set_flags(dwarf.external_pos)
+	return true
 
 func die(action, player_id):
 	var dwarf_id = int(action["id_nain"])

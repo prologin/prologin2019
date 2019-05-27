@@ -12,6 +12,9 @@ var ores = []
 func world_position(pos):
 	return map_to_world(pos) + (get_cell_size() / 2)
 
+func set_flag(pos):
+	set_cell(pos.x, pos.y, 10)
+
 func mine(pos):
 	set_cell(pos.x, pos.y, 0)
 
