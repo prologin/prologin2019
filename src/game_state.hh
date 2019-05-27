@@ -40,7 +40,6 @@ public:
     void check_nain_gravity(position pos, int current_player);
 
     void check_rope_gravity(position pos, int current_player);
-    void update_nains_on_rope(position pos);
 
     // Nain's ressources
     void reduce_pm(int player_id, int nain_id, int pm);

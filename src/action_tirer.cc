@@ -40,9 +40,6 @@ int ActionTirer::check(const GameState* st) const
     if (!st->map().has_rope_at(dest))
         return PAS_DE_CORDE;
 
-    if (st->map().get_rope_at(dest).get_nains().empty())
-        return PAS_DE_NAIN;
-
     return OK;
 }
 
@@ -53,32 +50,26 @@ void ActionTirer::apply_on(GameState* st) const
 
     st->reduce_pa(player_id_, id_nain_, COUT_TIRER);
 
-    // Build the ordered list of dwarfs
     const Rope& rope = st->map().get_rope_at(dest);
-    auto nains = rope.get_nains();
+    position curr_pos = (sens_ == HAUT) ? rope.get_anchor() : rope.get_bottom();
+    curr_pos = get_position_offset(curr_pos, reverse_direction(sens_));
 
-    std::sort(nains.begin(), nains.end(), [&](const auto& a, const auto& b) {
-        position pa = st->get_nain(a.first, a.second).pos;
-        position pb = st->get_nain(b.first, b.second).pos;
-
-        if (sens_ == HAUT)
-            return pa.ligne < pb.ligne;
-
-        return pb.ligne < pa.ligne;
-    });
-
-    // Apply
-    for (auto& nain : nains)
+    // Start moving dwarfs to their next position
+    while (inside_map(curr_pos) && st->map().has_rope_at(curr_pos))
     {
-        position pos = st->get_nain(nain.first, nain.second).pos;
-        position dest = get_position_offset(pos, sens_);
+        const int curr_occupant = st->map().get_cell_occupant(curr_pos);
+        const position destination = get_position_offset(curr_pos, sens_);
 
-        if (!st->map().has_rope_at(dest))
+        if (st->map().get_cell_occupant(destination) == 1 - curr_occupant)
             continue;
 
-        int occupant = st->map().get_cell_occupant(dest);
-        if (occupant != st->get_opponent_id(player_id_))
-            st->set_nain_position(nain.first, nain.second, dest);
+        const auto nains = st->map().get_nains_ids_at(curr_pos);
+
+        for (int nain_id : nains)
+            if (st->get_nain(curr_occupant, nain_id).accroche)
+                st->set_nain_position(curr_occupant, nain_id, destination);
+
+        curr_pos = get_position_offset(curr_pos, reverse_direction(sens_));
     }
 
     internal_action action;

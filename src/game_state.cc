@@ -128,9 +128,6 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
 
     position from = nains_[player_id][nain_id].pos;
 
-    if (map_.has_rope_at(from))
-        map_.remove_nain_from_rope(from, player_id, nain_id);
-
     nains_[player_id][nain_id].pos = dest;
     map_.move_nain(nain_id, from, dest);
 
@@ -140,9 +137,6 @@ void GameState::set_nain_position(int player_id, int nain_id, position dest)
         nains_[player_id][nain_id].butin = 0;
         nains_[player_id][nain_id].vie = VIE_NAIN;
     }
-
-    if (map_.has_rope_at(dest) && nains_[player_id][nain_id].accroche)
-        map_.add_nain_to_rope(dest, player_id, nain_id);
 }
 
 int GameState::get_movement_cost(int player_id, int nain_id,
@@ -297,9 +291,6 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
 
     if (nain.vie <= 0)
     {
-        if (map_.has_rope_at(nain.pos))
-            map_.remove_nain_from_rope(nain.pos, player_id, nain_id);
-
         nain.vie = 0;
         map_.remove_nain(nain_id, nain.pos);
         nains_respawn_.push_back({player_id, nain_id});
@@ -353,26 +344,11 @@ void GameState::check_rope_gravity(position pos, int current_player)
             break;
 
         const Rope& rope = map_.get_rope_at(pos);
-        update_nains_on_rope(rope.get_bottom());
-
         internal_action action;
         action.type = 4;
         action.fall = {current_player, -1, rope.get_bottom()};
         add_to_internal_history(current_player, action);
     }
-}
-
-void GameState::update_nains_on_rope(position pos)
-{
-    if (!inside_map(pos))
-        return;
-
-    const int player_id = map_.get_cell_occupant(pos);
-    const auto nains = map_.get_nains_ids_at(pos);
-
-    for (int id_nain : nains)
-        if (nains_[player_id][id_nain].accroche)
-            map_.add_nain_to_rope(pos, player_id, id_nain);
 }
 
 void GameState::add_rope(position pos, int current_player)
@@ -381,7 +357,6 @@ void GameState::add_rope(position pos, int current_player)
     assert(current_player == 0 || current_player == 1);
 
     map_.add_rope(pos);
-    update_nains_on_rope(pos);
     check_rope_gravity(pos, current_player);
 }
 

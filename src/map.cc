@@ -216,7 +216,7 @@ void Map::move_nain(int nain_id, position from, position to)
 
     const int player_id = map_[from.ligne][from.colonne].occupant;
     add_nain(nain_id, to, player_id);
-    // remove_nain(nain_id, from);
+    remove_nain(nain_id, from);
 }
 
 void Map::remove_nain(int nain_id, position pos)
@@ -269,24 +269,6 @@ const Rope& Map::get_rope_at(position pos) const
     assert(inside_map(pos) && has_rope_at(pos));
     const int index = map_[pos.ligne][pos.colonne].rope;
     return ropes_[index];
-}
-
-void Map::add_nain_to_rope(position pos, int player_id, int nain_id)
-{
-    assert(inside_map(pos));
-    assert(0 <= nain_id && nain_id < NB_NAINS);
-
-    const int index = map_[pos.ligne][pos.colonne].rope;
-    ropes_[index].add_nain(player_id, nain_id);
-}
-
-void Map::remove_nain_from_rope(position pos, int player_id, int nain_id)
-{
-    assert(inside_map(pos));
-    assert(0 <= nain_id && nain_id < NB_NAINS);
-
-    const int index = map_[pos.ligne][pos.colonne].rope;
-    ropes_[index].remove_nain(player_id, nain_id);
 }
 
 std::vector<position> Map::get_ropes_positions() const

@@ -14,11 +14,7 @@ public:
 
     void extends(position pos);
     void merge_down(const Rope& down);
-    void remove_nain(int player_id, int nain_id);
-    void add_nain(int player_id, int nain_id);
     void clear();
-
-    const std::vector<std::pair<int, int>>& get_nains() const;
 
     position get_anchor() const;
     position get_bottom() const;

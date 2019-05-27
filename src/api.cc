@@ -39,8 +39,6 @@ Api::Api(GameState* game_state, rules::Player_sptr player)
     , player_(player)
 {
     api = this;
-    std::cout << "Api@" << this << ": got a gamestate: " << game_state
-              << std::endl;
 }
 
 /// Renvoie le plus court chemin entre deux positions de la mine sous la forme
