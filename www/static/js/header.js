@@ -2,7 +2,7 @@
 // Copyright 2018 Alexandre Macabies
 
 $(function() {
-	$('[role=complementary] h1').text('').html('<object data="/static/img/logo.svg" width="100%" type="image/svg+xml" />');
+	$('[role=complementary] h1').text('').html('<object data="/static/img/logo.svg" style="width:100%; margin-top: 0.5em;" type="image/svg+xml" />');
 
 	// let's have some penguins
 	const p1 = $('<img src="/static/img/penguin1.png" class="easter-peng" />'),
