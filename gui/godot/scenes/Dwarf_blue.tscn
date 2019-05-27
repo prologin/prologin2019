@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://scripts/Dwarf.gd" type="Script" id=1]
 [ext_resource path="res://assets/blue/in_place/0.png" type="Texture" id=2]
@@ -36,6 +36,8 @@
 [ext_resource path="res://assets/blue/hit/1.png" type="Texture" id=34]
 [ext_resource path="res://assets/blue/hit/2.png" type="Texture" id=35]
 [ext_resource path="res://assets/blue/hit/3.png" type="Texture" id=36]
+[ext_resource path="res://assets/blue/victory/0.png" type="Texture" id=37]
+[ext_resource path="res://assets/blue/victory/1.png" type="Texture" id=38]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -70,6 +72,11 @@ animations = [ {
 "loop": true,
 "name": "hit",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 37 ), ExtResource( 38 ) ],
+"loop": true,
+"name": "dance",
+"speed": 5.0
 } ]
 
 [node name="Dwarf" type="KinematicBody2D"]
@@ -81,3 +88,4 @@ shape = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "mine"
+

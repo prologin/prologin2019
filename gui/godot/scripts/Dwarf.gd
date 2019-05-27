@@ -10,6 +10,7 @@ var mining = false
 var stick = false
 var roping = false
 var dying = false
+var dancing = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
 var external_pos = Vector2()
@@ -63,6 +64,12 @@ func set_rope_to(external_to, map):
 	#assert not moving
 	#assert not roping
 	roping = true
+
+func dance():
+	assert not dancing
+	dancing = true
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
+	$AnimatedSprite.play("dance")
 
 func die():
 	assert not dying
