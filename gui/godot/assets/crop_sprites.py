@@ -18,7 +18,9 @@ timelines = [
     'climb_vertical',
     'climb_horizontal',
     'fall',
-    'pull_rope']
+    'pull_rope',
+    'put_rope',
+    'victory']
 if sys.argv[3]:
     timelines = [timelines[int(sys.argv[3])]]
 y_plus = [0]*len(timelines)
