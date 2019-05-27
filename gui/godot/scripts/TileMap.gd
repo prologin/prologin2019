@@ -19,7 +19,7 @@ func mine(pos):
 	set_cell(pos.x, pos.y, 0)
 
 func set_rope(pos):
-	set_cell(pos.x, pos.y, 4)
+	set_cell(pos.x, pos.y, 9)
 
 func draw_rope(begin):
 	set_cell(begin.x, begin.y, 4)
