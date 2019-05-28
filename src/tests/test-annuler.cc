@@ -241,7 +241,7 @@ TEST_F(ApiTest, Annuler_ActionsCorde)
     }
 }
 
-TEST_F(ApiTest, Cancel_Allie)
+TEST_F(ApiTest, Cancel_HitAllie)
 {
     for (auto& player : players)
     {
@@ -259,6 +259,39 @@ TEST_F(ApiTest, Cancel_Allie)
         {
             CHECK_CANCEL(player, player.api->miner(0, reverse_direction(dir)));
             EXPECT_EQ(OK, player.api->miner(0, reverse_direction(dir)));
+            player.api->game_state()->reset_pa(
+                player.api->game_state()->get_player_id(player_id));
+        }
+
+        EXPECT_EQ(PAS_DE_NAIN, player.api->miner(0, reverse_direction(dir)));
+    }
+}
+
+TEST_F(ApiTest, Cancel_HitEnemie)
+{
+    for (auto& player : players)
+    {
+        const int player_id = player.api->moi();
+        const nain nain_initial = player.api->info_nain(player_id, 0);
+        const direction dir = (nain_initial.pos.colonne < 15) ? DROITE : GAUCHE;
+
+        for (int i = 0; i < TAILLE_MINE - 2; i++)
+        {
+            EXPECT_EQ(OK, player.api->deplacer(0, dir));
+            player.api->game_state()->reset_pm(
+                player.api->game_state()->get_player_id(player_id));
+        }
+
+        EXPECT_EQ(OBSTACLE_NAIN, player.api->deplacer(0, dir));
+
+        // Hit once
+        CHECK_CANCEL(player, player.api->miner(0, dir));
+
+        // Kill !!!
+        for (int i = 0; i < (VIE_NAIN + DEGAT_PIOCHE - 1) / DEGAT_PIOCHE; i++)
+        {
+            CHECK_CANCEL(player, player.api->miner(0, dir));
+            EXPECT_EQ(OK, player.api->miner(0, dir));
             player.api->game_state()->reset_pa(
                 player.api->game_state()->get_player_id(player_id));
         }

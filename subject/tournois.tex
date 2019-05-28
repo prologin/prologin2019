@@ -13,7 +13,7 @@ classement final, mais sont néanmoins à prendre au sérieux, car ils vous
 permettront de vous situer par rapport aux autres joueurs, de connaître vos
 ennemis, vos points forts et vos faiblesses, et vous donneront des pistes pour
 vous améliorer pendant la finale. L'annonce des tournois intermédiaires se fera
-environ une heure avant.
+dans l'heure qui précède.
 
 Pour chaque tournois, nous prendrons le dernier champion que chaque candidat
 aura envoyé sur le site de soumission pour le faire participer au tournoi, et
@@ -27,7 +27,7 @@ choix, qui seront potentiellement amenées à changer au fur et à mesure.
 Le tournoi final aura lieu \textbf{samedi à 23~h~42}.
 
 Le rendu final est le seul rendu qui comptera pour le classement. Les mêmes
-règles s'appliquent : le dernier champion soumis à l'heure du début du tournoi
+règles s'appliquent: le dernier champion soumis à l'heure du début du tournoi
 sera le champion utilisé pour le tournoi final.
 
 Lors du tournoi final, plusieurs cartes seront ajoutées. Celles-ci resteront
@@ -42,14 +42,14 @@ employés pour l'implémenter.
 
 \section{Considérations techniques}
 
-Vous disposez d'une seconde (temps réel !) à chaque fois qu'une de vos
-fonctions est appelée pour rendre la main. Passé ce délai, votre programme est
-tué, le match continue sans vous et vos fonctions ne sont plus appelées. Il
-n'est pas possible de revenir en jeu tout simplement parce qu'il n'y a aucun
-moyen de rétablir l'état des environnements des langages après une
-interruption.  Les limites de mémoire sont faites avec des \texttt{cgroups}, ce
-qui fait que l'allocation échouera si vous essayez de dépasser la limite qui
-vous est accordée. Cette limite compte aussi la taille de la pile.
+Vous disposez d'une seconde (temps réel!) à chaque fois qu'une de vos fonctions
+est appelée pour rendre la main. Passé ce délai, votre programme est tué, le
+match continue sans vous et vos fonctions ne sont plus appelées. Il n'est pas
+possible de revenir en jeu tout simplement parce qu'il n'y a aucun moyen de
+rétablir l'état des environnements des langages après une interruption.  Les
+limites de mémoire sont faites avec des \texttt{cgroups}, ce qui fait que
+l'allocation échouera si vous essayez de dépasser la limite qui vous est
+accordée. Cette limite compte aussi la taille de la pile.
 
 D'autres limitations sont appliquées :
 
