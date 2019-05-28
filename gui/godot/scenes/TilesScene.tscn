@@ -9,7 +9,7 @@ position = Vector2( 1, 2 )
 scale = Vector2( 0.941176, 0.882353 )
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 64, 32, 32, 32 )
+region_rect = Rect2( 0, 32, 32, 32 )
 
 [node name="Stone" type="Sprite" parent="."]
 texture = ExtResource( 1 )

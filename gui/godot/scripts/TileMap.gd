@@ -13,16 +13,16 @@ func world_position(pos):
 	return map_to_world(pos) + (get_cell_size() / 2)
 
 func set_flag(pos):
-	set_cell(pos.x, pos.y, 10)
+	set_cell(pos.x, pos.y, tile_set.find_tile_by_name("flag"))
 
 func mine(pos):
-	set_cell(pos.x, pos.y, 0)
+	set_cell(pos.x, pos.y, tile_set.find_tile_by_name("Free"))
 
 func set_rope(pos):
-	set_cell(pos.x, pos.y, 9)
+	set_cell(pos.x, pos.y, tile_set.find_tile_by_name("Rope"))
 
 func draw_rope(begin):
-	set_cell(begin.x, begin.y, 4)
+	set_cell(begin.x, begin.y, tile_set.find_tile_by_name("Rope_ext"))
 
 func get_tile(x, y):
 	return get_cell(x,y)

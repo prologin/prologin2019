@@ -17,6 +17,9 @@ var external_pos = Vector2()
 
 const SPEED = 100
 
+func set_sticky(is_stick):
+	stick = is_stick
+
 func set_external_position(pos, map):
 	external_pos = pos
 	position = map.world_position(pos)
@@ -29,14 +32,10 @@ func move_to(external_to, map):
 	moving = true
 	var anim = null
 	var dx = to.x - position.x
-	if (stick and dx == 0):
-		if ($TileMap.get_tile(position.x, position.y) == 4):
-			anim = "climb"
-		else:
-			anim = "grab"
+	if stick and dx == 0:
+		anim = "climb_v"
 	else:
 		anim = "move"
-		stick = false
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 
