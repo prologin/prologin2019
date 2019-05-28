@@ -134,11 +134,22 @@ func redraw(turn, players, ropes):
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
 
-	if turn / 2 + 1 == 100:
+	if turn / 2 + 1 >= 100:
+		if players[0].score == players[1].score:
+			$Info/End.text = "Egalite"
+			return
 		if players[0].score > players[1].score:
-			$Info/End.text = players[0].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
+			$Info/endnode/End.text = players[0].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
+			$Info/blue.show()
+			$Info/green.show()
+			$Info/blue.play("win")
+			$Info/green.play("die")
 		else:
-			$Info/End.text = "Victoire de " + players[1].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
+			$Info/blue.show()
+			$Info/green.show()
+			$Info/blue.play("die")
+			$Info/green.play("win")
+			$Info/endnode/End.text = "Victoire de " + players[1].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
 
 func teleport(dwarf, pos):
 	dwarf.set_external_position(pos, $TileMap)

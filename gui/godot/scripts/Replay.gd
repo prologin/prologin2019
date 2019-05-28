@@ -46,7 +46,11 @@ func _process(delta):
 
 	if $GameState/Info/Jump.pressed:
 		$GameState.finish_action()
-		jump_turn($GameState/Info/Jump/TurnIndex.get_line(0))
+		var input = $GameState/Info/Jump/TurnIndex.get_line(0)
+		if int(input) <= 99:
+			jump_turn(input)
+		else:
+			print("Invalid Index")
 		
 	if Input.is_action_just_pressed("toggle_screen"):
     	OS.window_fullscreen = !OS.window_fullscreen
