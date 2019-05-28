@@ -3,26 +3,26 @@
 [ext_resource path="res://scripts/GameState.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Info.gd" type="Script" id=2]
 [ext_resource path="res://assets/Pixel Sans Serif.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://assets/green/die/0.png" type="Texture" id=4]
-[ext_resource path="res://assets/green/die/1.png" type="Texture" id=5]
-[ext_resource path="res://assets/green/die/2.png" type="Texture" id=6]
-[ext_resource path="res://assets/green/die/3.png" type="Texture" id=7]
-[ext_resource path="res://assets/green/die/4.png" type="Texture" id=8]
-[ext_resource path="res://assets/green/die/5.png" type="Texture" id=9]
-[ext_resource path="res://assets/green/die/6.png" type="Texture" id=10]
-[ext_resource path="res://assets/green/die/7.png" type="Texture" id=11]
-[ext_resource path="res://assets/green/victory/0.png" type="Texture" id=12]
-[ext_resource path="res://assets/green/victory/1.png" type="Texture" id=13]
-[ext_resource path="res://assets/blue/die/0.png" type="Texture" id=14]
-[ext_resource path="res://assets/blue/die/1.png" type="Texture" id=15]
-[ext_resource path="res://assets/blue/die/2.png" type="Texture" id=16]
-[ext_resource path="res://assets/blue/die/3.png" type="Texture" id=17]
-[ext_resource path="res://assets/blue/die/4.png" type="Texture" id=18]
-[ext_resource path="res://assets/blue/die/5.png" type="Texture" id=19]
-[ext_resource path="res://assets/blue/die/6.png" type="Texture" id=20]
-[ext_resource path="res://assets/blue/die/7.png" type="Texture" id=21]
-[ext_resource path="res://assets/blue/victory/0.png" type="Texture" id=22]
-[ext_resource path="res://assets/blue/victory/1.png" type="Texture" id=23]
+[ext_resource path="res://assets/green/die/0_big.png" type="Texture" id=4]
+[ext_resource path="res://assets/green/die/1_big.png" type="Texture" id=5]
+[ext_resource path="res://assets/green/die/2_big.png" type="Texture" id=6]
+[ext_resource path="res://assets/green/die/3_big.png" type="Texture" id=7]
+[ext_resource path="res://assets/green/die/4_big.png" type="Texture" id=8]
+[ext_resource path="res://assets/green/die/5_big.png" type="Texture" id=9]
+[ext_resource path="res://assets/green/die/6_big.png" type="Texture" id=10]
+[ext_resource path="res://assets/green/die/7_big.png" type="Texture" id=11]
+[ext_resource path="res://assets/green/victory/0_big.png" type="Texture" id=12]
+[ext_resource path="res://assets/green/victory/1_big.png" type="Texture" id=13]
+[ext_resource path="res://assets/blue/die/0_big.png" type="Texture" id=14]
+[ext_resource path="res://assets/blue/die/1_big.png" type="Texture" id=15]
+[ext_resource path="res://assets/blue/die/2_big.png" type="Texture" id=16]
+[ext_resource path="res://assets/blue/die/3_big.png" type="Texture" id=17]
+[ext_resource path="res://assets/blue/die/4_big.png" type="Texture" id=18]
+[ext_resource path="res://assets/blue/die/5_big.png" type="Texture" id=19]
+[ext_resource path="res://assets/blue/die/6_big.png" type="Texture" id=20]
+[ext_resource path="res://assets/blue/die/7_big.png" type="Texture" id=21]
+[ext_resource path="res://assets/blue/victory/0_big.png" type="Texture" id=22]
+[ext_resource path="res://assets/blue/victory/1_big.png" type="Texture" id=23]
 [ext_resource path="res://assets/tiles.tres" type="TileSet" id=24]
 [ext_resource path="res://scripts/TileMap.gd" type="Script" id=25]
 
@@ -35,7 +35,7 @@ font_data = ExtResource( 3 )
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
 "frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
-"loop": false,
+"loop": true,
 "name": "die",
 "speed": 5.0
 }, {
@@ -119,8 +119,7 @@ margin_bottom = 20.1039
 [node name="green" type="AnimatedSprite" parent="Info"]
 visible = false
 show_behind_parent = true
-position = Vector2( 993.029, 516.473 )
-scale = Vector2( 9.14005, 8.04911 )
+position = Vector2( 1065.28, 486.367 )
 z_index = 2
 frames = SubResource( 5 )
 animation = "win"
@@ -130,7 +129,6 @@ flip_h = true
 visible = false
 show_behind_parent = true
 position = Vector2( 193.71, 518.991 )
-scale = Vector2( 9.3918, 7.20993 )
 z_index = 2
 frames = SubResource( 4 )
 animation = "die"

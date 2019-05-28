@@ -80,7 +80,7 @@ func set_rope(action, player_id):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
-	dwarf.set_rope_to(dest, $TileMap)
+	dwarf.set_rope_to()
 	is_roping = dest
 	return true
 
