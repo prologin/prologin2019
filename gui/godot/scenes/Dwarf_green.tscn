@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://scripts/Dwarf.gd" type="Script" id=1]
 [ext_resource path="res://assets/green/in_place/0.png" type="Texture" id=2]
@@ -35,11 +35,15 @@
 [ext_resource path="res://assets/green/hit/1.png" type="Texture" id=33]
 [ext_resource path="res://assets/green/hit/2.png" type="Texture" id=34]
 [ext_resource path="res://assets/green/hit/3.png" type="Texture" id=35]
-[ext_resource path="res://assets/green/rope/0.png" type="Texture" id=36]
-[ext_resource path="res://assets/green/rope/1.png" type="Texture" id=37]
-[ext_resource path="res://assets/green/climb_vertical/0.png" type="Texture" id=38]
-[ext_resource path="res://assets/green/climb_vertical/1.png" type="Texture" id=39]
-[ext_resource path="res://assets/green/climb_vertical/2.png" type="Texture" id=40]
+[ext_resource path="res://assets/green/climb_horizontal/0.png" type="Texture" id=36]
+[ext_resource path="res://assets/green/climb_horizontal/1.png" type="Texture" id=37]
+[ext_resource path="res://assets/green/climb_horizontal/2.png" type="Texture" id=38]
+[ext_resource path="res://assets/green/climb_horizontal/3.png" type="Texture" id=39]
+[ext_resource path="res://assets/green/rope/0.png" type="Texture" id=40]
+[ext_resource path="res://assets/green/rope/1.png" type="Texture" id=41]
+[ext_resource path="res://assets/green/climb_vertical/0.png" type="Texture" id=42]
+[ext_resource path="res://assets/green/climb_vertical/1.png" type="Texture" id=43]
+[ext_resource path="res://assets/green/climb_vertical/2.png" type="Texture" id=44]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -70,22 +74,22 @@ animations = [ {
 "name": "mine",
 "speed": 5.0
 }, {
-"frames": [  ],
-"loop": true,
-"name": "grab",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 35 ) ],
 "loop": true,
 "name": "hit",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 36 ), ExtResource( 37 ) ],
+"frames": [ ExtResource( 36 ), ExtResource( 37 ), ExtResource( 38 ), ExtResource( 39 ) ],
+"loop": true,
+"name": "climb_h",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 40 ), ExtResource( 41 ) ],
 "loop": true,
 "name": "climb_rope",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 38 ), ExtResource( 39 ), ExtResource( 40 ) ],
+"frames": [ ExtResource( 42 ), ExtResource( 43 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "climb_v",
 "speed": 5.0
@@ -102,7 +106,6 @@ __meta__ = {
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-use_parent_material = true
 position = Vector2( -0.500004, 2.5 )
 scale = Vector2( 0.993333, 1.16667 )
 frames = SubResource( 2 )

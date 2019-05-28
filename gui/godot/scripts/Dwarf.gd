@@ -33,7 +33,10 @@ func move_to(external_to, map):
 	var anim = null
 	var dx = to.x - position.x
 	if stick and dx == 0:
-		anim = "climb_v"
+		if dx == 0:
+			anim = "climb_v"
+		else:
+			anim = "climb_h"
 	else:
 		anim = "move"
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
@@ -58,10 +61,7 @@ func mine_to(external_to, map):
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
 	
-func set_rope_to(external_to, map):
-	#assert not mining
-	#assert not moving
-	#assert not roping
+func set_rope_to():
 	roping = true
 
 func dance():
@@ -76,7 +76,7 @@ func die():
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("die")
 
-func grab_to(map):
+func grab_to():
 	assert not mining
 	stick = true
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
