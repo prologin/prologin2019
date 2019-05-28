@@ -51,8 +51,9 @@ void ActionMiner::apply_on(GameState* st) const
     {
         // Handle an attack
         const int player_id = st->map().get_cell_occupant(dest);
+        const auto nains_ids = st->map().get_nains_ids_at(dest);
 
-        for (int nain_id : st->map().get_nains_ids_at(dest))
+        for (int nain_id : nains_ids)
             st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE, player_id_);
     }
     else
