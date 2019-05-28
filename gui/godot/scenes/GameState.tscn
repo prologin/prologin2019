@@ -119,7 +119,7 @@ margin_bottom = 20.1039
 [node name="green" type="AnimatedSprite" parent="Info"]
 visible = false
 show_behind_parent = true
-position = Vector2( 1473.88, 561.789 )
+position = Vector2( 993.029, 516.473 )
 scale = Vector2( 9.14005, 8.04911 )
 z_index = 2
 frames = SubResource( 5 )
@@ -129,7 +129,7 @@ flip_h = true
 [node name="blue" type="AnimatedSprite" parent="Info"]
 visible = false
 show_behind_parent = true
-position = Vector2( 654.42, 551.719 )
+position = Vector2( 193.71, 518.991 )
 scale = Vector2( 9.3918, 7.20993 )
 z_index = 2
 frames = SubResource( 4 )
@@ -148,13 +148,6 @@ margin_top = -2.0
 margin_right = 2.0
 margin_bottom = 21.0
 text = "0"
-
-[node name="Popup" type="Popup" parent="Info"]
-visible = true
-margin_left = 455.535
-margin_top = 126.254
-margin_right = 1671.53
-margin_bottom = 705.254
 
 [node name="endnode" type="Node2D" parent="Info"]
 z_index = 1
