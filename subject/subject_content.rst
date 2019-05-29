@@ -13,7 +13,7 @@ Passons donc en revue vos nouvelles conditions d’exercice.
 La mine (standard)
 ------------------
 
-C’est une mine. Parfois il y a des tunnels déjà creusées, d’autres fois
+C’est une mine. Parfois il y a des tunnels déjà creusés, d’autres fois
 non.
 
 Le minerai
@@ -45,7 +45,7 @@ certaines… particularités, comme des *points d’action*, *de déplacement*
 et *de vie*.
 
 Pour des questions de restrictions budgétaires, le nombre de nains
-(standard) est limité.
+(standards) est limité.
 
 De la concurrence pour plus de productivité
 -------------------------------------------
@@ -77,7 +77,7 @@ exactement 0 pièce d’or [5]_, et **requiert un seul coup de pioche pour
 Le minerai
 ----------
 
-En plus du granite (standard), il a été identifié 6 types de minerai
+En plus du granite (standard), il a été identifié 6 types de minerais
 différents. Le marché pouvant être particulièrement volatile, leur
 valeur en pièces d’or varie, de même que le nombre de coups de pioche
 nécessaires pour les extraire. Les valeurs dépendent de la mine en
@@ -121,8 +121,8 @@ Divers
 ------
 
 Le terrain comporte de nombreuses cavités naturelles, formant parfois
-des trous profonds. C’est très utiles pour descendre vos nains plus
-rapidement … dans les deux sens du termes ! Plus ils chuteront de haut,
+des trous profonds. C’est très utile pour descendre vos nains plus
+rapidement … dans les deux sens du terme ! Plus ils chuteront de haut,
 plus ils se blesseront à l’arrivée [7]_. Vous trouverez plus de détails
 sur les risques de chute dans le manuel d’exploitation.
 
@@ -161,14 +161,13 @@ Cordages (standard)
 -------------------
 
 Le matériel des nains inclut des cordes (standard) illimitées. Pour les
-utiliser il convient de disposer une poulie en tête de cordage, cela
+utiliser il convient de disposer d'une poulie en tête de cordage, cela
 permettra les actions sur la corde.
 
 Ces cordes permettent aux nains de se déplacer au dessus du vide plus
 rapidement qu’en s’agrippant aux parois.
 
-Une fois la poulie posée, **la corde descend jusqu’au sol**, de plus
-votre équipe de nains s’assurera de prévoir suffisamment de jeu afin que
+Une fois la poulie posée, **la corde descend jusqu’au sol**. Votre équipe de nains s’assurera de prévoir suffisamment de jeu afin que
 la corde puisse toujours se dérouler au fur et à mesure que de nouveaux
 blocs de granite (standard) sont creusés en dessous de celle-ci. En
 revanche, **poser une corde est une entreprise complexe, qui nécessite
@@ -176,24 +175,26 @@ la totalité des points d’action de toute l’équipe combinée**.
 
 De plus les cordes peuvent être actionnées par un autre nain qui n’est
 pas sur la corde. En consommant des points d’actions **un nain peut
-actionner la corde dans un sens ou dans un autre** ce qui entrainera tous
-les nains agrippés et sur une case de la corde dans le sens choisi.
+actionner la corde dans un sens ou dans un autre** ce qui entrainera dans le
+sens choisi tous les nains agrippés et sur une case de la corde.
 
 Déplacements
 ------------
 
-Le personnel minier peut se déplacer dans deux dimensions: verticalement
+Le personnel minier peut se déplacer dans deux dimensions : verticalement
 et transversalement, en marchant au sol, en s’agrippant, en chutant ou
 emporté par une corde.
 
 Un déplacement n’est possible que vers une position libre [10]_, et
-nécessite des *points de déplacement*. De plus, nous rappelons aux nains
-que les effets de la gravité existe [11]_, nous vous recommandant donc
-de lire attentivement la section dédié.
+nécessite des *points de déplacement*. Une case n'est pas considérée comme
+libre lorsqu'elle contient du granite, de l'obsidienne, ou un nain (standard)
+ennemi. De plus, nous rappelons aux nains
+que les effets de la gravité existe [11]_, nous vous recommandons donc
+de lire attentivement la section dédiée.
 
 Il est également à noter que la promiscuité ne pose pas de problème aux
 mineurs [12]_, ils peuvent donc se trouver sur une même position. Il est
-néanmoins nécessaire de se coordonner un minimum avant: ainsi seuls
+néanmoins nécessaire de se coordonner un minimum avant : ainsi seuls
 **les mineurs d’une même équipe se tolèrent entre eux**.
 
 Enfin, de par leur activité physique intense, les mineurs ont les
@@ -223,11 +224,11 @@ la hauteur de chute, selon la formule ci-dessous.
 avec :math:`h` la hauteur de chute. Si un nain meurt de chute, les dieux
 vont immédiatement s’occuper de faire disparaitre son butin [13]_.
 
-Cependant il est possible d’échapper à ça: **un nain agrippé, libéré de
+Cependant il est possible d’échapper à ça : **un nain agrippé, libéré de
 l’emprise de la gravité, peut se déplacer dans toutes les directions
 sans craindre de chuter**, ce qui lui demandera plus de *points
-d’action* que de se déplacement au sol. Il y a alors plusieurs manière
-de se déplacer à distinguer pour un nain agrippé:
+d’action* que de se déplacer au sol. Il y a alors plusieurs manières
+de se déplacer à distinguer pour un nain agrippé :
 
 -  déplacement standard (relativement lent)
 
@@ -257,7 +258,7 @@ sécurité…), **le minerai doit être rapporté à la taverne**.
 
 Notez que comme **les nains ne peuvent porter qu’une quantité limitée de
 minerai** [14]_, ils devront régulièrement faire un retour à la taverne
-pour décharger celui-ci. Si un nain extrait du minerai qu’il ne peut pas
+pour se décharger. Si un nain extrait du minerai qu’il ne peut pas
 porter, il détruit immédiatement ce qu’il y a de trop pour éviter que ça
 ne tombe entre de mauvaises mains [15]_.
 
@@ -265,7 +266,7 @@ Cas particulier des rencontres malveillantes
 --------------------------------------------
 
 Il est rappelé à l’ensemble du personnel que la pioche (standard) qui
-est donnée à chaque nains, peut également être considéré comme une arme
+est donnée à chaque nain, peut également être considérée comme une arme
 de quatrième catégorie… Son usage à cette fin est explicitement ignoré
 par la direction, à la discrétion de chacun. Dans ce cas, la pioche se
 manie de manière identique à son utilisation standard. À noter que **si
@@ -280,8 +281,8 @@ butin sur le coup …
 
 **Le nain qui a donné le coup de pioche s’empresse alors de récupérer le
 butin des nains éliminés**, dans la limite de la *capacité* qu’il a à le
-transporter, comme expliqué dans la section précédente, il détruira tous
-ce qu’il n’arrive pas à emporter avec lui.
+transporter, comme expliqué dans la section précédente. Il détruira donc tout
+ce qu’il n’arrivera pas à emporter avec lui.
 
 .. [1]
    Restriction budgétaire, crise économique, augmentation des taxes…
@@ -304,14 +305,14 @@ ce qu’il n’arrive pas à emporter avec lui.
 .. [7]
    Nous rappelons que P.R.O.L.O.G.I.N. n’est responsable en aucune
    manière des blessures reçues par ses employés, et que toute la charge
-   en incombe sur le manager (vous donc).
+   en incombe sur le manager (vous, donc).
 
 .. [8]
-   et non pas laminer
+   Et non pas laminer
 
 .. [9]
-   Ce type de réaction n’a été observé dans nos laboratoires que chez
-   les nains standard adultes, n’essayez pas chez vous, même si vous
+   Ce type de réaction n’a été observée dans nos laboratoires que chez
+   les nains standard adultes. N’essayez pas chez vous, même si vous
    mesurez moins d’un mètre 50.
 
 .. [10]
@@ -326,14 +327,14 @@ ce qu’il n’arrive pas à emporter avec lui.
 
 .. [13]
    Il est inscrit dans les registres sacrés: “On subit tellement avec
-   les bêtises des nains qu’on a bien été forcé d’y mettre une taxe”.
+   les bêtises des nains qu’on a bien été forcés d’y mettre une taxe”.
 
 .. [14]
    Tous leurs points de compétences dédiés ayant été investis dans le
    transport de bière.
 
 .. [15]
-   Ami ou ennemi, un nain nai jamais trop prudent.
+   Ami ou ennemi, un nain n'est jamais trop prudent.
 
 .. [16]
    Striiike!
