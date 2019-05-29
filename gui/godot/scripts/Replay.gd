@@ -29,17 +29,17 @@ func _ready():
 	dump = DUMP_READER.parse_input_json()
 	current_turn = DUMP_READER.parse_turn(dump[turn])
 	$GameState.init(current_turn, self)
+	$GameState.check(current_turn)
 
 func next_turn():
-	if turn + 1 == Constants.NB_TOURS * 2:
+	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
-	var current_turn = DUMP_READER.parse_turn(dump[turn])
+	current_turn = DUMP_READER.parse_turn(dump[turn])
 	actions = current_turn.players[get_player_id()].history.duplicate()
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
 
 func _process(delta):
-		
 	if Input.is_action_pressed("ui_escape") and not get_tree().paused:
 		get_tree().paused = true
 		$Pause.show()
@@ -58,4 +58,6 @@ func _process(delta):
 	while actions.size() != 0 and not is_animating:
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:
+		if turn != 0:
+			$GameState.check(DUMP_READER.parse_turn(dump[turn - 1]))
 		next_turn()

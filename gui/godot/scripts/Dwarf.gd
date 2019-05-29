@@ -88,12 +88,12 @@ func pull_to():
 	$AnimatedSprite.play("climb")
 	
 func stop():
-	$AnimatedSprite.set_speed_scale(Global.speed_factor)
-	$AnimatedSprite.play("idle")
-	emit_signal("finished_moving")
 	moving = false
 	mining = false
 	dying = false
+	emit_signal("finished_moving")
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
+	$AnimatedSprite.play("idle")
 
 func animation_finished():
 	if mining or (stick and not moving) or roping or dying:
@@ -105,7 +105,7 @@ func _ready():
 func _process(delta):
 	if moving:
 		var diff = _moving_to - position
-		if diff == Vector2():
+		if diff == Vector2(0, 0):
 			stop()
 		else:
 			var speed = SPEED * Global.speed_factor
