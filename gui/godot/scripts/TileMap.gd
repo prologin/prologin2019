@@ -40,12 +40,15 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 	for y in range(Constants.TAILLE_MINE):
 		for x in range(Constants.TAILLE_MINE):
 			var is_ore = false
+			var is_rope_ext = false
 			var is_rope = false
 			var ore_o = null
 			
 			for rope in ropes:
-				if rope.haut.y >= y or rope.bas.y <= y:
+				if rope.haut.y == y or rope.bas.y == y:
 					is_rope = true
+				if rope.haut.y > y or rope.bas.y < y:
+					is_rope_ext = true
 					break
 				
 			for ore in ores:
@@ -58,8 +61,10 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 				#set_ore_color(ore_o.value)
 				set_cell(x, y, get_ore_color(ore_o.value))
 			elif not reset and (Vector2(x, y) == spawn1 or Vector2(x, y) == spawn2):
-				set_cell(x, y, 5)
+				set_cell(x, y, tile_set.find_tile_by_name("Spawn"))
+			elif is_rope_ext:
+				set_cell(x, y, tile_set.find_tile_by_name("Rope_ext"))
 			elif is_rope:
-				set_cell(x, y, 4)
+				set_cell(x, y, tile_set.find_tile_by_name("Rope"))
 			else:
 				set_cell(x, y, blocks[y][x])
