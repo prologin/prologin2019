@@ -1,5 +1,8 @@
 all:: subject.pdf
 
+subject_content.tex: subject_content.rst
+	pandoc -o subject_content.tex subject_content.rst
+
 apidoc.tex useapi.tex: ../prologin2019.yml
 	stechec2-generator apidoc ../prologin2019.yml .
 
@@ -17,7 +20,7 @@ clean:
 distclean: clean
 	rm -f apidoc.tex
 	rm -f useapi.tex
-	rm -f finale.tex
+	rm -f subject_content.tex
 	rm -f subject.pdf
 
 .PHONY: all subject.pdf
