@@ -245,7 +245,6 @@ int Api::cout_deplacement(int id_nain, direction dir)
 {
     const int player_id = game_state_->get_player_id(player_->id);
 
-    // TODO: to functions
     if (!nain_valid(id_nain) || !dir_valid(dir))
         return -1;
 

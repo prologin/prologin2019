@@ -294,7 +294,8 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
         nain.vie = 0;
         map_.remove_nain(nain_id, nain.pos);
         nains_respawn_.push_back({player_id, nain_id});
-        // TODO: CHECK GRAVITY
+
+        check_nain_gravity(get_position_offset(nain.pos, HAUT), current_player);
 
         internal_action action;
         action.type = 3;

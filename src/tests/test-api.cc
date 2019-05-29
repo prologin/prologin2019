@@ -3,8 +3,6 @@
 
 #include "test-helpers.hh"
 
-// TODO add test for type_case
-
 TEST_F(ApiTest, Api_Moi)
 {
     for (auto& player : players)
