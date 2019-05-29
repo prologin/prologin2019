@@ -19,13 +19,13 @@ non.
 Le minerai
 ----------
 
-*Le granit est une roche magmatique plutonique à structure grenue,
+*Le granite* [42]_ *est une roche magmatique plutonique à structure grenue,
 c’est-à-dire entièrement cristallisée, formée par le refroidissement
 lent et en profondeur d’un magma issu de la fusion partielle de la
 croûte continentale. C’est une roche acide composée essentiellement de
 quartz et de mica* [2]_ .
 
-La région est riche en granit (standard), mais il existe des veines de
+La région est riche en granite (standard), mais il existe des veines de
 minerai de plus forte valeur. Vous consulterez avec attention le rapport
 de votre géologue en chef qui reprend les différents minerais présents
 sur site.
@@ -63,13 +63,13 @@ n’étant que le produit de malheureux accidents [4]_.
 Rapport géologique
 ==================
 
-Le granit (standard)
+Le granite (standard)
 --------------------
 
-*Le granit est une roche magmatique plutonique à structure grenue,
+*Le granite est une roche magmatique plutonique à structure grenue,
 c’est-à-dire entièrement cristallisée, formée par le refroi…*
 
-Bref, comme vous le savez déjà, le granit (standard) est présent en
+Bref, comme vous le savez déjà, le granite (standard) est présent en
 abondance sur le site. Cependant, il a une valeur marchande de très
 exactement 0 pièce d’or [5]_, et **requiert un seul coup de pioche pour
 être cassé**.
@@ -77,7 +77,7 @@ exactement 0 pièce d’or [5]_, et **requiert un seul coup de pioche pour
 Le minerai
 ----------
 
-En plus du granit (standard), il a été identifié 6 types de minerai
+En plus du granite (standard), il a été identifié 6 types de minerai
 différents. Le marché pouvant être particulièrement volatile, leur
 valeur en pièces d’or varie, de même que le nombre de coups de pioche
 nécessaires pour les extraire. Les valeurs dépendent de la mine en
@@ -91,7 +91,7 @@ caractéristiques :
 ============  ===============================  ===================
  Minerai       Échantillon                      Rendement
 ============  ===============================  ===================
-Granit        .. image:: frames/granit.png     0
+Granite       .. image:: frames/granit.png     0
                 :width: 20px
                 :height: 20px
 Obsidienne    .. image:: frames/obsidian.png   –
@@ -285,6 +285,12 @@ ce qu’il n’arrive pas à emporter avec lui.
 
 .. [1]
    Restriction budgétaire, crise économique, augmentation des taxes…
+
+.. [42]
+   Il ne faut pas confondre « granite » et « granit », le premier
+   désignant une roche spécifique, tandis que le second est un terme
+   commercial utilisé dans l'industrie extractive, indépendamment de sa
+   lithologie
 
 .. [2]
    …do
