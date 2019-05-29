@@ -28,12 +28,10 @@ Global="*res://scripts/Global.gd"
 
 window/size/width=1242
 window/size/height=1024
-window/stretch/mode="viewport"
-window/stretch/aspect="keep_width"
 
 [editor]
 
-main_run_args="-json=/home/bfor/download/dump-38179.json"
+main_run_args="-json=/home/bull/prologin2019/gui/dump3.json"
 
 [input]
 

@@ -49,6 +49,8 @@ func replay_action(action, player_id):
 		return stick(action, player_id, true)
 	if action["action"] == Constants.ACTIONS.get("ACTION_LACHER"):
 		return stick(action, player_id, false)
+	if action["action"] == Constants.ACTIONS.get("ACTION_TIRER"):
+		return pull(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_DEBUG_AFFICHER_DRAPEAU"):
 		return flag(action, player_id)
 	if action["action"] == -2:
@@ -60,6 +62,12 @@ func replay_action(action, player_id):
 	print("unknown action: ", action["action"])
 	return false
 
+func pull(action, player_id):
+	var dwarf_id = int(action["id_nain"])
+	var dwarf = dwarfs[player_id][dwarf_id]
+	dwarf.pull()
+	return true
+	
 func stick(action, player_id, is_stick):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]

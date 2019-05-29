@@ -10,6 +10,7 @@ var mining = false
 var stick = false
 var roping = false
 var dying = false
+var pulling = false
 var dancing = false
 var _moving_to = Vector2()
 var _mining_to = Vector2()
@@ -67,6 +68,12 @@ func mine_to(external_to, map):
 func set_rope_to():
 	roping = true
 
+func pull():
+	assert not pulling
+	pulling = true
+	$AnimatedSprite.set_speed_scale(Global.speed_factor)
+	$AnimatedSprite.play("pull")
+
 func dance():
 	assert not dancing
 	dancing = true
@@ -94,12 +101,13 @@ func stop():
 	moving = false
 	mining = false
 	dying = false
+	pulling = false
 	emit_signal("finished_moving")
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("idle")
 
 func animation_finished():
-	if mining or (stick and not moving) or roping or dying:
+	if mining or (stick and not moving) or roping or dying or pulling:
 		stop()
 
 func _ready():
