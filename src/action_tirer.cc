@@ -45,6 +45,11 @@ int ActionTirer::check(const GameState* st) const
 
 void ActionTirer::apply_on(GameState* st) const
 {
+    internal_action action;
+    action.type = 1;
+    action.action = {ACTION_TIRER, id_nain_, dir_corde_, sens_};
+    st->add_to_internal_history(player_id_, action);
+
     const nain nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain.pos, dir_corde_);
 
@@ -71,9 +76,4 @@ void ActionTirer::apply_on(GameState* st) const
 
         curr_pos = get_position_offset(curr_pos, reverse_direction(sens_));
     }
-
-    internal_action action;
-    action.type = 1;
-    action.action = {ACTION_TIRER, id_nain_, dir_corde_, sens_};
-    st->add_to_internal_history(player_id_, action);
 }

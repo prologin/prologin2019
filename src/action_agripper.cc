@@ -21,12 +21,12 @@ int ActionAgripper::check(const GameState* st) const
 
 void ActionAgripper::apply_on(GameState* st) const
 {
-    st->set_nain_accroche(player_id_, id_nain_, true);
-    st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
-
     internal_action action;
     action.type = 1;
     action.action = {ACTION_AGRIPPER, id_nain_, ERREUR_DIRECTION,
                      ERREUR_DIRECTION};
+
     st->add_to_internal_history(player_id_, action);
+    st->set_nain_accroche(player_id_, id_nain_, true);
+    st->reduce_pa(player_id_, id_nain_, COUT_AGRIPPER);
 }

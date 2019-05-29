@@ -36,6 +36,11 @@ int ActionPoserCorde::check(const GameState* st) const
 
 void ActionPoserCorde::apply_on(GameState* st) const
 {
+    internal_action action;
+    action.type = 1;
+    action.action = {ACTION_POSER_CORDE, id_nain_, dir_, ERREUR_DIRECTION};
+    st->add_to_internal_history(player_id_, action);
+
     const nain nain = st->get_nain(player_id_, id_nain_);
     st->add_rope(get_position_offset(nain.pos, dir_), player_id_);
 
@@ -44,9 +49,4 @@ void ActionPoserCorde::apply_on(GameState* st) const
         int pa = st->get_nain(player_id_, nain_id).pa;
         st->reduce_pa(player_id_, nain_id, pa);
     }
-
-    internal_action action;
-    action.type = 1;
-    action.action = {ACTION_POSER_CORDE, id_nain_, dir_, ERREUR_DIRECTION};
-    st->add_to_internal_history(player_id_, action);
 }

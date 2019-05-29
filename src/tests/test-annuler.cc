@@ -3,6 +3,24 @@
 
 #include "test-helpers.hh"
 
+#define CHECK_CANCEL_HISTORY_SIZE(player, action)                              \
+    {                                                                          \
+        const int player_id__ =                                                \
+            player.api->game_state()->get_player_id(player.api->moi());        \
+        const size_t history_size = player.api->game_state()                   \
+                                        ->get_internal_history(player_id__)    \
+                                        .size();                               \
+                                                                               \
+        action;                                                                \
+        EXPECT_NE(history_size, player.api->game_state()                       \
+                                    ->get_internal_history(player_id__)        \
+                                    .size());                                  \
+        player.api->annuler();                                                 \
+        EXPECT_EQ(history_size, player.api->game_state()                       \
+                                    ->get_internal_history(player_id__)        \
+                                    .size());                                  \
+    }
+
 #define CHECK_CANCEL_ON_NAIN(player, nain_id, action)                          \
     {                                                                          \
         const nain nain_before_ =                                              \
@@ -52,6 +70,7 @@
     }
 
 #define CHECK_CANCEL(player, action)                                           \
+    CHECK_CANCEL_HISTORY_SIZE(player, action)                                  \
     CHECK_CANCEL_ON_MAP(player, action)                                        \
                                                                                \
     for (int nain_id__ = 0; nain_id__ < NB_NAINS; nain_id__++)                 \
