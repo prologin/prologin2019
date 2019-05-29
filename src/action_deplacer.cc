@@ -4,6 +4,7 @@
 
 int ActionDeplacer::check(const GameState* st) const
 {
+
     // Check dwarf
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
@@ -28,6 +29,10 @@ int ActionDeplacer::check(const GameState* st) const
     if (dest_owner == st->get_opponent_id(player_id_))
         return OBSTACLE_NAIN;
 
+    if (dest == st->map().get_spawn_point(1 - player_id_))
+        // Little easter egg: kill a dwarf going to enemy camp
+        return OK;
+
     // Check cost
     int cost = st->get_movement_cost(player_id_, id_nain_, dir_);
 
@@ -46,6 +51,13 @@ void ActionDeplacer::apply_on(GameState* st) const
 
     const nain nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain.pos, dir_);
+
+    if (dest == st->map().get_spawn_point(1 - player_id_))
+    {
+        st->increase_score(1 - player_id_, nain.butin);
+        st->reduce_pv(player_id_, id_nain_, VIE_NAIN, player_id_);
+        return;
+    }
 
     st->reduce_pm(player_id_, id_nain_,
                   st->get_movement_cost(player_id_, id_nain_, dir_));

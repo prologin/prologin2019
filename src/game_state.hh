@@ -54,6 +54,8 @@ public:
 
     // Score
     int get_score(int player_id) const;
+    void increase_score(int player_id, int delta);
+
     bool is_finished() const;
     int get_round() const;
     void increment_round();
@@ -70,7 +72,6 @@ public:
 
 private:
     int get_fall_distance(int player_id, int nain_id) const;
-    void increase_score(int player_id, int delta);
 
     std::array<PlayerInfo, 2> player_info_;
 
