@@ -4,6 +4,7 @@
 $(function() {
 	$('[role=complementary] h1').text('').html('<object data="/static/img/logo.svg" style="width:100%; margin-top: 0.5em;" type="image/svg+xml" />');
 
+	/*
 	// let's have some penguins
 	const p1 = $('<img src="/static/img/penguin1.png" class="easter-peng" />'),
 		  p2 = $('<img src="/static/img/penguin2.png" class="easter-peng" />');
@@ -28,4 +29,5 @@ $(function() {
 			1000 * (5 + Math.random() * 10));
 		}
 	});
+	*/
 });
