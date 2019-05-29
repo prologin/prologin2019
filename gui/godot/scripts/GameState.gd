@@ -85,7 +85,7 @@ func check(current_turn):
 			var current_pos = dwarfs[player][dwarf_id].external_pos
 			var theorical_pos = current_turn.players[player].dwarfs[dwarf_id].pos
 			if current_pos != theorical_pos:
-					dwarfs[player][dwarf_id].move_to(theorical_pos, $TileMap)
+					dwarfs[player][dwarf_id].move_to(theorical_pos, $TileMap, 0)
 			#	dwarfs[player][dwarf_id].set_external_position(theorical_pos, $TileMap)
 			#assert current_pos == theorical_pos
 	for y in range(Constants.TAILLE_MINE):

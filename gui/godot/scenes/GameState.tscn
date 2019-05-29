@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://scripts/GameState.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Info.gd" type="Script" id=2]
@@ -28,6 +28,9 @@
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 3 )
 
 [sub_resource type="SpriteFrames" id=3]
@@ -114,6 +117,14 @@ margin_left = 1140.91
 margin_top = 6.10394
 margin_right = 1180.91
 margin_bottom = 20.1039
+
+[node name="Error" type="Label" parent="Info"]
+margin_left = 1042.0
+margin_top = 620.0
+margin_right = 1221.0
+margin_bottom = 676.0
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color = Color( 0.607843, 0.105882, 0.105882, 1 )
 
 [node name="green" type="AnimatedSprite" parent="Info"]
 visible = false
