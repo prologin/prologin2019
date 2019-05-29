@@ -13,7 +13,7 @@ TEST_F(ApiTest, ActionMiner_Impossible)
             direction ext_dir = (nain.pos.colonne < 15) ? GAUCHE : DROITE;
 
             EXPECT_EQ(OBSTACLE_MUR, player.api->miner(nain_id, BAS));
-            EXPECT_EQ(PAS_DE_NAIN, player.api->miner(nain_id, HAUT));
+            EXPECT_EQ(PAS_DE_CIBLE, player.api->miner(nain_id, HAUT));
             EXPECT_EQ(HORS_LIMITES, player.api->miner(nain_id, ext_dir));
         }
 }

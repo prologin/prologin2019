@@ -30,7 +30,7 @@ int ActionMiner::check(const GameState* st) const
         return OBSTACLE_MUR;
 
     if (type == LIBRE && st->map().get_cell_occupant(dest) == -1)
-        return PAS_DE_NAIN;
+        return PAS_DE_CIBLE;
 
     return OK;
 }

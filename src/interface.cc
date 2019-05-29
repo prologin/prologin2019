@@ -160,8 +160,8 @@ std::string convert_to_string(erreur in)
         return "\"obstacle_nain\"";
     case OBSTACLE_CORDE:
         return "\"obstacle_corde\"";
-    case PAS_DE_NAIN:
-        return "\"pas_de_nain\"";
+    case PAS_DE_CIBLE:
+        return "\"pas_de_cible\"";
     case NAIN_MORT:
         return "\"nain_mort\"";
     case PAS_ACCROCHE:
@@ -626,8 +626,8 @@ std::ostream& operator<<(std::ostream& os, erreur v)
     case OBSTACLE_CORDE:
         os << "OBSTACLE_CORDE";
         break;
-    case PAS_DE_NAIN:
-        os << "PAS_DE_NAIN";
+    case PAS_DE_CIBLE:
+        os << "PAS_DE_CIBLE";
         break;
     case NAIN_MORT:
         os << "NAIN_MORT";

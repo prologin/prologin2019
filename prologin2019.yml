@@ -114,8 +114,8 @@ enum:
       - [obstacle_mur, "La position spécifiée est un mur."]
       - [obstacle_nain, "La position spécifiée est un nain (standard) adverse."]
       - [obstacle_corde, "Il y a déjà une corde dans la direction spécifiée."]
-      - [pas_de_nain, "Il n'y a pas de nain (standard) sur la position
-                       spécifiée."]
+      - [pas_de_cible, "Il n'y a pas de nain (standard) ni de granite
+                        (standard) sur la position spécifiée."]
       - [nain_mort, "Le nain (standard) spécifié est mort."]
       - [pas_accroche, "Le nain (standard) n'est pas accroché."]
       - [deja_accroche, "Le nain (standard) est déjà accroché."]

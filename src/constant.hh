@@ -123,9 +123,9 @@ typedef enum erreur
     OBSTACLE_NAIN, /* <- La position spécifiée est un nain (standard) adverse.
                     */
     OBSTACLE_CORDE, /* <- Il y a déjà une corde dans la direction spécifiée. */
-    PAS_DE_NAIN,    /* <- Il n'y a pas de nain (standard) sur la position
-                       spécifiée. */
-    NAIN_MORT,      /* <- Le nain (standard) spécifié est mort. */
+    PAS_DE_CIBLE,  /* <- Il n'y a pas de nain (standard) sur la position
+                     spécifiée. */
+    NAIN_MORT,     /* <- Le nain (standard) spécifié est mort. */
     PAS_ACCROCHE,  /* <- Le nain (standard) n'est pas accroché. */
     DEJA_ACCROCHE, /* <- Le nain (standard) est déjà accroché. */
     PAS_DE_CORDE,  /* <- Il n'y a pas de corde dans la direction spécifiée. */

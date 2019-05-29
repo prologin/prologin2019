@@ -282,7 +282,7 @@ TEST_F(ApiTest, Cancel_HitAllie)
                 player.api->game_state()->get_player_id(player_id));
         }
 
-        EXPECT_EQ(PAS_DE_NAIN, player.api->miner(0, reverse_direction(dir)));
+        EXPECT_EQ(PAS_DE_CIBLE, player.api->miner(0, reverse_direction(dir)));
     }
 }
 
@@ -315,6 +315,6 @@ TEST_F(ApiTest, Cancel_HitEnemie)
                 player.api->game_state()->get_player_id(player_id));
         }
 
-        EXPECT_EQ(PAS_DE_NAIN, player.api->miner(0, reverse_direction(dir)));
+        EXPECT_EQ(PAS_DE_CIBLE, player.api->miner(0, reverse_direction(dir)));
     }
 }
