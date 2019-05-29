@@ -24,7 +24,7 @@ func set_external_position(pos, map):
 	external_pos = pos
 	position = map.world_position(pos)
 
-func move_to(external_to, map):
+func move_to(external_to, map, tile):
 	#assert not moving
 	external_pos = external_to
 	var to = map.world_position(external_to)
@@ -34,7 +34,10 @@ func move_to(external_to, map):
 	var dx = to.x - position.x
 	if stick and dx == 0:
 		if dx == 0:
-			anim = "climb_v"
+			if tile == 4:
+				anim = "climb_rope"
+			else:
+				anim = "climb_v"
 		else:
 			anim = "climb_h"
 	else:

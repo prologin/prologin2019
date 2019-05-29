@@ -107,7 +107,7 @@ func move(action, player_id):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
-	dwarf.move_to(dest, $TileMap)
+	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y))
 	return true
 
 func mine(action, player_id):
@@ -127,7 +127,7 @@ func fall(action):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
-	dwarf.move_to(dest, $TileMap)
+	dwarf.move_to(dest, $TileMap, 0)
 	return true
 
 func grab(action, player_id):
