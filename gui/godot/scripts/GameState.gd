@@ -85,8 +85,8 @@ func check(current_turn):
 			var a = current_turn.blocks[y][x]
 			var b = $TileMap.get_tile(x, y)
 			#assert (a == 0) == (b == 0 or b == 5)
-			if not ((a == 0) == (b == 0 or b == 5)):
-				$TileMap.mine(Vector2(x, y))
+			#if not ((a == 0) == (b == 0 or b == 5)):
+			#	$TileMap.mine(Vector2(x, y))
 
 func die(action, player_id):
 	var dwarf_id = int(action["id_nain"])
