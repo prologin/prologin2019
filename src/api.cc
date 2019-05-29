@@ -208,11 +208,17 @@ int Api::nain_sur_case(position pos)
 nain Api::info_nain(int id_joueur, int id_nain)
 {
     const int player_id = game_state_->get_player_id(id_joueur);
+    static const nain failure_ret = {{-1, -1}, -1, -1, -1, false, -1};
 
     if (!player_valid(player_id) || !nain_valid(id_nain))
-        return {{-1, -1}, -1, -1, -1, false, -1};
+        return failure_ret;
 
-    return game_state_->get_nain(player_id, id_nain);
+    const nain nain = game_state_->get_nain(player_id, id_nain);
+
+    if (nain.vie <= 0)
+        return failure_ret;
+
+    return nain;
 }
 
 /// Renvoie la description d'un minerai en fonction d'une position donnée. Si le

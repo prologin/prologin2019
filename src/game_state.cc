@@ -296,7 +296,6 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
         nains_respawn_.push_back({player_id, nain_id});
         // TODO: CHECK GRAVITY
 
-        // TODO: wut ?
         internal_action action;
         action.type = 3;
         action.fall = {player_id, nain_id, nain.pos};
@@ -346,6 +345,7 @@ void GameState::check_rope_gravity(position pos, int current_player)
             break;
 
         const Rope& rope = map_.get_rope_at(pos);
+
         internal_action action;
         action.type = 4;
         action.fall = {current_player, -1, rope.get_bottom()};
