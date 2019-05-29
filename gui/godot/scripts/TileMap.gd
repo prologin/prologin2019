@@ -45,11 +45,12 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 			var ore_o = null
 			
 			for rope in ropes:
-				if rope.haut.y == y or rope.bas.y == y:
-					is_rope = true
-				if rope.haut.y > y or rope.bas.y < y:
-					is_rope_ext = true
-					break
+				if rope.bas.x == x:
+					if rope.haut.y == y:
+						is_rope = true
+					elif rope.haut.y < y and rope.bas.y >= y:
+						is_rope_ext = true
+						break
 				
 			for ore in ores:
 				if ore.pos == Vector2(x, y):

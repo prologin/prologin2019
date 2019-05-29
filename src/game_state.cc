@@ -27,11 +27,6 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
 
         check_nain_gravity(map_.get_spawn_point(player), player);
     }
-
-    const auto ropes = map_.get_ropes_positions();
-
-    for (position pos : ropes)
-        check_rope_gravity(pos, 0);
 }
 
 GameState::GameState(const GameState& st)

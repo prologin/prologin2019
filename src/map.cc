@@ -115,6 +115,9 @@ void Map::load_rope_info(std::istream& stream)
                   error.c_str());
 
         add_rope(pos);
+
+        while (try_extend_rope(pos))
+            ;
     }
 }
 
