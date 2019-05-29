@@ -3,7 +3,7 @@ Le début des ennuis
 
 Félicitations! Votre dernière promotion au titre de nain responsable de
 la mine au P.R.O.L.O.G.I.N. (Profits Rapides Organisés Logiquement,
-Obtenus Grâce à des Individus Nanesques.) est bien méritée. Vous voici
+Obtenus Grâce à des Individus Nanesques) est bien méritée. Vous voici
 donc chargé de superviser l’extraction de minerais rares d’une mine
 (standard). Malheureusement, la direction ne vous a pas accordé tous les
 moyens nécessaires [1]_ …
@@ -16,14 +16,14 @@ La mine (standard)
 C’est une mine. Parfois il y a des tunnels déjà creusées, d’autres fois
 non.
 
-Le minerai (standard)
----------------------
+Le minerai
+----------
 
 *Le granit est une roche magmatique plutonique à structure grenue,
 c’est-à-dire entièrement cristallisée, formée par le refroidissement
 lent et en profondeur d’un magma issu de la fusion partielle de la
 croûte continentale. C’est une roche acide composée essentiellement de
-quartz et de mica [2]_.*
+quartz et de mica* [2]_ .
 
 La région est riche en granit (standard), mais il existe des veines de
 minerai de plus forte valeur. Vous consulterez avec attention le rapport
@@ -53,7 +53,7 @@ De la concurrence pour plus de productivité
 La société a décidé de vous mettre en concurrence avec un autre manager
 de nains, afin d’exploiter au mieux le gisement. Sachez que celui
 d’entre vous qui fera le plus de profit remportera une très belle
-prime [3]_ !
+prime !
 
 P.R.O.L.O.G.I.N. n’est pas responsable des blessures que subissent ses
 employés. Elle nie toute implication dans les récentes rumeurs sur les
@@ -70,8 +70,8 @@ Le granit (standard)
 c’est-à-dire entièrement cristallisée, formée par le refroi…*
 
 Bref, comme vous le savez déjà, le granit (standard) est présent en
-abondance sur le site. Cependant, il a une valeur marchande de très
-exactement 0 pièce d’or [5]_, et requiert un seul coup de pioche pour
+abondance sur le site. Cependant, **il a une valeur marchande de très
+exactement 0 pièce d’or** [5]_, et requiert un seul coup de pioche pour
 être cassé.
 
 Le minerai
@@ -121,7 +121,7 @@ Divers
 ------
 
 Le terrain comporte de nombreuses cavités naturelles, formant parfois
-des trous [6]_ profonds. C’est très utiles pour descendre vos nains plus
+des trous profonds. C’est très utiles pour descendre vos nains plus
 rapidement … dans les deux sens du termes ! Plus ils chuteront de haut,
 plus ils se blesseront à l’arrivée [7]_. Vous trouverez plus de détails
 sur les risques de chute dans le manuel d’exploitation.
@@ -150,34 +150,34 @@ Applicable, une taverne est présente en surface de chaque mine. Les
 mesures de sécurité prévoient que les mineurs sans affectation doivent y
 être présents en permanence. Par dérogation au code du travail, la
 consommation de bière pendant les horaires de travail est autorisée, en
-vertu de ses propriétés médicales exceptionnelles : chaque mineur se
+vertu de ses propriétés médicales exceptionnelles : **chaque mineur se
 présentant à la taverne récupère instantanément la totalité de ses
-points de vie [9]_.
+points de vie** [9]_.
 
 La taverne abrite également une délégation du département trading, qui
 collecte le minerai extrait.
 
-Cordages
---------
+Cordages (standard)
+-------------------
 
 Le matériel des nains inclut des cordes (standard) illimitées. Pour les
 utiliser il convient de disposer une poulie en tête de cordage, cela
 permettra les actions sur la corde.
 
-Ces cordes permettent au nains de se déplacer verticalement plus
-rapidement qu’en s’agrippant aux parois et plus sûrement qu’en chutant.
+Ces cordes permettent aux nains de se déplacer au dessus du vide plus
+rapidement qu’en s’agrippant aux parois.
 
-Une fois la poulie posée, la corde descend jusqu’au prochain bloc, de
-plus votre équipe de nains s’assurera de prévoir suffisamment de jeu
-afin que la corde puisse toujours se dérouler jusqu’au sol lorsque de
-nouveaux blocs de granite sont creusés en dessous de celle-ci. En
-revanche, poser une corde est une entreprise complexe, qui nécessite la
-totalité des *points d’action* de toute l’équipe combinée.
+Une fois la poulie posée, **la corde descend jusqu’au sol**, de plus
+votre équipe de nains s’assurera de prévoir suffisamment de jeu afin que
+la corde puisse toujours se dérouler au fur et à mesure que de nouveaux
+blocs de granite (standard) sont creusés en dessous de celle-ci. En
+revanche, **poser une corde est une entreprise complexe, qui nécessite
+la totalité des points d’action de toute l’équipe combinée**.
 
 De plus les cordes peuvent être actionnées par un autre nain qui n’est
 pas sur la corde. En consommant des points d’actions le nain peut
-actionner la corde dans un sens ou dans un autre ce qui ralentira ou
-accélérera le mouvement du (ou des) nain sur la corde.
+actionner la corde dans un sens ou dans un autre ce qui entrainera tous
+les nains agrippés et sur une case de la corde dans le sens choisi.
 
 Déplacements
 ------------
@@ -193,14 +193,14 @@ de lire attentivement la section dédié.
 
 Il est également à noter que la promiscuité ne pose pas de problème aux
 mineurs [12]_, ils peuvent donc se trouver sur une même position. Il est
-néanmoins nécessaire de se coordonner un minimum avant: ainsi seuls les
-mineurs **d’une même équipe** se tolèrent entre eux.
+néanmoins nécessaire de se coordonner un minimum avant: ainsi seuls
+**les mineurs d’une même équipe se tolèrent entre eux**.
 
 Enfin, de par leur activité physique intense, les mineurs ont les
 épaules larges. Ils peuvent sans problème supporter le poids d’un autre
-mineur. En application du paragraphe précédent, un mineur ne gardera
-jamais un mineur qui est dans son équipe sur ses épaules car ils peuvent
-se coordonner afin de se tenir sur la même case.
+mineur. En application du paragraphe précédent, **un mineur ne gardera
+jamais un mineur qui est dans son équipe sur ses épaules** car ils
+peuvent se coordonner afin de se tenir sur la même case.
 
 Cas particulier des déplacements verticaux
 ------------------------------------------
@@ -223,11 +223,11 @@ la hauteur de chute, selon la formule ci-dessous.
 avec :math:`h` la hauteur de chute. Si un nain meurt de chute, les dieux
 vont immédiatement s’occuper de faire disparaitre son butin [13]_.
 
-Cependant il est possible d’échapper à ça: un nain agrippé à la paroi,
-libéré de l’emprise de la gravité, peut se déplacer dans toutes les
-directions, ce qui lui demandera plus de *points d’action* que de se
-déplacement au sol. Il y a alors plusieurs manière de se déplacer à
-distinguer pour un nain accroché à la paroi:
+Cependant il est possible d’échapper à ça: **un nain agrippé, libéré de
+l’emprise de la gravité, peut se déplacer dans toutes les directions
+sans craindre de chuter**, ce qui lui demandera plus de *points
+d’action* que de se déplacement au sol. Il y a alors plusieurs manière
+de se déplacer à distinguer pour un nain agrippé:
 
 -  déplacement standard (relativement lent)
 
@@ -253,13 +253,13 @@ possible de paralléliser l’extraction avec plusieurs mineurs, de manière
 
 Une fois extrait, le minerai est stocké temporairement par le personnel.
 Afin d’être pris en compte par le département trading (et être mis en
-sécurité…), le minerai doit être rapporté à la taverne.
+sécurité…), **le minerai doit être rapporté à la taverne**.
 
-Notez que comme les nains ne peuvent porter qu’une quantité limitée de
-minerai [14]_, ils devront régulièrement faire un retour à la taverne
+Notez que comme **les nains ne peuvent porter qu’une quantité limitée de
+minerai** [14]_, ils devront régulièrement faire un retour à la taverne
 pour décharger celui-ci. Si un nain extrait du minerai qu’il ne peut pas
-porter, il détruit immédiatement ce qu’il y a de trop pour qu’il ne
-tombe pas entre de mauvaises mains [15]_.
+porter, il détruit immédiatement ce qu’il y a de trop pour éviter que ça
+ne tombe entre de mauvaises mains [15]_.
 
 Cas particulier des rencontres malveillantes
 --------------------------------------------
@@ -268,9 +268,9 @@ Il est rappelé à l’ensemble du personnel que la pioche (standard) qui
 est donnée à chaque nains, peut également être considéré comme une arme
 de quatrième catégorie… Son usage à cette fin est explicitement ignoré
 par la direction, à la discrétion de chacun. Dans ce cas, la pioche se
-manie de manière identique à son utilisation standard. À noter que si
+manie de manière identique à son utilisation standard. À noter que **si
 plusieurs nains sont sur la même position et que l’un d’entre eux est
-attaqué, ils sont tous blessés [16]_ !
+attaqué, ils sont tous blessés** [16]_ !
 
 Un soin particulier sera accordé aux *points de vie* des intervenants.
 Lorsque ce compteur arrive à zéro, un point de destin [17]_ est
@@ -278,8 +278,8 @@ automatiquement utilisé. Le mineur ainsi ressuscité regagne la mine dans
 la taverne du chantier à son prochain tour, mais ayant perdu tout son
 butin sur le coup …
 
-Le nain qui a donné le coup de pioche s’empresse alors de récupérer le
-butin du nain éliminé, dans la limite de la *capacité* qu’il a à le
+**Le nain qui a donné le coup de pioche s’empresse alors de récupérer le
+butin des nains éliminés**, dans la limite de la *capacité* qu’il a à le
 transporter, comme expliqué dans la section précédente, il détruira tous
 ce qu’il n’arrive pas à emporter avec lui.
 
@@ -289,17 +289,11 @@ ce qu’il n’arrive pas à emporter avec lui.
 .. [2]
    …do
 
-.. [3]
-   Dans la limite des stocks disponibles.
-
 .. [4]
    Mineur est un métier dangereux, même à plus de 18 ans
 
 .. [5]
    Avec 20% de taxes, on peut mieux faire en terme de rentabilité.
-
-.. [6]
-   des petits trous, encore des petits trous ...
 
 .. [7]
    Nous rappelons que P.R.O.L.O.G.I.N. n’est responsable en aucune
