@@ -284,7 +284,7 @@ function:
       - [pos, position, "Case choisie"]
   -
     fct_name: nain_sur_case
-    fct_summary: Renvoie le numéro du joueur à qui appartient le nain
+    fct_summary: Renvoie le numéro du joueur à qui appartienent les nains
                  (standard) sur la case indiquée.
                  Renvoie -1 s'il n'y a pas de nain (standard) ou si la position
                  est invalide.

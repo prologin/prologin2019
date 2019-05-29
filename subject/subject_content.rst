@@ -146,9 +146,10 @@ Le terrain est donc globalement plat, et l’exploitation se fait
 globalement verticalement.
 
 Conformément aux articles 16 et suivants de la Convention Collective
-Applicable, une taverne est présente en surface de chaque mine. Les
-mesures de sécurité prévoient que les mineurs sans affectation doivent y
-être présents en permanence. Par dérogation au code du travail, la
+Applicable, une taverne est mise à disposition de chaque équipe, et
+déterminera leur point de regroupement principal. Les mesures de
+sécurité prévoient que les mineurs sans affectation doivent y être
+présents en permanence. Par dérogation au code du travail, la
 consommation de bière pendant les horaires de travail est autorisée, en
 vertu de ses propriétés médicales exceptionnelles : **chaque mineur se
 présentant à la taverne récupère instantanément la totalité de ses
@@ -167,16 +168,19 @@ permettra les actions sur la corde.
 Ces cordes permettent aux nains de se déplacer au dessus du vide plus
 rapidement qu’en s’agrippant aux parois.
 
-Une fois la poulie posée, **la corde descend jusqu’au sol**. Votre équipe de nains s’assurera de prévoir suffisamment de jeu afin que
-la corde puisse toujours se dérouler au fur et à mesure que de nouveaux
+Une fois la poulie posée, **la corde descend jusqu’au sol**. Votre
+équipe de nains s’assurera de prévoir suffisamment de jeu afin que la
+corde puisse toujours se dérouler au fur et à mesure que de nouveaux
 blocs de granite (standard) sont creusés en dessous de celle-ci. En
 revanche, **poser une corde est une entreprise complexe, qui nécessite
 la totalité des points d’action de toute l’équipe combinée**.
 
 De plus les cordes peuvent être actionnées par un autre nain qui n’est
 pas sur la corde. En consommant des points d’actions **un nain peut
-actionner la corde dans un sens ou dans un autre** ce qui entrainera dans le
-sens choisi tous les nains agrippés et sur une case de la corde.
+tirer la corde dans un sens ou dans un autre** ce qui déplacera de une
+case dans un sens ou dans l'autre tous les nains qui sont sur la corde
+et agrippé. Ce déplacement ne peut pas déplacer un nain hors de la corde
+et comme d'habitude, un nain bloquera un nain adverse.
 
 Déplacements
 ------------
@@ -238,6 +242,9 @@ de se déplacer à distinguer pour un nain agrippé :
    autre nain (ce qui peut faire gagner beaucoup de temps si vous avez
    confiance en l’opérateur de cette corde)
 
+**S'agripper à la parroi ne aucune autre action que le déplacement du
+nain.**
+
 Vous ne pouvez pas pousser les nains dans les trous (i.e. les putsch
 sont interdits).
 
@@ -283,6 +290,19 @@ butin sur le coup …
 butin des nains éliminés**, dans la limite de la *capacité* qu’il a à le
 transporter, comme expliqué dans la section précédente. Il détruira donc tout
 ce qu’il n’arrivera pas à emporter avec lui.
+
+Un nain qui a l'audace de s'égarer sur la case occupée par la taverne
+du joueur adverse sera mal accueilli, et verra ses points de vie réduire
+à 0 [30]_, toutes les richesses qu'il transportait seront ramassées par
+l'équipe ennemie.
+
+Fin de la période d'essai
+-------------------------
+
+À la fin de 100 tours de jeu, le joueur qui a ramené le plus de pièces
+d'or à sa taverne gagne. Les pièces d'or encore portées dans
+l'inventaire de nains dispersés dans la map ne sont pas contabilisés.
+
 
 .. [1]
    Restriction budgétaire, crise économique, augmentation des taxes…
@@ -343,3 +363,6 @@ ce qu’il n’arrivera pas à emporter avec lui.
    La direction assure qu’un nain aura toujours un point de destin
    disponible pour lui dans cette situation, au risque d’un prélèvement
    de salaire.
+
+.. [30]
+   On ne déconne pas avec la bière...
