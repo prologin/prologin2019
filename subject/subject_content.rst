@@ -16,6 +16,10 @@ La mine (standard)
 C’est une mine. Parfois il y a des tunnels déjà creusés, d’autres fois
 non.
 
+.. image:: mine.png
+   :width: 400px
+   :height: 400px
+
 Le minerai
 ----------
 
