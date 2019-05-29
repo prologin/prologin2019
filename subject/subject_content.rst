@@ -70,9 +70,9 @@ Le granit (standard)
 c’est-à-dire entièrement cristallisée, formée par le refroi…*
 
 Bref, comme vous le savez déjà, le granit (standard) est présent en
-abondance sur le site. Cependant, **il a une valeur marchande de très
-exactement 0 pièce d’or** [5]_, et requiert un seul coup de pioche pour
-être cassé.
+abondance sur le site. Cependant, il a une valeur marchande de très
+exactement 0 pièce d’or [5]_, et **requiert un seul coup de pioche pour
+être cassé**.
 
 Le minerai
 ----------
@@ -175,8 +175,8 @@ revanche, **poser une corde est une entreprise complexe, qui nécessite
 la totalité des points d’action de toute l’équipe combinée**.
 
 De plus les cordes peuvent être actionnées par un autre nain qui n’est
-pas sur la corde. En consommant des points d’actions le nain peut
-actionner la corde dans un sens ou dans un autre ce qui entrainera tous
+pas sur la corde. En consommant des points d’actions **un nain peut
+actionner la corde dans un sens ou dans un autre** ce qui entrainera tous
 les nains agrippés et sur une case de la corde dans le sens choisi.
 
 Déplacements
