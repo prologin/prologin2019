@@ -28,6 +28,8 @@ Global="*res://scripts/Global.gd"
 
 window/size/width=1242
 window/size/height=1024
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
 
 [editor]
 
