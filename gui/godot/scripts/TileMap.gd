@@ -25,8 +25,12 @@ func has_rope_at(pos):
 	return get_tile(pos.x, pos.y) == 4 or get_tile(pos.x, pos.y) == 12
 
 func draw_rope(begin):
-	if get_tile(begin.x, begin.y) == 5:
+	if get_tile(begin.x, begin.y) == tile_set.find_tile_by_name("Spawn"):
 		return
+
+	if get_tile(begin.x, begin.y+1) == tile_set.find_tile_by_name("Rope"):
+		set_cell(begin.x, begin.y+1, tile_set.find_tile_by_name("Rope_ext"))
+
 	set_cell(begin.x, begin.y, tile_set.find_tile_by_name("Rope_ext"))
 
 func get_tile(x, y):
@@ -52,13 +56,6 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 			var is_rope_ext = false
 			var is_rope = false
 			var ore_o = null
-			
-			for rope in ropes:
-				if x == rope.bas.x and rope.haut.y <= y and y <= rope.bas.y:
-					if Vector2(x, y) == rope.haut:
-						is_rope = true
-					else:
-						is_rope_ext = true
 
 			for ore in ores:
 				if ore.pos == Vector2(x, y):
@@ -76,3 +73,10 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 				set_cell(x, y, tile_set.find_tile_by_name("Rope"))
 			else:
 				set_cell(x, y, blocks[y][x])
+
+	for rope in ropes:
+		assert(rope.bas.x == rope.haut.x)
+		var x = rope.bas.x
+		set_rope(rope.haut)
+		for y in range(rope.haut.y+1, rope.bas.y + 1):
+			draw_rope(Vector2(x, y))
