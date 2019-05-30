@@ -133,4 +133,14 @@
 12/navigation_offset = Vector2( 16, 16 )
 12/shapes = [  ]
 12/z_index = 0
+13/name = "Ores_white"
+13/texture = ExtResource( 1 )
+13/tex_offset = Vector2( 0, 0 )
+13/modulate = Color( 1, 1, 1, 1 )
+13/region = Rect2( 64, 96, 32, 32 )
+13/tile_mode = 0
+13/occluder_offset = Vector2( 16, 16 )
+13/navigation_offset = Vector2( 16, 16 )
+13/shapes = [  ]
+13/z_index = 0
 
