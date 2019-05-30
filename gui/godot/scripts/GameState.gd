@@ -59,28 +59,30 @@ func replay_action(action, player_id):
 	if action["action"] == Constants.ACTIONS.get("ACTION_LACHER"):
 		return stick(action, player_id, false)
 	if action["action"] == Constants.ACTIONS.get("ACTION_TIRER"):
-		return pull(action, player_id)
+		return simple_action(action, player_id, "pull")
 	if action["action"] == Constants.ACTIONS.get("ACTION_DEBUG_AFFICHER_DRAPEAU"):
 		return flag(action, player_id)
 	if action["action"] == -2:
 		return fall(action)
 	if action["action"] == -3:
-		return die(action, player_id)
+		return simple_action(action, player_id, "die")
 	if action["action"] == -4:
 		return extend_rope(action)
 	print("unknown action: ", action["action"])
 	return false
 
-func pull(action, player_id):
+#die pull
+func simple_action(action, player_id, action):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
-	dwarf.pull()
+	dwarf.simple_animation(action)
 	return true
 
 func stick(action, player_id, is_stick):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	dwarf.set_sticky(is_stick)
+	return true
 
 func flag(action, player_id):
 	var dwarf_id = int(action["id_nain"])
@@ -108,7 +110,7 @@ func check(current_turn):
 func die(action, player_id):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
-	dwarf.die()
+	dwarf.simple_animation("die")
 	return true
 
 func set_rope(action, player_id):
@@ -145,12 +147,6 @@ func fall(action):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
 	dwarf.move_to(dest, $TileMap, 0, player_id, true)
-	return true
-
-func grab(action, player_id):
-	var dwarf_id = int(action["id_nain"])
-	var dwarf = dwarfs[player_id][dwarf_id]
-	dwarf.grab_to($TileMap)
 	return true
 
 func spawn_dwarf(player_id, pos, parent_node):
