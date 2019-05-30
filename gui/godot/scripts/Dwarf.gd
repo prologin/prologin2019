@@ -25,7 +25,7 @@ func set_external_position(pos, map):
 	external_pos = pos
 	position = map.world_position(pos)
 
-func move_to(external_to, map, tile):
+func move_to(external_to, map, tile, fall=false):
 	#assert not moving
 	external_pos = external_to
 	var to = map.world_position(external_to)
@@ -33,16 +33,19 @@ func move_to(external_to, map, tile):
 	moving = true
 	var anim = null
 	var dx = to.x - position.x
-	if stick and dx == 0:
-		if dx == 0:
-			if tile == 4:
-				anim = "climb_rope"
-			else:
-				anim = "climb_v"
-		else:
-			anim = "climb_h"
+	if fall:
+		anim = "fall"
 	else:
-		anim = "move"
+		if stick and dx == 0:
+			if dx == 0:
+				if tile == 4:
+					anim = "climb_rope"
+				else:
+					anim = "climb_v"
+			else:
+				anim = "climb_h"
+		else:
+			anim = "move"
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 

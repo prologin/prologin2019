@@ -135,7 +135,7 @@ func fall(action):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
-	dwarf.move_to(dest, $TileMap, 0)
+	dwarf.move_to(dest, $TileMap, 0, true)
 	return true
 
 func grab(action, player_id):

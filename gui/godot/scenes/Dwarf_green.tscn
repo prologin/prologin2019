@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://scripts/Dwarf.gd" type="Script" id=1]
 [ext_resource path="res://assets/green/in_place/0.png" type="Texture" id=2]
@@ -6,16 +6,16 @@
 [ext_resource path="res://assets/green/in_place/2.png" type="Texture" id=4]
 [ext_resource path="res://assets/green/in_place/3.png" type="Texture" id=5]
 [ext_resource path="res://assets/green/in_place/4.png" type="Texture" id=6]
-[ext_resource path="res://assets/green/die/0.png" type="Texture" id=7]
-[ext_resource path="res://assets/green/die/1.png" type="Texture" id=8]
-[ext_resource path="res://assets/green/die/2.png" type="Texture" id=9]
-[ext_resource path="res://assets/green/die/3.png" type="Texture" id=10]
-[ext_resource path="res://assets/green/die/4.png" type="Texture" id=11]
-[ext_resource path="res://assets/green/die/5.png" type="Texture" id=12]
-[ext_resource path="res://assets/green/die/6.png" type="Texture" id=13]
-[ext_resource path="res://assets/green/die/7.png" type="Texture" id=14]
-[ext_resource path="res://assets/green/victory/0.png" type="Texture" id=15]
-[ext_resource path="res://assets/green/victory/1.png" type="Texture" id=16]
+[ext_resource path="res://assets/green/victory/0.png" type="Texture" id=7]
+[ext_resource path="res://assets/green/victory/1.png" type="Texture" id=8]
+[ext_resource path="res://assets/green/die/0.png" type="Texture" id=9]
+[ext_resource path="res://assets/green/die/1.png" type="Texture" id=10]
+[ext_resource path="res://assets/green/die/2.png" type="Texture" id=11]
+[ext_resource path="res://assets/green/die/3.png" type="Texture" id=12]
+[ext_resource path="res://assets/green/die/4.png" type="Texture" id=13]
+[ext_resource path="res://assets/green/die/5.png" type="Texture" id=14]
+[ext_resource path="res://assets/green/die/6.png" type="Texture" id=15]
+[ext_resource path="res://assets/green/die/7.png" type="Texture" id=16]
 [ext_resource path="res://assets/green/move/0.png" type="Texture" id=17]
 [ext_resource path="res://assets/green/move/1.png" type="Texture" id=18]
 [ext_resource path="res://assets/green/move/2.png" type="Texture" id=19]
@@ -44,6 +44,7 @@
 [ext_resource path="res://assets/green/climb_vertical/0.png" type="Texture" id=42]
 [ext_resource path="res://assets/green/climb_vertical/1.png" type="Texture" id=43]
 [ext_resource path="res://assets/green/climb_vertical/2.png" type="Texture" id=44]
+[ext_resource path="res://assets/green/fall/0.png" type="Texture" id=45]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -59,14 +60,14 @@ animations = [ {
 "name": "pull",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
-"loop": false,
-"name": "die",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 15 ), ExtResource( 16 ) ],
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
 "loop": true,
 "name": "dance",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ) ],
+"loop": false,
+"name": "die",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 23 ), ExtResource( 24 ) ],
@@ -97,6 +98,11 @@ animations = [ {
 "frames": [ ExtResource( 42 ), ExtResource( 43 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "climb_v",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 45 ) ],
+"loop": true,
+"name": "fall",
 "speed": 5.0
 } ]
 
