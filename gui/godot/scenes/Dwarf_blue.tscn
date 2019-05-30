@@ -111,6 +111,11 @@ animations = [ {
 "loop": true,
 "name": "idle_rope",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 39 ), ExtResource( 39 ) ],
+"loop": true,
+"name": "idle_stick",
+"speed": 5.0
 } ]
 
 [node name="Dwarf" type="KinematicBody2D"]
@@ -123,4 +128,4 @@ shape = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, 6 )
 frames = SubResource( 2 )
-animation = "idle"
+animation = "idle_stick"

@@ -131,7 +131,7 @@ func stop():
 		if on_rope:
 			$AnimatedSprite.play("idle_rope")
 		else:
-			$AnimatedSprite.play("climb_v")
+			$AnimatedSprite.play("idle_stick")
 	else:
 		$AnimatedSprite.play("idle")
 
