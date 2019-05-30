@@ -185,6 +185,10 @@ func redraw(turn, players, ropes):
 	if turn / Constants.NB_JOUEURS + 1 == 100:
 		if players[0].score == players[1].score:
 			$Info/End.text = "Egalite"
+			$Info/blue.show()
+			$Info/green.show()
+			$Info/blue.play("idle")
+			$Info/green.play("idle")
 			return
 		if players[0].score > players[1].score:
 			$Info/endnode/End.text = players[0].name + " est le plus riche!\n\n Appuyer sur Esc pour quitter"
