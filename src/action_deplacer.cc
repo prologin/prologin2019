@@ -29,15 +29,15 @@ int ActionDeplacer::check(const GameState* st) const
     if (dest_owner == st->get_opponent_id(player_id_))
         return OBSTACLE_NAIN;
 
-    if (dest == st->map().get_spawn_point(1 - player_id_))
-        // Little easter egg: kill a dwarf going to enemy camp
-        return OK;
-
     // Check cost
     int cost = st->get_movement_cost(player_id_, id_nain_, dir_);
 
     if (nain.pm < cost)
         return PM_INSUFFISANTS;
+
+    // NOTE: Little easter egg: kill a dwarf going to enemy camp.
+    // It still returns OK though, the movement is added to the history and the
+    // dwarf instantly killed.
 
     return OK;
 }
