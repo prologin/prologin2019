@@ -109,6 +109,11 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
     nains_[player_id][nain_id].butin = std::min(
         nains_[player_id][nain_id].butin + minerai.rendement, BUTIN_MAX);
 
+    internal_action action;
+    action.type = 6;
+    action.fall = {-1, -1, pos};
+    add_to_internal_history(player_id, action);
+
     map_.remove_minerai(pos);
     set_cell_type(pos, LIBRE, player_id);
     return true;

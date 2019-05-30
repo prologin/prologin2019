@@ -167,6 +167,10 @@ static void dump_history(std::ostream& ss, const GameState& st, int player_id)
                 ss << ", \"id_nain\": " << action.fall.nain_id;
                 ss << ", \"spawn\": " << action.fall.goal << "}";
                 break;
+            case 6:
+                ss << "{\"action\": " << -6;
+                ss << ", \"pos\": " << action.fall.goal << "}";
+                break;
             }
         });
 }

@@ -62,6 +62,13 @@ void ActionMiner::apply_on(GameState* st) const
         if (st->map().has_minerai_at(dest))
             st->mine_minerai(dest, player_id_, id_nain_);
         else
+        {
+            internal_action action;
+            action.type = 6;
+            action.fall = {-1, -1, dest};
+            st->add_to_internal_history(player_id_, action);
+
             st->set_cell_type(dest, LIBRE, player_id_);
+        }
     }
 }

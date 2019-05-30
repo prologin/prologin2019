@@ -20,7 +20,6 @@ func select_dwarf(dwarf):
 var dwarfs = []
 var ores = []
 
-var is_mining = Vector2(-1, -1)
 var is_roping = Vector2(-1, -1)
 
 const DIRS = [ Vector2(0, -1), Vector2(0, 1), Vector2(-1, 0), Vector2(1, 0) ]
@@ -35,12 +34,6 @@ func is_ore(pos):
 	return null
 
 func finish_action():
-	if is_mining != Vector2(-1, -1):
-		var ore = is_ore(is_mining)
-		if ore == null:
-			$TileMap.mine(is_mining)
-		is_mining = Vector2(-1, -1)
-
 	if is_roping != Vector2(-1, -1):
 		$TileMap.set_rope(is_roping)
 		is_roping = Vector2(-1, -1)
@@ -70,6 +63,8 @@ func replay_action(action, player_id):
 		return extend_rope(action)
 	if action["action"] == -5:
 		return respawn_dwarf(action)
+	if action["action"] == -6:
+		return break_block(action)
 	print("unknown action: ", action["action"])
 	return false
 
@@ -136,7 +131,6 @@ func mine(action, player_id):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
 	dwarf.mine_to(dest, $TileMap)
-	is_mining = dest
 	return true
 
 func extend_rope(action):
@@ -144,12 +138,15 @@ func extend_rope(action):
 	return false
 
 func respawn_dwarf(action):
-	print("respawn !!!!")
 	var player_id = action["player_id"]
 	var nain_id = action["id_nain"]
 	var spawn_pos = action["spawn"]
 	teleport(dwarfs[player_id][nain_id], Vector2(spawn_pos["c"], spawn_pos["l"]))
 	dwarfs[player_id][nain_id].dying = false
+
+func break_block(action):
+	var pos = action["pos"]
+	$TileMap.mine(Vector2(action["pos"]["c"], action["pos"]["l"]))
 
 func fall(action):
 	var player_id = int(action["player_id"])
