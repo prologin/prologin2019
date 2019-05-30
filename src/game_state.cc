@@ -328,8 +328,6 @@ void GameState::respawn(int player_id)
             };
             add_to_internal_history(player_id, action);
 
-            std::cout << "RESPAWN !!!" << std::endl;
-
             nains_[nain.first][nain.second] = {
                 target_pos,       VIE_NAIN, NB_POINTS_DEPLACEMENT,
                 NB_POINTS_ACTION, false,    0};

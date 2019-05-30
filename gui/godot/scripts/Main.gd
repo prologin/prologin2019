@@ -2,6 +2,7 @@ extends Node
 
 func _ready():
 	if OS.has_feature('JavaScript'):
+		#OS.set_window_maximized(true)
 		get_tree().change_scene("res://scenes/Replay.tscn")
 		return
 	for arg in OS.get_cmdline_args():

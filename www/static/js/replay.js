@@ -133,6 +133,23 @@ function godot_init(engine) {
         setStatusMode('notice');
         initializing = false;
     });
+
+    // PROLOGIN 2019 -- RESIZE CANVAS
+    const content_el = document.getElementById("content");
+    const canvas_el = document.getElementById("canvas");
+
+    const actual_width = 1280;
+    const actual_height = 992;
+
+    window.setInterval(function() {
+        const width = content_el.offsetWidth;
+        const height = (width / actual_width) * actual_height;
+
+        canvas_el.setAttribute("style", `max-width: ${width}px; max-height: ${height}px;`);
+
+        canvas_el.setAttribute("width", width);
+        canvas_el.setAttribute("height", height);
+    }, 100);
 }
 
 $(function () {
