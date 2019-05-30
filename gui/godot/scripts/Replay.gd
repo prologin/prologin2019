@@ -35,10 +35,11 @@ func next_turn():
 	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
-	current_turn = DUMP_READER.parse_turn(dump[turn])
 	$GameState.ores = current_turn.ores
+	current_turn = DUMP_READER.parse_turn(dump[turn])
 	actions = current_turn.players[get_player_id()].history.duplicate()
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
+	print("--- ", turn, " ---")
 
 func _process(delta):
 	$GameState/Info/Error.text = ""
@@ -60,6 +61,16 @@ func _process(delta):
     	OS.window_fullscreen = !OS.window_fullscreen
 	#print("actions.size(): ", actions.size())
 	while actions.size() != 0 and not is_animating:
+
+		var act = actions.front()
+		if act.action >= 0:
+			if act.action == 0:
+				print("deplacer ", act.dir)
+			elif act.action == 3:
+				print("miner ", act.dir)
+			else:
+				print(act)
+
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:
 		if turn != 0:

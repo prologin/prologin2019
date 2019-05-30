@@ -37,10 +37,7 @@ func is_ore(pos):
 func finish_action():
 	if is_mining != Vector2(-1, -1):
 		var ore = is_ore(is_mining)
-		if ore != null:
-			if ore.duration == 1:
-				$TileMap.mine(is_mining)
-		else:
+		if ore == null:
 			$TileMap.mine(is_mining)
 		is_mining = Vector2(-1, -1)
 
@@ -125,7 +122,7 @@ func set_rope(action, player_id):
 func move(action, player_id):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
-	print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
+	#print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
 	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y), player_id)
 	return true
