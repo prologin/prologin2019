@@ -68,6 +68,8 @@ func replay_action(action, player_id):
 		return simple_action(action, player_id, "die")
 	if action["action"] == -4:
 		return extend_rope(action)
+	if action["action"] == -5:
+		return respawn_dwarf(action)
 	print("unknown action: ", action["action"])
 	return false
 
@@ -124,8 +126,10 @@ func set_rope(action, player_id):
 func move(action, player_id):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
+	print("pos before moving: ", dwarf.external_pos)
 	#print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
+	print("move to ", dest)
 	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y), player_id)
 	return true
 
@@ -140,6 +144,14 @@ func mine(action, player_id):
 func extend_rope(action):
 	$TileMap.draw_rope(Vector2(action["pos"]["c"], action["pos"]["l"]))
 	return true
+
+func respawn_dwarf(action):
+	print("respawn !!!!")
+	var player_id = action["player_id"]
+	var nain_id = action["id_nain"]
+	var spawn_pos = action["spawn"]
+	teleport(dwarfs[player_id][nain_id], Vector2(spawn_pos["c"], spawn_pos["l"]))
+	dwarfs[player_id][nain_id].dying = false
 
 func fall(action):
 	var player_id = int(action["player_id"])

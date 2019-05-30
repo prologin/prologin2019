@@ -5,4 +5,3 @@
 [node name="Spectator" type="Node"]
 
 [node name="GameState" parent="." instance=ExtResource( 1 )]
-

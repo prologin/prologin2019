@@ -72,7 +72,7 @@ animations = [ {
 "name": "dance",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 19 ), ExtResource( 2 ) ],
+"frames": [ ExtResource( 19 ), ExtResource( 19 ) ],
 "loop": true,
 "name": "fall",
 "speed": 5.0
@@ -114,6 +114,7 @@ animations = [ {
 } ]
 
 [node name="Dwarf" type="KinematicBody2D"]
+collision_layer = 3
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

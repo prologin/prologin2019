@@ -312,12 +312,22 @@ void GameState::respawn(int player_id)
     for (auto nain : nains_respawn_)
         if (nain.first == player_id)
         {
-            nains_[nain.first][nain.second] = {map_.get_spawn_point(nain.first),
-                                               VIE_NAIN,
-                                               NB_POINTS_DEPLACEMENT,
-                                               NB_POINTS_ACTION,
-                                               false,
-                                               0};
+            const position target_pos = map_.get_spawn_point(nain.first);
+
+            internal_action action;
+            action.type = 5;
+            action.fall = {
+                player_id,
+                nain.second,
+                target_pos,
+            };
+            add_to_internal_history(player_id, action);
+
+            std::cout << "RESPAWN !!!" << std::endl;
+
+            nains_[nain.first][nain.second] = {
+                target_pos,       VIE_NAIN, NB_POINTS_DEPLACEMENT,
+                NB_POINTS_ACTION, false,    0};
             map_.add_nain(nain.second, nains_[nain.first][nain.second].pos,
                           nain.first);
 

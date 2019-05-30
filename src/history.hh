@@ -25,6 +25,7 @@ typedef struct internal_action
     // 2 for falling event
     // 3 for death event
     // 4 for ropes which reached the floor
+    // 5 for respawn
     int type;
 
     union {

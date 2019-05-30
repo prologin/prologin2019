@@ -59,7 +59,9 @@ func _process(delta):
 		
 	if Input.is_action_just_pressed("toggle_screen"):
     	OS.window_fullscreen = !OS.window_fullscreen
+		
 	#print("actions.size(): ", actions.size())
+
 	while actions.size() != 0 and not is_animating:
 
 		var act = actions.front()

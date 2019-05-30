@@ -70,7 +70,7 @@ animations = [ {
 "name": "dance",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ), ExtResource( 2 ) ],
+"frames": [ ExtResource( 17 ), ExtResource( 17 ) ],
 "loop": true,
 "name": "fall",
 "speed": 5.0
