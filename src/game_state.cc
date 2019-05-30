@@ -295,12 +295,12 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
         map_.remove_nain(nain_id, nain.pos);
         nains_respawn_.push_back({player_id, nain_id});
 
-        check_nain_gravity(get_position_offset(nain.pos, HAUT), current_player);
-
         internal_action action;
         action.type = 3;
         action.fall = {player_id, nain_id, nain.pos};
         add_to_internal_history(current_player, action);
+
+        check_nain_gravity(get_position_offset(nain.pos, HAUT), current_player);
     }
 }
 

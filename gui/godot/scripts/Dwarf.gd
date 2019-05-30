@@ -43,12 +43,14 @@ func move_to(external_to, map, tile, player_id, fall=false):
 	if map.has_rope_at(external_to):
 		on_rope = true
 		if $AnimatedSprite.flip_h:
-			$AnimatedSprite.transform.origin.x = -2
+			$AnimatedSprite.transform.origin.x = -3
 		else:
 			$AnimatedSprite.transform.origin.x = 3
 	else:
 		on_rope = false
 		$AnimatedSprite.transform.origin.x = 0
+
+	#$AnimatedSprite.transform.origin.y = 6
 
 	if fall:
 		anim = "fall"
@@ -116,11 +118,14 @@ func pull_to():
 func stop():
 	moving = false
 	mining = false
-	#dying = false
 	pulling = false
+	roping = false
 
 	emit_signal("finished_moving")
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
+
+	if dying:
+		return false
 
 	if stick:
 		if on_rope:
@@ -131,7 +136,7 @@ func stop():
 		$AnimatedSprite.play("idle")
 
 func animation_finished():
-	if mining or (stick and not moving) or roping or dying or pulling:
+	if mining or roping or dying or pulling:
 		stop()
 
 func _ready():
