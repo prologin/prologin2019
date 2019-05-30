@@ -109,7 +109,9 @@ enum:
       - [pm_insuffisants, "Votre nain (standard) ne possède pas assez de points
                            de déplacement pour réaliser ce déplacement."]
       - [hors_limites, "L'action est en dehors des limites de la mine."]
-      - [direction_invalide, "La direction spécifiée n'existe pas."]
+      - [direction_invalide, "La direction spécifiée n'existe pas, ou vous
+                              n'êtes pas autorisé à cibler cette direction pour
+                              cette action."]
       - [id_nain_invalide, "Le nain (standard) spécifié n'existe pas."]
       - [obstacle_mur, "La position spécifiée est un mur."]
       - [obstacle_nain, "La position spécifiée est un nain (standard) adverse."]
@@ -179,7 +181,8 @@ struct:
                           déplacement"]
       - [sens, direction, "Sens de l'action, utilisé uniquement pour préciser
                            si l'on doit tirer une corde vers le bas ou vers le
-                           haut."]
+                           haut. Direction doit cibler la droite ou la
+                           gauche."]
 
 function:
 

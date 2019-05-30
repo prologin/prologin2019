@@ -22,7 +22,7 @@ int ActionTirer::check(const GameState* st) const
         return PA_INSUFFISANTS;
 
     // Check positions
-    if (dir_corde_ < 0 || dir_corde_ >= 4)
+    if (dir_corde_ != GAUCHE || dir_corde_ != DROITE)
         return DIRECTION_INVALIDE;
 
     if (sens_ != HAUT && sens_ != BAS)
