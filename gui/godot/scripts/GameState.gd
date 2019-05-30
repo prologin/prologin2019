@@ -53,7 +53,7 @@ func replay_action(action, player_id):
 		return stick(action, player_id, false)
 	if action["action"] == Constants.ACTIONS.get("ACTION_TIRER"):
 		return pull(action, player_id)
-	if action["action"] == Constants.ACTIONS.get("ACTION_DEBUG_AFFICHER_DRAPEAU"):
+	if action["action"] == -1:
 		return flag(action, player_id)
 	if action["action"] == -2:
 		return fall(action)
@@ -80,10 +80,10 @@ func stick(action, player_id, is_stick):
 	dwarf.set_sticky(is_stick)
 
 func flag(action, player_id):
-	var dwarf_id = int(action["id_nain"])
-	var dwarf = dwarfs[player_id][dwarf_id]
-	$TileMap.set_flags(dwarf.external_pos)
-	return true
+	return false # TODO
+	var pos = Vector2(action["pos"]["c"], action["pos"]["l"])
+	$TileMap.set_flag(pos)
+	return false
 
 func check(current_turn):
 	for player in range(Constants.NB_JOUEURS):

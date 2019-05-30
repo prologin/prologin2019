@@ -54,7 +54,7 @@ func move_to(external_to, map, tile, player_id, fall=false):
 	if fall:
 		anim = "fall"
 	else:
-		if stick and dx == 0:
+		if stick:
 			if dx == 0:
 				if on_rope:
 					anim = "climb_rope"
