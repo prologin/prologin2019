@@ -36,6 +36,7 @@ func next_turn():
 		return
 	turn += 1
 	current_turn = DUMP_READER.parse_turn(dump[turn])
+	$GameState.ores = current_turn.ores
 	actions = current_turn.players[get_player_id()].history.duplicate()
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
 

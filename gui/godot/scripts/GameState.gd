@@ -18,6 +18,7 @@ func select_dwarf(dwarf):
 ########################
 
 var dwarfs = []
+var ores = []
 
 var is_mining = Vector2(-1, -1)
 var is_roping = Vector2(-1, -1)
@@ -27,9 +28,20 @@ func get_position_offset(pos, dir):
 	assert dir >= 0 and dir < len(DIRS)
 	return pos + DIRS[dir]
 
+func is_ore(pos):
+	for ore in ores:
+			if pos == ore.pos:
+				return ore
+	return null
+
 func finish_action():
 	if is_mining != Vector2(-1, -1):
-		$TileMap.mine(is_mining)
+		var ore = is_ore(is_mining)
+		if ore != null:
+			if ore.duration == 1:
+				$TileMap.mine(is_mining)
+		else:
+			$TileMap.mine(is_mining)
 		is_mining = Vector2(-1, -1)
 
 	if is_roping != Vector2(-1, -1):
@@ -182,6 +194,7 @@ func teleport(dwarf, pos):
 	dwarf.set_external_position(pos, $TileMap)
 
 func init(turn, parent_node, reinit=false):
+	ores = turn.ores
 	if (reinit):
 		$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos, true)
 	else:
