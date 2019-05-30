@@ -263,3 +263,8 @@ pre, input[type=text], input[type=password], textarea.form-control {
   50% { transform: rotate(0deg); }
   75% { transform: rotate(10deg); }
 }
+
+#replay::before {
+    font-size: small;
+    content: "Cliquez sur la vue puis appuyez sur F pour passer en mode plein écran";
+}

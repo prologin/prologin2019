@@ -23,7 +23,6 @@ func set_sticky(is_stick):
 	stick = is_stick
 
 func set_external_position(pos, map):
-	print("set external pos: ", pos)
 	external_pos = pos
 	position = map.world_position(pos)
 

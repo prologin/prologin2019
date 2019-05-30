@@ -142,8 +142,13 @@ function godot_init(engine) {
     const actual_height = 992;
 
     window.setInterval(function() {
-        const width = content_el.offsetWidth;
-        const height = (width / actual_width) * actual_height;
+        var width = content_el.offsetWidth;
+        var height = (width / actual_width) * actual_height;
+
+        if (document.fullscreen) {
+            width = document.body.clientWidth;
+            height = document.height.clientHeight;
+        }
 
         canvas_el.setAttribute("style", `max-width: ${width}px; max-height: ${height}px;`);
 

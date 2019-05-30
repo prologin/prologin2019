@@ -119,10 +119,7 @@ func set_rope(action, player_id):
 func move(action, player_id):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
-	print("pos before moving: ", dwarf.external_pos)
-	#print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
-	print("move to ", dest)
 	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y), player_id)
 	return true
 

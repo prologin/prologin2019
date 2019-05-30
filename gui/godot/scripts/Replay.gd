@@ -39,7 +39,11 @@ func next_turn():
 	current_turn = DUMP_READER.parse_turn(dump[turn])
 	actions = current_turn.players[get_player_id()].history.duplicate()
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
-	print("--- ", turn, " ---")
+	#print("--- ", turn, " ---")
+
+func _unhandled_input(event):
+	if Input.is_action_just_pressed("toggle_screen"):
+    	OS.window_fullscreen = !OS.window_fullscreen
 
 func _process(delta):
 	$GameState/Info/Error.text = ""
@@ -56,22 +60,20 @@ func _process(delta):
 			jump_turn(input)
 		else:
 			$GameState/Info/Error.text = "Invalid index"
-		
-	if Input.is_action_just_pressed("toggle_screen"):
-    	OS.window_fullscreen = !OS.window_fullscreen
+
 		
 	#print("actions.size(): ", actions.size())
 
 	while actions.size() != 0 and not is_animating:
 
-		var act = actions.front()
-		if act.action >= 0:
-			if act.action == 0:
-				print("deplacer ", act.dir)
-			elif act.action == 3:
-				print("miner ", act.dir)
-			else:
-				print(act)
+		#var act = actions.front()
+		#if act.action >= 0:
+		#	if act.action == 0:
+		#		print("deplacer ", act.dir)
+		#	elif act.action == 3:
+		#		print("miner ", act.dir)
+		#	else:
+		#		print(act)
 
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:
