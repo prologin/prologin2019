@@ -68,7 +68,7 @@ Rapport géologique
 ==================
 
 Le granite (standard)
---------------------
+---------------------
 
 *Le granite est une roche magmatique plutonique à structure grenue,
 c’est-à-dire entièrement cristallisée, formée par le refroi…*
@@ -169,7 +169,7 @@ Le matériel des nains inclut des cordes (standard) illimitées. Pour les
 utiliser il convient de disposer d'une poulie en tête de cordage, cela
 permettra les actions sur la corde.
 
-Ces cordes permettent aux nains de se déplacer au dessus du vide plus
+Ces cordes permettent aux nains de se déplacer au-dessus du vide plus
 rapidement qu’en s’agrippant aux parois.
 
 Une fois la poulie posée, **la corde descend jusqu’au sol**. Votre
@@ -194,11 +194,11 @@ et transversalement, en marchant au sol, en s’agrippant, en chutant ou
 emporté par une corde.
 
 Un déplacement n’est possible que vers une position libre [10]_, et
-nécessite des *points de déplacement*. Une case n'est pas considérée comme
-libre lorsqu'elle contient du granite, de l'obsidienne, ou un nain (standard)
-ennemi. De plus, nous rappelons aux nains
-que les effets de la gravité existe [11]_, nous vous recommandons donc
-de lire attentivement la section dédiée.
+nécessite des *points de déplacement*. Une case n'est pas considérée
+comme libre lorsqu'elle contient du granite, de l'obsidienne, ou un nain
+(standard) ennemi. De plus, nous rappelons aux nains que les effets de
+la gravité existent [11]_, nous vous recommandons donc de lire
+attentivement la section dédiée.
 
 Il est également à noter que la promiscuité ne pose pas de problème aux
 mineurs [12]_, ils peuvent donc se trouver sur une même position. Il est
@@ -246,8 +246,8 @@ de se déplacer à distinguer pour un nain agrippé :
    autre nain (ce qui peut faire gagner beaucoup de temps si vous avez
    confiance en l’opérateur de cette corde)
 
-**S'agripper à la parroi ne aucune autre action que le déplacement du
-nain.**
+**S'agripper à la paroi ne contraint aucune autre action que le
+déplacement du nain.**
 
 Vous ne pouvez pas pousser les nains dans les trous (i.e. les putsch
 sont interdits).
@@ -305,7 +305,7 @@ Fin de la période d'essai
 
 À la fin de 100 tours de jeu, le joueur qui a ramené le plus de pièces
 d'or à sa taverne gagne. Les pièces d'or encore portées dans
-l'inventaire de nains dispersés dans la map ne sont pas contabilisés.
+l'inventaire de nains dispersés dans la map ne sont pas comptabilisées.
 
 
 .. [1]
@@ -324,7 +324,7 @@ l'inventaire de nains dispersés dans la map ne sont pas contabilisés.
    Mineur est un métier dangereux, même à plus de 18 ans
 
 .. [5]
-   Avec 20% de taxes, on peut mieux faire en terme de rentabilité.
+   Avec 20% de taxes, on peut mieux faire en termes de rentabilité.
 
 .. [7]
    Nous rappelons que P.R.O.L.O.G.I.N. n’est responsable en aucune
