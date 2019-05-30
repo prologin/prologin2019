@@ -22,6 +22,8 @@ func set_rope(pos):
 	set_cell(pos.x, pos.y, tile_set.find_tile_by_name("Rope"))
 
 func draw_rope(begin):
+	if get_tile(begin.x, begin.y) == 5:
+		return
 	set_cell(begin.x, begin.y, tile_set.find_tile_by_name("Rope_ext"))
 
 func get_tile(x, y):
