@@ -8,6 +8,7 @@ signal finished_moving
 var moving = false
 var mining = false
 var stick = false
+var on_rope = false
 var roping = false
 var dying = false
 var pulling = false
@@ -25,7 +26,7 @@ func set_external_position(pos, map):
 	external_pos = pos
 	position = map.world_position(pos)
 
-func move_to(external_to, map, tile, fall=false):
+func move_to(external_to, map, tile, player_id, fall=false):
 	#assert not moving
 	external_pos = external_to
 	var to = map.world_position(external_to)
@@ -33,12 +34,27 @@ func move_to(external_to, map, tile, fall=false):
 	moving = true
 	var anim = null
 	var dx = to.x - position.x
+	if dx > 0:
+		$AnimatedSprite.flip_h = false
+	elif dx < 0:
+		$AnimatedSprite.flip_h = true
+
+	if map.has_rope_at(external_to):
+		on_rope = true
+		if $AnimatedSprite.flip_h:
+			$AnimatedSprite.transform.origin.x = -2
+		else:
+			$AnimatedSprite.transform.origin.x = 3
+	else:
+		on_rope = false
+		$AnimatedSprite.transform.origin.x = 0
+
 	if fall:
 		anim = "fall"
 	else:
 		if stick and dx == 0:
 			if dx == 0:
-				if tile == 4:
+				if on_rope:
 					anim = "climb_rope"
 				else:
 					anim = "climb_v"
@@ -49,10 +65,6 @@ func move_to(external_to, map, tile, fall=false):
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 
-	if dx > 0:
-		$AnimatedSprite.flip_h = false
-	elif dx < 0:
-		$AnimatedSprite.flip_h = true
 
 func mine_to(external_to, map):
 	#assert not mining
@@ -67,7 +79,7 @@ func mine_to(external_to, map):
 		$AnimatedSprite.flip_h = false
 	elif dx < 0:
 		$AnimatedSprite.flip_h = true
-	
+
 func set_rope_to():
 	roping = true
 
@@ -94,20 +106,28 @@ func grab_to():
 	stick = true
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("grab")
-	
+
 func pull_to():
 	assert not mining
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("climb")
-	
+
 func stop():
 	moving = false
 	mining = false
 	dying = false
 	pulling = false
+
 	emit_signal("finished_moving")
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
-	$AnimatedSprite.play("idle")
+
+	if stick:
+		if on_rope:
+			$AnimatedSprite.play("idle_rope")
+		else:
+			$AnimatedSprite.play("climb_v")
+	else:
+		$AnimatedSprite.play("idle")
 
 func animation_finished():
 	if mining or (stick and not moving) or roping or dying or pulling:

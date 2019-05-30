@@ -31,14 +31,14 @@ func finish_action():
 	if is_mining != Vector2(-1, -1):
 		$TileMap.mine(is_mining)
 		is_mining = Vector2(-1, -1)
-		
+
 	if is_roping != Vector2(-1, -1):
 		$TileMap.set_rope(is_roping)
 		is_roping = Vector2(-1, -1)
 
 func replay_action(action, player_id):
 	finish_action()
-	
+
 	if action["action"] == Constants.ACTIONS.get("ACTION_DEPLACER"):
 		return move(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_MINER"):
@@ -58,7 +58,7 @@ func replay_action(action, player_id):
 	if action["action"] == -3:
 		return die(action, player_id)
 	if action["action"] == -4:
-		return extend_rope(action) 
+		return extend_rope(action)
 	print("unknown action: ", action["action"])
 	return false
 
@@ -67,7 +67,7 @@ func pull(action, player_id):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	dwarf.pull()
 	return true
-	
+
 func stick(action, player_id, is_stick):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
@@ -85,7 +85,7 @@ func check(current_turn):
 			var current_pos = dwarfs[player][dwarf_id].external_pos
 			var theorical_pos = current_turn.players[player].dwarfs[dwarf_id].pos
 			if current_pos != theorical_pos:
-					dwarfs[player][dwarf_id].move_to(theorical_pos, $TileMap, 0)
+					dwarfs[player][dwarf_id].move_to(theorical_pos, $TileMap, 0, 0)
 			#	dwarfs[player][dwarf_id].set_external_position(theorical_pos, $TileMap)
 			#assert current_pos == theorical_pos
 	for y in range(Constants.TAILLE_MINE):
@@ -115,7 +115,7 @@ func move(action, player_id):
 	var dwarf = dwarfs[player_id][dwarf_id]
 	print("move", dwarfs[player_id][dwarf_id].external_pos, int(action["dir"]), get_position_offset(dwarf.external_pos, int(action["dir"])))
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
-	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y))
+	dwarf.move_to(dest, $TileMap, $TileMap.get_tile(dwarf.external_pos.x, dwarf.external_pos.y), player_id)
 	return true
 
 func mine(action, player_id):
@@ -135,7 +135,7 @@ func fall(action):
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
-	dwarf.move_to(dest, $TileMap, 0, true)
+	dwarf.move_to(dest, $TileMap, 0, player_id, true)
 	return true
 
 func grab(action, player_id):
@@ -187,11 +187,11 @@ func init(turn, parent_node, reinit=false):
 	else:
 		$TileMap.init(turn.blocks, turn.ores, turn.ropes, turn.players[0].dwarfs[0].pos, turn.players[1].dwarfs[0].pos)
 		$Info.init(turn.players)
-	
+
 	for player in range(Constants.NB_JOUEURS):
 		dwarfs.append([])
 		for dwarf_id in range(Constants.NB_NAINS):
 			if (reinit):
-				teleport(dwarfs[player][dwarf_id], turn.players[player].dwarfs[dwarf_id].pos) 
+				teleport(dwarfs[player][dwarf_id], turn.players[player].dwarfs[dwarf_id].pos)
 			else:
 				dwarfs[player].append(spawn_dwarf(player, turn.players[player].dwarfs[dwarf_id].pos, parent_node))

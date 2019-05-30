@@ -21,13 +21,16 @@ func mine(pos):
 func set_rope(pos):
 	set_cell(pos.x, pos.y, tile_set.find_tile_by_name("Rope"))
 
+func has_rope_at(pos):
+	return get_tile(pos.x, pos.y) == 4 or get_tile(pos.x, pos.y) == 12
+
 func draw_rope(begin):
 	if get_tile(begin.x, begin.y) == 5:
 		return
 	set_cell(begin.x, begin.y, tile_set.find_tile_by_name("Rope_ext"))
 
 func get_tile(x, y):
-	return get_cell(x,y)
+	return get_cell(x, y)
 
 func get_ore_color(value):
 	if value >= 1 and value <= 4:
@@ -51,13 +54,12 @@ func init(blocks, ores, ropes, spawn1, spawn2, reset=false):
 			var ore_o = null
 			
 			for rope in ropes:
-				if rope.bas.x == x:
-					if rope.haut.y == y:
+				if x == rope.bas.x and rope.haut.y <= y and y <= rope.bas.y:
+					if Vector2(x, y) == rope.haut:
 						is_rope = true
-					elif rope.haut.y < y and rope.bas.y >= y:
+					else:
 						is_rope_ext = true
-						break
-				
+
 			for ore in ores:
 				if ore.pos == Vector2(x, y):
 					is_ore = true
