@@ -10,3 +10,5 @@ Pages:
    :maxdepth: 1
 
    finale
+   faq-candidat
+   stechec2
