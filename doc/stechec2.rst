@@ -71,24 +71,22 @@ pourriez rencontrer lors de l'exécution de stechec2.
 Interface graphique (GUI)
 -------------------------
 
-Pour utiliser la GUI pendant que vous lancez votre match, rajoutez à la fin de
-votre ``config.yml``
+.. warning::
 
-::
+  La GUI n'est pas encore fonctionnelle. Nous y travaillons.
+
+Pour utiliser la GUI pendant que vous lancez votre match, rajoutez à la fin de
+votre ``config.yml`` ::
 
   spectators:
     - /opt/prologin2019-gui.so
 
-Si vous préférez regarder le replay à la fin
-
-::
+Si vous préférez regarder le replay à la fin, ajoutez ::
 
   dump: dump.json
 
 Ceci crée un fichier `dump.json` dans le répertoire courant, que vous pouvez
-visualiser avec
-
-::
+visualiser avec ::
 
   prologin2019-replay dump.json
 

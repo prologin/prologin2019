@@ -10,6 +10,7 @@ Pages:
    :maxdepth: 1
 
    finale
+   rendu
    faq-candidat
    stechec2
    api

@@ -16,7 +16,7 @@ La mine (standard)
 C’est une mine. Parfois il y a des tunnels déjà creusés, d’autres fois
 non.
 
-.. image:: mine.png
+.. image:: ../subject/mine.png
    :width: 400px
    :height: 400px
 
@@ -92,34 +92,34 @@ Voici en attendant une liste de ces minerais, avec un échantillon pour
 les distinguer plus facilement et des approximations de leurs
 caractéristiques :
 
-============  ===============================  ===================
- Minerai       Échantillon                      Rendement
-============  ===============================  ===================
-Granite       .. image:: frames/granit.png     0
+============  ==========================================  ===================
+ Minerai       Échantillon                                 Rendement
+============  ==========================================  ===================
+Granite       .. image:: ../subject/frames/granit.png     0
                 :width: 20px
                 :height: 20px
-Obsidienne    .. image:: frames/obsidian.png   –
+Obsidienne    .. image:: ../subject/frames/obsidian.png   –
                 :width: 20px
                 :height: 20px
-Charbon       .. image:: frames/coal.png       1 à 4
+Charbon       .. image:: ../subject/frames/coal.png       1 à 4
                 :width: 20px
                 :height: 20px
-Fer           .. image:: frames/iron.png       5 à 9
+Fer           .. image:: ../subject/frames/iron.png       5 à 9
                 :width: 20px
                 :height: 20px
-Or            .. image:: frames/or.png         10 à 14
+Or            .. image:: ../subject/frames/or.png         10 à 14
                 :width: 20px
                 :height: 20px
-Diamants      .. image:: frames/diamonds.png   15 à 19
+Diamants      .. image:: ../subject/frames/diamonds.png   15 à 19
                 :width: 20px
                 :height: 20px
-Émeraudes     .. image:: frames/emerauld.png   20 à :math:`\infty`
+Émeraudes     .. image:: ../subject/frames/emerauld.png   20 à :math:`\infty`
                 :width: 20px
                 :height: 20px
-Rubis         .. image:: frames/ruby.png       :math:`\mathbb{Z}`
+Rubis         .. image:: ../subject/frames/ruby.png       :math:`\mathbb{Z}`
                 :width: 20px
                 :height: 20px
-============  ===============================  ===================
+============  ==========================================  ===================
 
 Divers
 ------
