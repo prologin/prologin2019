@@ -339,8 +339,12 @@ void GameState::respawn(int player_id)
             add_to_internal_history(player_id, action);
 
             nains_[nain.first][nain.second] = {
-                target_pos,       VIE_NAIN, NB_POINTS_DEPLACEMENT,
-                NB_POINTS_ACTION, false,    0};
+                target_pos /* pos */,
+                VIE_NAIN /* vie */,
+                NB_POINTS_ACTION /* pa */,
+                NB_POINTS_DEPLACEMENT /* pm */,
+                false /* accroche */,
+                0 /* butin */};
             map_.add_nain(nain.second, nains_[nain.first][nain.second].pos,
                           nain.first);
 
