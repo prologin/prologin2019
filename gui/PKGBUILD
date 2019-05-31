@@ -1,12 +1,12 @@
 pkgname=prologin2019-gui
-pkgver=1.303
+pkgver=1.305
 pkgrel=1
 pkgdesc="GUI for prologin 2019"
 arch=('any')
 url="https://github.com/prologin/prologin2019"
 license=('GPL')
-depends=('godot>=3', 'stechec2')
-makedepends=('git' 'gcc' 'make' 'prologin2019')
+depends=('godot>=3' 'stechec2')
+makedepends=('git' 'gcc' 'make' 'stechec2')
 source=("git+ssh://git@github.com/prologin/prologin2019")
 sha512sums=(SKIP)
 
