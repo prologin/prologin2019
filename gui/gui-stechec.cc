@@ -4,6 +4,9 @@
 #include <sstream>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <cstring>
 
 #include "prologin.hh"
 
@@ -54,7 +57,7 @@ void partie_init()
   if (!fork())
   {
     auto s = std::to_string(port);
-    excecl("/usr/bin/prologin2019-gui", "usr/bin/prologin2019-gui",
+    execl("/usr/bin/prologin2019-gui", "usr/bin/prologin2019-gui",
         s.c_str(), std::to_string(moi()).c_str(), (char*)nullptr);
     exit(5);
   }
@@ -102,13 +105,13 @@ void jouer_tour()
     else if (words[0] == "DROP")
       lacher(std::stoi(words[1]));
     else if (words[0] == "GRAB")
-      agriper(std::stoi(words[1]));
+      agripper(std::stoi(words[1]));
     else if (words[0] == "MINE")
-      mine(std::stoi(words[1], to_direction(words[2])));
+      miner(std::stoi(words[1], to_direction(words[2])));
     else if (words[0] == "PULL")
       tirer(words[1], to_direction(words[2], to_direction(words[3])));
     else if (words[0] == "SET_ROPE")
-      poser_corde(std::stoi(words[1], to_direction(words2)));
+      poser_corde(std::stoi(words[1], to_direction(words[2])));
     else if (words[0] == "CANCEL")
       annuler();
   }

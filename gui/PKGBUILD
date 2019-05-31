@@ -33,9 +33,9 @@ build() {
     echo "godot --main-pack /opt/prologin2019.pck -socket=\$1 -id=\$2" >> $gui
     chmod +x $gui
 
-#stechec2-generator player prologin2019 .
-#    cp "prologin2019/gui/gui-stechec.cc" "cxx/prologin.cc"
-#    make -C cxx
+    stechec2-generator player prologin2019 .
+    cp "prologin2019/gui/gui-stechec.cc" "cxx/prologin.cc"
+    make -C cxx
 }
 
 package() {

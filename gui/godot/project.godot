@@ -26,14 +26,12 @@ Global="*res://scripts/Global.gd"
 
 [display]
 
-window/size/width=1280
-window/size/height=992
-window/stretch/mode="viewport"
-window/stretch/aspect="keep_width"
+window/size/width=1242
+window/size/height=1024
 
 [editor]
 
-main_run_args="-json=/home/remi/code/prologin/stechec2/player2019/python/dump.json"
+main_run_args="-json=/home/bull/prologin2019/gui/dump3.json"
 
 [input]
 
