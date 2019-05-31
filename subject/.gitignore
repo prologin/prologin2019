@@ -1,0 +1,10 @@
+apidoc.tex
+useapi.tex
+subject.pdf
+*.aux
+*.idx
+*.log
+*.toc
+*.nav
+*.out
+*.snm
