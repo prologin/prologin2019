@@ -321,7 +321,7 @@ function:
     fct_arg:
       - [pos, position, "Case choisie"]
   -
-    fct_name: cout_deplacement
+    fct_name: cout_de_deplacement
     fct_summary: Renvoie le nombre de points de déplacement que coûterai le
                  déplacement d'un nain (standard) dans une direction donnée.
                  Renvoie -1 si le déplacement n'est pas possible.

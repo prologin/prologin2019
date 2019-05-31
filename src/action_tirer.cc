@@ -72,7 +72,14 @@ void ActionTirer::apply_on(GameState* st) const
 
         for (int nain_id : nains)
             if (st->get_nain(curr_occupant, nain_id).accroche)
+            {
+                internal_action action;
+                action.type = 7;
+                action.fall = {curr_occupant, nain_id, destination};
+                st->add_to_internal_history(player_id_, action);
+
                 st->set_nain_position(curr_occupant, nain_id, destination);
+            }
 
         curr_pos = get_position_offset(curr_pos, reverse_direction(sens_));
     }

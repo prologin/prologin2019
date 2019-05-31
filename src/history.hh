@@ -27,6 +27,7 @@ typedef struct internal_action
     // 4 for ropes which reached the floor
     // 5 for respawn
     // 6 for block breaking block
+    // 7 for pulled by rope
     int type;
 
     union {

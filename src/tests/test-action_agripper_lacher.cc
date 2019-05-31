@@ -15,7 +15,7 @@ TEST_F(ApiTest, ActionAgripperLacher)
 
             // Try to let go
             EXPECT_EQ(COUT_DEPLACEMENT,
-                      player.api->cout_deplacement(nain_id, dir));
+                      player.api->cout_de_deplacement(nain_id, dir));
             EXPECT_EQ(PAS_ACCROCHE, player.api->lacher(nain_id));
 
             // Grab
@@ -23,13 +23,13 @@ TEST_F(ApiTest, ActionAgripperLacher)
             EXPECT_EQ(NB_POINTS_ACTION - COUT_AGRIPPER,
                       player.api->info_nain(player_id, nain_id).pa);
             EXPECT_EQ(COUT_ESCALADER,
-                      player.api->cout_deplacement(nain_id, dir));
+                      player.api->cout_de_deplacement(nain_id, dir));
             EXPECT_EQ(DEJA_ACCROCHE, player.api->agripper(nain_id));
 
             // Move right (next column has a rope)
             EXPECT_EQ(OK, player.api->deplacer(nain_id, dir));
             EXPECT_EQ(COUT_ESCALADER_CORDE,
-                      player.api->cout_deplacement(nain_id, dir));
+                      player.api->cout_de_deplacement(nain_id, dir));
 
             // Move up
             nain = player.api->info_nain(player_id, nain_id);

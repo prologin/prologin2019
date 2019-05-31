@@ -114,7 +114,7 @@ public:
     /// Renvoie le nombre de points de déplacement pour le déplacement d'un nain
     /// (standard) dans une direction donnée. Renvoie -1 si le déplacement n'est
     /// pas possible.
-    int cout_deplacement(int id_nain, direction dir);
+    int cout_de_deplacement(int id_nain, direction dir);
 
     /// Renvoie la position de la taverne appartenant au joueur ``id_joueur``.
     /// Si le joueur n'existe pas, renvoie la position (-1, -1).
