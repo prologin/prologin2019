@@ -12,3 +12,4 @@ Pages:
    finale
    faq-candidat
    stechec2
+   api
