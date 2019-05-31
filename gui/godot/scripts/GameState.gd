@@ -22,6 +22,8 @@ func select_dwarf(dwarf):
 var dwarfs = []
 var ores = []
 
+var selected_tile = null
+
 var is_roping = Vector2(-1, -1)
 
 const DIRS = [ Vector2(0, -1), Vector2(0, 1), Vector2(-1, 0), Vector2(1, 0) ]
@@ -221,6 +223,38 @@ func redraw(turn, players, ropes):
 
 func teleport(dwarf, pos):
 	dwarf.set_external_position(pos, $TileMap)
+
+func _update_tile_info():
+	if selected_tile == null:
+		$Info/Tile.text = ""
+		$TileMap/Select.visible = false
+		return
+	$TileMap/Select.visible = true
+	$TileMap/Select.rect_position = $TileMap.map_to_world(selected_tile)
+	var ore = null
+	var reg = RegEx.new()
+	reg.compile("Ores*")
+	if reg.search($TileMap.tile_set.tile_get_name($TileMap.get_cellv(selected_tile))):
+		for a in ores:
+			if a.pos == selected_tile:
+				ore = a
+				break
+	if ore != null:
+		$Info/Tile/name.text = $TileMap.tile_set.tile_get_name($TileMap.get_cellv(selected_tile))
+		$Info/Tile/pos.text = str("x: ",ore.pos.x, " y: ", ore.pos.y)
+		$Info/Tile/duration.text = str("resistance: ", ore.duration)
+		$Info/Tile/value.text = str("rendement: ", ore.value)
+
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		var pos = $TileMap.world_to_map(event.position)
+		if pos.x >= 0 and pos.y >= 0 and pos.x < Constants.TAILLE_MINE and pos.y < Constants.TAILLE_MINE:
+			if not Input.is_action_pressed("ui_shift"):
+				if selected_tile == pos:
+					selected_tile = null
+				else:
+					selected_tile = pos
+				_update_tile_info()
 
 func init(turn, parent_node, reinit=false):
 	ores = turn.ores
