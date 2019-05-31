@@ -41,8 +41,8 @@ build() {
 package() {
     mkdir "$pkgdir/opt/"
     cp "prologin2019/gui/godot/prologin2019.pck" "$pkgdir/opt/"
-#   cp "cxx/champion.so" "$pkgdir/opt/prologin2019-gui.so"
+    cp "cxx/champion.so" "$pkgdir/opt/prologin2019-gui.so"
     mkdir -p "$pkgdir/usr/bin"
     cp "prologin2019-replay" "$pkgdir/usr/bin/"
-#cp "prologin2019-gui" "$pkgdir/usr/bin/"
+    cp "prologin2019-gui" "$pkgdir/usr/bin/"
 }

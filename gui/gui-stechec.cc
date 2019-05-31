@@ -57,7 +57,7 @@ void partie_init()
   if (!fork())
   {
     auto s = std::to_string(port);
-    execl("/usr/bin/prologin2019-gui", "usr/bin/prologin2019-gui",
+    execl("/usr/bin/prologin2019-gui", "/usr/bin/prologin2019-gui",
         s.c_str(), std::to_string(moi()).c_str(), (char*)nullptr);
     exit(5);
   }
