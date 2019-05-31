@@ -2,6 +2,9 @@
 
 int ActionLacher::check(const GameState* st) const
 {
+    if (!st->is_init())
+        FATAL("action: you cannot use action outside jouer_tour");
+
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 

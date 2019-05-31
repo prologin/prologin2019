@@ -4,6 +4,8 @@
 
 int ActionDeplacer::check(const GameState* st) const
 {
+    if (!st->is_init())
+        FATAL("action: you cannot use action outside jouer_tour");
 
     // Check dwarf
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)

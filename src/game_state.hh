@@ -71,6 +71,9 @@ public:
     void reset_internal_history(int player_id);
     void add_to_internal_history(int player_id, internal_action action);
 
+    bool is_init() const;
+    void set_init(bool init); 
+
 private:
     int get_fall_distance(int player_id, int nain_id) const;
 
@@ -80,6 +83,7 @@ private:
     std::array<std::array<nain, NB_NAINS>, 2> nains_;
     std::vector<std::pair<int, int>> nains_respawn_;
     int round_;
+    bool init_;
 };
 
 #endif /* !GAME_STATE_HH */

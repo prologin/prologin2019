@@ -100,6 +100,7 @@ protected:
         utils::Logger::get().level() = utils::Logger::DEBUG_LEVEL;
         auto players_ptr = make_players(player_id_1, player_id_2);
         st = make_test_gamestate(test_map, players_ptr);
+        st->set_init(true);
 
         players[0].id = player_id_1;
         players[0].api = new Api(st, players_ptr->players[0]);

@@ -11,6 +11,7 @@ GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
           {PlayerInfo(players->players[0]), PlayerInfo(players->players[1])})
     , map_(map_stream)
     , round_(0)
+    , init_(false)
 {
     if (players->players.size() > NB_JOUEURS)
         FATAL("This game does not support more than two players.");
@@ -36,6 +37,7 @@ GameState::GameState(const GameState& st)
     , nains_(st.nains_)
     , nains_respawn_(st.nains_respawn_)
     , round_(st.round_)
+    , init_(st.init_)
 {
 }
 
@@ -448,4 +450,14 @@ void GameState::increase_score(int player_id, int delta)
 {
     assert(player_id == 0 || player_id == 1);
     player_info_[player_id].increase_score(delta);
+}
+
+bool GameState::is_init() const
+{
+    return init_;
+}
+
+void GameState::set_init(bool init)
+{
+    init_ = init;
 }

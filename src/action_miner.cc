@@ -4,6 +4,9 @@
 
 int ActionMiner::check(const GameState* st) const
 {
+    if (!st->is_init())
+        FATAL("action: you cannot use action outside jouer_tour");
+
     if (dir_ < 0 || dir_ >= 4)
         return DIRECTION_INVALIDE;
 
