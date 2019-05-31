@@ -256,6 +256,9 @@ int Api::cout_de_deplacement(int id_nain, direction dir)
             game_state_->get_opponent_id(player_id))
         return -1;
 
+    if (nain.vie <= 0)
+        return -1;
+
     return game_state_->get_movement_cost(player_id, id_nain, dir);
 }
 
