@@ -2,14 +2,19 @@ extends Node
 
 const DUMP_READER = preload("res://scripts/DumpReader.gd")
 
-var dump = null	
+var dump = null
 var turn = 0
+
+var socket = null
+var my_stechec_id = null
+var waiting = false
 
 var is_animating = false
 var actions = []
 var jump = false
 
 var current_turn = null
+var last_turn = null
 
 func jump_turn(input_turn):
 	turn = int(input_turn) * 2
@@ -25,9 +30,35 @@ func get_player_id():
 func finish_animating():
 	is_animating = false
 
+func _init_socket():
+	var port = 0;
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("-socket="):
+			port = int(arg.right(8));
+		elif arg.begins_with("-id="):
+			my_stechec_id = int(arg.right(4))
+	socket = StreamPeerTCP.new()
+	var connected = socket.connect_to_host("127.0.0.1", port)
+	if connected != OK:
+		print("Could not connect")
+
 func _ready():
-	dump = DUMP_READER.parse_input_json()
-	current_turn = DUMP_READER.parse_turn(dump[turn])
+	if not Global.spectator:
+		dump = DUMP_READER.parse_input_json()
+		current_turn = DUMP_READER.parse_turn(dump[turn])
+	else:
+		_init_socket()
+		var available = 0
+		while available == 0:
+			available = socket.get_available_bytes()
+		var dump_spect = socket.get_string(available)
+		var json = JSON.parse(dump_spect).result
+		if not json:
+			print("invalid json ", dump_spect)
+		current_turn = DUMP_READER.parse_turn(json)
+		last_turn = current_turn
+		socket.put_utf8_string("NEXT")
+		waiting = true
 	$GameState.init(current_turn, self)
 	$GameState.check(current_turn)
 
@@ -35,8 +66,12 @@ func next_turn():
 	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
-	$GameState.ores = current_turn.ores
-	current_turn = DUMP_READER.parse_turn(dump[turn])
+	if Global.spectator:
+		turn = current_turn.roundNumber
+		$GameState.ores = last_turn.ores
+	else:
+		$GameState.ores = current_turn.ores
+		current_turn = DUMP_READER.parse_turn(dump[turn])
 	actions = current_turn.players[get_player_id()].history.duplicate()
 	$GameState.clear_flags()
 	$GameState.redraw(turn, current_turn.players, current_turn.ropes)
@@ -47,6 +82,18 @@ func _unhandled_input(event):
     	OS.window_fullscreen = !OS.window_fullscreen
 
 func _process(delta):
+	if waiting:
+		var available = socket.get_available_bytes()
+		if available:
+			var dump_spect = socket.get_string(available)
+			var json = JSON.parse(dump_spect).result
+			last_turn = current_turn
+			current_turn = DUMP_READER.parse_turn(json)
+			waiting = false
+			next_turn()
+		else:
+			return
+
 	$GameState/Info/Error.text = ""
 	if Input.is_action_pressed("ui_escape") and not get_tree().paused:
 		get_tree().paused = true
@@ -78,6 +125,10 @@ func _process(delta):
 
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:
-		if turn != 0:
+		if turn != 0 and not Global.spectator:
 			$GameState.check(DUMP_READER.parse_turn(dump[turn - 1]))
-		next_turn()
+		if Global.spectator:
+			socket.put_utf8_string("NEXT")
+			waiting = true
+		else:
+			next_turn()
