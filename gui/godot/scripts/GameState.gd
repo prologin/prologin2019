@@ -2,9 +2,11 @@ extends Node
 
 onready var dwarf_g_scene = preload("res://scenes/Dwarf_green.tscn")
 onready var dwarf_b_scene = preload("res://scenes/Dwarf_blue.tscn")
+onready var flag_scene = preload("res://scenes/Flag.tscn")
 
 #ONLY FOR SPECTATOR MODE#
 var selected_dwarf = -1
+var flags = []
 
 func select_dwarf(dwarf):
 	if dwarf == selected_dwarf:
@@ -80,10 +82,19 @@ func stick(action, player_id, is_stick):
 	dwarf.set_sticky(is_stick)
 
 func flag(action, player_id):
-	return false # TODO
 	var pos = Vector2(action["pos"]["c"], action["pos"]["l"])
-	$TileMap.set_flag(pos)
+	var ftype = action["drapeau"]
+	var spawned_flag = flag_scene.instance()
+	spawned_flag.position = $TileMap.world_position(pos)
+	add_child(spawned_flag)
+	spawned_flag.set_color(ftype)
+	flags.append(spawned_flag)
 	return false
+
+func clear_flags():
+	for flag in flags:
+		remove_child(flag)
+	flags.clear()
 
 func check(current_turn):
 	for player in range(Constants.NB_JOUEURS):
