@@ -148,10 +148,10 @@ typedef enum action_type
 {
     ACTION_DEPLACER,    /* <- Action ``deplacer`` */
     ACTION_LACHER,      /* <- Action ``lacher`` */
-    ACTION_AGRIPPER,    /* <- Action ``agripper`` */
     ACTION_MINER,       /* <- Action ``miner`` */
     ACTION_POSER_CORDE, /* <- Action ``poser_corde`` */
     ACTION_TIRER,       /* <- Action ``tirer`` */
+    ACTION_AGRIPPER,    /* <- Action ``agripper`` */
 } action_type;
 // This is needed for old compilers
 namespace std
