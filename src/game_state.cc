@@ -106,8 +106,7 @@ bool GameState::mine_minerai(position pos, int player_id, int nain_id)
     }
 
     // The mineral broke
-    nains_[player_id][nain_id].butin = std::min(
-        nains_[player_id][nain_id].butin + minerai.rendement, BUTIN_MAX);
+    loot(player_id, nain_id, minerai.rendement);
 
     internal_action action;
     action.type = 6;
@@ -307,6 +306,15 @@ void GameState::reduce_pv(int player_id, int nain_id, int damage,
 
         check_nain_gravity(get_position_offset(nain.pos, HAUT), current_player);
     }
+}
+
+void GameState::loot(int player_id, int nain_id, int value)
+{
+    assert(player_id == 0 || player_id == 1);
+    assert(0 <= nain_id && nain_id < NB_NAINS);
+
+    nains_[player_id][nain_id].butin =
+        std::min(nains_[player_id][nain_id].butin + value, BUTIN_MAX);
 }
 
 void GameState::respawn(int player_id)

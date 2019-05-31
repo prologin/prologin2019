@@ -47,6 +47,7 @@ public:
     void reduce_pa(int player_id, int nain_id, int pa);
     void reset_pa(int player_id);
     void reduce_pv(int player_id, int nain_id, int damage, int current_player);
+    void loot(int player_id, int nain_id, int value);
     void respawn(int player_id);
 
     // Ropes

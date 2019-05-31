@@ -54,7 +54,13 @@ void ActionMiner::apply_on(GameState* st) const
         const auto nains_ids = st->map().get_nains_ids_at(dest);
 
         for (int nain_id : nains_ids)
+        {
+            if (st->get_nain(player_id, nain_id).vie <= DEGAT_PIOCHE)
+                st->loot(player_id_, id_nain_,
+                         st->get_nain(player_id, nain_id).butin);
+
             st->reduce_pv(player_id, nain_id, DEGAT_PIOCHE, player_id_);
+        }
     }
     else
     {
