@@ -104,6 +104,7 @@ void Rules::at_spectator_start(rules::ClientMessenger_sptr)
 
 void Rules::at_player_end(rules::ClientMessenger_sptr)
 {
+    api_->game_state()->set_init(false);
     try
     {
         sandbox_.execute(champion_partie_fin_);
@@ -143,6 +144,7 @@ void Rules::start_of_player_turn(unsigned int player_key)
     api_->game_state()->reset_pm(player_id);
     api_->game_state()->reset_internal_history(player_id);
     api_->game_state()->respawn(player_id);
+    api_->game_state()->set_init(true);
 }
 
 void Rules::end_of_player_turn(unsigned int /* player_id */)
