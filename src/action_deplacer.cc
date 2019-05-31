@@ -54,7 +54,8 @@ void ActionDeplacer::apply_on(GameState* st) const
 
     if (dest == st->map().get_spawn_point(1 - player_id_))
     {
-        st->increase_score(1 - player_id_, nain.butin);
+        if (nain.butin > 0)
+            st->increase_score(1 - player_id_, nain.butin);
         st->reduce_pv(player_id_, id_nain_, VIE_NAIN, player_id_);
         return;
     }
