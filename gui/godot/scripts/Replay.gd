@@ -8,6 +8,9 @@ var turn = 0
 var socket = null
 var my_stechec_id = null
 var waiting = false
+var pause_init = false
+var pause = false
+var want_next_turn = true
 
 var is_animating = false
 var actions = []
@@ -64,6 +67,12 @@ func _ready():
 	$GameState.check(current_turn)
 
 func next_turn():
+	if pause:
+		$GameState/Info/endnode/isPause.text = "Jeu en pause press n pour le prochain tour"
+		want_next_turn = true
+		return
+	want_next_turn = false
+	pause = pause_init
 	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
@@ -110,7 +119,16 @@ func _process(delta):
 		else:
 			$GameState/Info/Error.text = "Invalid index"
 
+	if Input.is_action_just_pressed("ui_select"):
+		pause_init = not pause_init
+		pause = pause_init
+		if pause:
+			$GameState/Info/endnode/isPause.text = "Pause (dès la fin du tour)"
+		else:
+			$GameState/Info/endnode/isPause.text = ""
 		
+	if Input.is_action_just_pressed("ui_right") and pause_init:
+		pause = false
 	#print("actions.size(): ", actions.size())
 
 	while actions.size() != 0 and not is_animating:
