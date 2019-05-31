@@ -193,6 +193,7 @@ frames = SubResource( 5 )
 animation = "die"
 
 [node name="Jump" type="Button" parent="Info"]
+visible = false
 margin_left = 1119.08
 margin_top = 570.232
 margin_right = 1163.08
@@ -200,6 +201,7 @@ margin_bottom = 590.232
 text = "Jump"
 
 [node name="TurnIndex" type="TextEdit" parent="Info/Jump"]
+visible = false
 margin_left = -50.0
 margin_top = -2.0
 margin_right = 2.0

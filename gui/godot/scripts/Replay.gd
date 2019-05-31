@@ -108,15 +108,15 @@ func _process(delta):
 		get_tree().paused = true
 		$Pause.show()
 
-	if $GameState/Info/Jump.pressed:
-		$GameState.finish_action()
-		var input = $GameState/Info/Jump/TurnIndex.get_line(0)
-		var reg = RegEx.new()
-		reg.compile("[0-9]+")
-		if reg.search(input) and int(input) <= 99 and int(input) >= 0:
-			jump_turn(input)
-		else:
-			$GameState/Info/Error.text = "Invalid index"
+	#if $GameState/Info/Jump.pressed:
+	#	$GameState.finish_action()
+	#	var input = $GameState/Info/Jump/TurnIndex.get_line(0)
+	#	var reg = RegEx.new()
+	#	reg.compile("[0-9]+")
+	#	if reg.search(input) and int(input) <= 99 and int(input) >= 0:
+	#		jump_turn(input)
+	#	else:
+	#		$GameState/Info/Error.text = "Invalid index"
 
 	if Input.is_action_just_pressed("ui_select"):
 		pause_init = not pause_init
