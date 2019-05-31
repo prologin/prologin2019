@@ -13,6 +13,7 @@ func _ready():
 			get_tree().change_scene("res://scenes/Replay.tscn")
 			return
 		if arg.begins_with("-socket="):
-			get_tree().change_scene("res://scenes/Specator.tscn")
+			Global.spectator = true
+			get_tree().change_scene("res://scenes/Replay.tscn")
 			return
 	get_tree().quit()

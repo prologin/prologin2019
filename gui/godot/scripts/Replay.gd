@@ -2,8 +2,11 @@ extends Node
 
 const DUMP_READER = preload("res://scripts/DumpReader.gd")
 
-var dump = null	
+var dump = null
 var turn = 0
+
+var socket = null
+var my_stechec_id = null
 
 var is_animating = false
 var actions = []
@@ -25,13 +28,37 @@ func get_player_id():
 func finish_animating():
 	is_animating = false
 
+func _init_socket():
+	var port = 0;
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("-socket="):
+			port = int(arg.right(8));
+		elif arg.begins_with("-id="):
+			my_stechec_id = int(arg.right(4))
+	socket = StreamPeerTCP.new()
+	var connected = socket.connect_to_host("127.0.0.1", port)
+	if connected != OK:
+		print("Could not connect")
+
 func _ready():
-	dump = DUMP_READER.parse_input_json()
-	current_turn = DUMP_READER.parse_turn(dump[turn])
+	if not Global.spectator:
+		dump = DUMP_READER.parse_input_json()
+		current_turn = DUMP_READER.parse_turn(dump[turn])
+	else:
+		_init_socket()
+		var available = 0
+		while available == 0:
+			available = socket.get_available_bytes()
+		var dump_spect = socket.get_string(available)
+		var json = JSON.parse(dump_spect).result
+		if not json:
+			print("invalid json ", dump_spect)
+		current_turn = DUMP_READER.parse_turn(json)
 	$GameState.init(current_turn, self)
 	$GameState.check(current_turn)
 
 func next_turn():
+	return
 	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
