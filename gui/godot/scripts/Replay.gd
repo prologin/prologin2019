@@ -77,7 +77,6 @@ func next_turn():
 		return
 	turn += 1
 	if Global.spectator:
-		turn = current_turn.roundNumber
 		$GameState.ores = last_turn.ores
 	else:
 		$GameState.ores = current_turn.ores
