@@ -40,22 +40,27 @@ cell_types:
             ascii: 'X'
             order: 2
         presets:
-            coal:
+            charbon:
                 sprite: ores/coal.png
                 default:
                     resistance: 2
-                    value: 5
-            gold:
+                    value: 4
+            fer:
                 sprite: ores/gold.png
                 default:
                     resistance: 4
-                    value: 10
-            ruby:
+                    value: 8
+            or:
                 sprite: ores/ruby.png
                 default:
                     resistance: 5
-                    value: 15
-            diamond:
+                    value: 12
+            diamant:
+                sprite: ores/diamond.png
+                default:
+                    resistance: 10
+                    value: 20
+            emeraude:
                 sprite: ores/diamond.png
                 default:
                     resistance: 25

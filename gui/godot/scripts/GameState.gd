@@ -152,7 +152,7 @@ func respawn_dwarf(action):
 	var nain_id = action["id_nain"]
 	var spawn_pos = action["spawn"]
 	teleport(dwarfs[player_id][nain_id], Vector2(spawn_pos["c"], spawn_pos["l"]))
-	dwarfs[player_id][nain_id].dying = false
+	dwarfs[player_id][nain_id].respawn()
 
 func break_block(action):
 	var pos = action["pos"]

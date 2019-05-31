@@ -11,6 +11,7 @@ var stick = false
 var on_rope = false
 var roping = false
 var dying = false
+var dead = false
 var pulling = false
 var dancing = false
 var _moving_to = Vector2()
@@ -34,6 +35,7 @@ func move_to(external_to, map, tile, player_id, fall=false):
 	moving = true
 	var anim = null
 	var dx = to.x - position.x
+
 	if dx > 0:
 		$AnimatedSprite.flip_h = false
 	elif dx < 0:
@@ -64,6 +66,7 @@ func move_to(external_to, map, tile, player_id, fall=false):
 				anim = "climb_h"
 		else:
 			anim = "move"
+
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
 
@@ -76,6 +79,7 @@ func mine_to(external_to, map):
 	var anim = "mine"
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play(anim)
+
 	var dx = to.x - position.x
 	if dx > 0:
 		$AnimatedSprite.flip_h = false
@@ -114,6 +118,11 @@ func pull_to():
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("climb_rope")
 
+func respawn():
+	dying = false
+	dead = false
+	$AnimatedSprite.play("idle")
+
 func stop():
 	moving = false
 	mining = false
@@ -124,11 +133,17 @@ func stop():
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 
 	if dying:
-		return false
-
-	if stick:
+		dying = false
+		dead = true
+		$AnimatedSprite.play("dead")
+	elif stick:
 		if on_rope:
+			if $AnimatedSprite.flip_h:
+				$AnimatedSprite.transform.origin.x = -3
+			else:
+				$AnimatedSprite.transform.origin.x = 3
 			$AnimatedSprite.play("idle_rope")
+			
 		else:
 			$AnimatedSprite.play("idle_stick")
 	else:
@@ -144,12 +159,10 @@ func _ready():
 func _process(delta):
 	if moving:
 		var diff = _moving_to - position
-		if diff == Vector2(0, 0):
-			stop()
+		var speed = SPEED * Global.speed_factor
+
+		if diff.length() > speed * delta:
+			position += (diff.normalized() * speed * delta)
 		else:
-			var speed = SPEED * Global.speed_factor
-			if diff.length() > speed * delta:
-				position += (diff.normalized() * speed * delta)
-			else:
-				position = _moving_to
-				stop()
+			position = _moving_to
+			stop()

@@ -20,7 +20,7 @@ typedef struct fall_info
 // only action_hist is not enough to store the complete internal history.
 typedef struct internal_action
 {
-    // 0 for debug flags
+    // 0 for debug flagsconst
     // 1 for standart action
     // 2 for falling event
     // 3 for death event
