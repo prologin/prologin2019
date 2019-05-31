@@ -47,6 +47,7 @@ func _ready():
 		dump = DUMP_READER.parse_input_json()
 		current_turn = DUMP_READER.parse_turn(dump[turn])
 	else:
+		$GameState/Info/Jump.set_visible(false)
 		_init_socket()
 		var available = 0
 		while available == 0:
