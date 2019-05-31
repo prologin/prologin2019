@@ -13,6 +13,9 @@ from tkinter.ttk import Button, OptionMenu, Style
 import yaml
 from PIL import Image, ImageTk
 
+import os
+res_dir = os.path.dirname(os.path.abspath(__file__))
+
 # Display related constants
 
 MAP_CELL_SIZE = 20
@@ -22,7 +25,7 @@ TEXT_OFFSET = 5
 SYMETRY = ["NONE", "CENT", "HORI", "VERT", "DIAG1", "DIAG2"]
 
 # Load configuration
-with open('conf.yml') as f:
+with open(res_dir + '/conf.yml') as f:
     CONF = yaml.load(f)
 
 MAP_SIZE = CONF['map_size']
@@ -63,7 +66,7 @@ for name in list_draw_types():
     conf = get_type_conf(name)
 
     if 'sprite' in conf:
-        SPRITES[name] = Image.open(conf['sprite']).resize(
+        SPRITES[name] = Image.open(res_dir + '/' + conf['sprite']).resize(
             (MAP_CELL_SIZE, MAP_CELL_SIZE), Image.ANTIALIAS)
     else:
         color = conf['color'] if 'color' in conf else 'white'
