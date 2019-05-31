@@ -86,7 +86,7 @@ func set_rope_to():
 	roping = true
 
 func pull():
-	assert not pulling
+	#assert not pulling
 	pulling = true
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
 	$AnimatedSprite.play("pull")
@@ -112,7 +112,7 @@ func grab_to():
 func pull_to():
 	assert not mining
 	$AnimatedSprite.set_speed_scale(Global.speed_factor)
-	$AnimatedSprite.play("climb")
+	$AnimatedSprite.play("climb_rope")
 
 func stop():
 	moving = false

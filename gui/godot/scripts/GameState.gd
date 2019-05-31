@@ -67,6 +67,8 @@ func replay_action(action, player_id):
 		return respawn_dwarf(action)
 	if action["action"] == -6:
 		return break_block(action)
+	if action["action"] == -7:
+		return pulled(action)
 	print("unknown action: ", action["action"])
 	return false
 
@@ -170,6 +172,14 @@ func grab(action, player_id):
 	dwarf.grab_to($TileMap)
 	return true
 
+func pulled(action):
+	var player_id = int(action["player_id"])
+	var dwarf_id = int(action["id_nain"])
+	var dwarf = dwarfs[player_id][dwarf_id]
+	var dest = Vector2(action["goal"]["c"], action["goal"]["l"])
+	dwarf.move_to(dest, $TileMap, 0, player_id, true)
+	dwarf.pull_to()
+
 func spawn_dwarf(player_id, pos, parent_node):
 	var dwarf = null
 	if player_id == 0:
@@ -189,7 +199,7 @@ func redraw(turn, players, ropes):
 
 	if turn / Constants.NB_JOUEURS + 1 == 100:
 		if players[0].score == players[1].score:
-			$Info/End.text = "Egalite"
+			$Info/endnode/End.text = "Egalite"
 			$Info/blue.show()
 			$Info/green.show()
 			$Info/blue.play("idle")

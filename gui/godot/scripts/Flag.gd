@@ -8,4 +8,3 @@ func set_color(colour):
 		$AnimatedSprite.play("red")
 	elif colour == Constants.flag.DRAPEAU_BLEU:
 		$AnimatedSprite.play("blue")
-		
