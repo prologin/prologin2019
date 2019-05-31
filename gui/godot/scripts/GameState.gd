@@ -44,7 +44,6 @@ func finish_action():
 
 func replay_action(action, player_id):
 	finish_action()
-
 	if action["action"] == Constants.ACTIONS.get("ACTION_DEPLACER"):
 		return move(action, player_id)
 	if action["action"] == Constants.ACTIONS.get("ACTION_MINER"):
@@ -195,8 +194,9 @@ func spawn_dwarf(player_id, pos, parent_node):
 	return dwarf
 
 func redraw(turn, players, ropes):
+	_update_tile_info()
 	if (turn % Constants.NB_JOUEURS == 0):
-		$Info/Turn.text = str(turn / Constants.NB_JOUEURS + 1) + " / 100"
+		$Info/Turn.text = str(turn / Constants.NB_JOUEURS - 1) + " / 100"
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
 
@@ -226,7 +226,10 @@ func teleport(dwarf, pos):
 
 func _update_tile_info():
 	if selected_tile == null:
-		$Info/Tile.text = ""
+		$Info/Tile/name.text = ""
+		$Info/Tile/pos.text = ""
+		$Info/Tile/duration.text = ""
+		$Info/Tile/value.text = ""
 		$TileMap/Select.visible = false
 		return
 	$TileMap/Select.visible = true
