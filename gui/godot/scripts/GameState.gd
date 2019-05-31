@@ -60,7 +60,7 @@ func replay_action(action, player_id):
 	if action["action"] == -2:
 		return fall(action)
 	if action["action"] == -3:
-		return die(action, player_id)
+		return die(action)
 	if action["action"] == -4:
 		return extend_rope(action)
 	if action["action"] == -5:
@@ -115,7 +115,8 @@ func check(current_turn):
 			#if not ((a == 0) == (b == 0 or b == 5)):
 			#	$TileMap.mine(Vector2(x, y))
 
-func die(action, player_id):
+func die(action):
+	var player_id = action["player_id"]
 	var dwarf_id = int(action["id_nain"])
 	var dwarf = dwarfs[player_id][dwarf_id]
 	dwarf.die()
