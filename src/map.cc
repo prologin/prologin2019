@@ -59,13 +59,19 @@ void Map::load_minerai_info(std::istream& stream)
     int nb_minerai;
 
     stream >> nb_minerai;
-    ores_pos_.resize(nb_minerai);
 
     for (int minerai = 0; minerai < nb_minerai; ++minerai)
     {
-        int l, c;
-        stream >> l >> c;
+        int l, c, resistance, rendement;
+        stream >> l >> c >> resistance >> rendement;
         position pos = {l, c};
+
+        if (pos == get_position_offset(spawn_point_[0], BAS) ||
+            pos == get_position_offset(spawn_point_[1], BAS))
+        {
+            std::cerr << "Warning: mineral ignored bellow spawn point\n";
+            continue;
+        }
 
         std::string error;
         if (std::find(seen.cbegin(), seen.cend(), pos) != seen.cend())
@@ -79,14 +85,11 @@ void Map::load_minerai_info(std::istream& stream)
             FATAL("invalid position (%d;%d) for minerai is %s", l, c,
                   error.c_str());
 
-        int resistance, rendement;
-        stream >> resistance >> rendement;
-
         if (resistance <= 0)
             FATAL("resistance must be a strictly positive int");
 
         map_[l][c].ore = {resistance, rendement};
-        ores_pos_[minerai] = {l, c};
+        ores_pos_.push_back(pos);
         seen.push_back(pos);
     }
 }
