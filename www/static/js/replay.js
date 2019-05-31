@@ -35,6 +35,8 @@ async function main() {
             dump_value = game_data;
             godot_init(new Engine);
         });
+
+    $.get("api/matches/s")
 }
 
 function godot_init(engine) {

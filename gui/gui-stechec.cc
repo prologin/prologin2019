@@ -75,7 +75,7 @@ void partie_init()
 static direction to_direction(const std::string& input)
 {
   int value = std::stoi(input);
-  direction convert[4] = {SOUTH, NORTH, WEST, EAST};
+  direction convert[4] = {BAS, HAUT, GAUCHE, DROITE};
   return convert[value];
 }
 
@@ -107,11 +107,11 @@ void jouer_tour()
     else if (words[0] == "GRAB")
       agripper(std::stoi(words[1]));
     else if (words[0] == "MINE")
-      miner(std::stoi(words[1], to_direction(words[2])));
+      miner(std::stoi(words[1]), to_direction(words[2]));
     else if (words[0] == "PULL")
-      tirer(words[1], to_direction(words[2], to_direction(words[3])));
+      tirer(std::stoi(words[1]), to_direction(words[2]), to_direction(words[3]));
     else if (words[0] == "SET_ROPE")
-      poser_corde(std::stoi(words[1], to_direction(words[2])));
+      poser_corde(std::stoi(words[1]), to_direction(words[2]));
     else if (words[0] == "CANCEL")
       annuler();
   }
