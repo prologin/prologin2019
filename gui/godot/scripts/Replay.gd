@@ -147,7 +147,10 @@ func _process(delta):
 		if turn != 0 and not Global.spectator:
 			$GameState.check(DUMP_READER.parse_turn(dump[turn - 1]))
 		if Global.spectator:
-			socket.put_utf8_string("NEXT")
-			waiting = true
+			if not pause:
+				socket.put_utf8_string("NEXT")
+				waiting = true
+			else:
+				$GameState/Info/endnode/isPause.text = "Jeu en pause press n pour le prochain tour"
 		else:
 			next_turn()
