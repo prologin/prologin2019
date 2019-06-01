@@ -1,30 +1,36 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://scripts/GameState.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Info.gd" type="Script" id=2]
 [ext_resource path="res://assets/Pixel Sans Serif.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://assets/green/die/0_big.png" type="Texture" id=4]
-[ext_resource path="res://assets/green/die/1_big.png" type="Texture" id=5]
-[ext_resource path="res://assets/green/die/2_big.png" type="Texture" id=6]
-[ext_resource path="res://assets/green/die/3_big.png" type="Texture" id=7]
-[ext_resource path="res://assets/green/die/4_big.png" type="Texture" id=8]
-[ext_resource path="res://assets/green/die/5_big.png" type="Texture" id=9]
-[ext_resource path="res://assets/green/die/6_big.png" type="Texture" id=10]
-[ext_resource path="res://assets/green/die/7_big.png" type="Texture" id=11]
-[ext_resource path="res://assets/green/victory/0_big.png" type="Texture" id=12]
-[ext_resource path="res://assets/green/victory/1_big.png" type="Texture" id=13]
-[ext_resource path="res://assets/blue/die/0_big.png" type="Texture" id=14]
-[ext_resource path="res://assets/blue/die/1_big.png" type="Texture" id=15]
-[ext_resource path="res://assets/blue/die/2_big.png" type="Texture" id=16]
-[ext_resource path="res://assets/blue/die/3_big.png" type="Texture" id=17]
-[ext_resource path="res://assets/blue/die/4_big.png" type="Texture" id=18]
-[ext_resource path="res://assets/blue/die/5_big.png" type="Texture" id=19]
-[ext_resource path="res://assets/blue/die/6_big.png" type="Texture" id=20]
-[ext_resource path="res://assets/blue/die/7_big.png" type="Texture" id=21]
-[ext_resource path="res://assets/blue/victory/0_big.png" type="Texture" id=22]
-[ext_resource path="res://assets/blue/victory/1_big.png" type="Texture" id=23]
+[ext_resource path="res://assets/green/victory/0_big.png" type="Texture" id=4]
+[ext_resource path="res://assets/green/victory/1_big.png" type="Texture" id=5]
+[ext_resource path="res://assets/green/die/0_big.png" type="Texture" id=6]
+[ext_resource path="res://assets/green/die/1_big.png" type="Texture" id=7]
+[ext_resource path="res://assets/green/die/2_big.png" type="Texture" id=8]
+[ext_resource path="res://assets/green/die/3_big.png" type="Texture" id=9]
+[ext_resource path="res://assets/green/die/4_big.png" type="Texture" id=10]
+[ext_resource path="res://assets/green/die/5_big.png" type="Texture" id=11]
+[ext_resource path="res://assets/green/die/6_big.png" type="Texture" id=12]
+[ext_resource path="res://assets/green/die/7_big.png" type="Texture" id=13]
+[ext_resource path="res://assets/blue/victory/0_big.png" type="Texture" id=14]
+[ext_resource path="res://assets/blue/victory/1_big.png" type="Texture" id=15]
+[ext_resource path="res://assets/blue/die/0_big.png" type="Texture" id=16]
+[ext_resource path="res://assets/blue/die/1_big.png" type="Texture" id=17]
+[ext_resource path="res://assets/blue/die/2_big.png" type="Texture" id=18]
+[ext_resource path="res://assets/blue/die/3_big.png" type="Texture" id=19]
+[ext_resource path="res://assets/blue/die/4_big.png" type="Texture" id=20]
+[ext_resource path="res://assets/blue/die/5_big.png" type="Texture" id=21]
+[ext_resource path="res://assets/blue/die/6_big.png" type="Texture" id=22]
+[ext_resource path="res://assets/blue/die/7_big.png" type="Texture" id=23]
 [ext_resource path="res://assets/tiles.tres" type="TileSet" id=24]
 [ext_resource path="res://scripts/TileMap.gd" type="Script" id=25]
+
+[sub_resource type="DynamicFont" id=12]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=13]
+font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 3 )
@@ -49,27 +55,27 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="SpriteFrames" id=8]
 animations = [ {
-"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
-"loop": false,
-"name": "die",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 12 ), ExtResource( 13 ) ],
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
 "loop": true,
 "name": "win",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ],
+"loop": false,
+"name": "die",
 "speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=9]
 animations = [ {
-"frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ) ],
-"loop": false,
-"name": "die",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 22 ), ExtResource( 23 ) ],
+"frames": [ ExtResource( 14 ), ExtResource( 15 ) ],
 "loop": true,
 "name": "win",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 23 ) ],
+"loop": false,
+"name": "die",
 "speed": 5.0
 } ]
 
@@ -104,12 +110,14 @@ margin_left = 1020.0
 margin_top = 100.0
 margin_right = 1060.0
 margin_bottom = 114.0
+custom_fonts/font = SubResource( 12 )
 
 [node name="Score 2" type="Label" parent="Info"]
-margin_left = 1150.0
-margin_top = 100.0
-margin_right = 1190.0
-margin_bottom = 114.0
+margin_left = 1020.0
+margin_top = 140.0
+margin_right = 1060.0
+margin_bottom = 154.0
+custom_fonts/font = SubResource( 13 )
 
 [node name="Name 1" type="Label" parent="Info"]
 margin_left = 1020.0
@@ -117,13 +125,15 @@ margin_top = 75.0
 margin_right = 1060.0
 margin_bottom = 99.0
 custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.266667, 0.376471, 0.752941, 1 )
 
 [node name="Name 2" type="Label" parent="Info"]
-margin_left = 1150.0
-margin_top = 75.0
-margin_right = 1190.0
-margin_bottom = 99.0
+margin_left = 1020.0
+margin_top = 120.0
+margin_right = 1060.0
+margin_bottom = 144.0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.145098, 0.462745, 0.0862745, 1 )
 
 [node name="Dwarf" type="Label" parent="Info"]
 margin_right = 40.0
@@ -149,30 +159,30 @@ z_index = 2
 
 [node name="name" type="Label" parent="Info/Tile"]
 margin_left = -72.0
-margin_top = -250.0
+margin_top = -50.0
 margin_right = 128.0
-margin_bottom = -170.0
+margin_bottom = 30.0
 custom_fonts/font = SubResource( 4 )
 
 [node name="pos" type="Label" parent="Info/Tile"]
 margin_left = -72.0
-margin_top = -180.0
-margin_right = 128.0
-margin_bottom = -100.0
+margin_top = 120.0
+margin_right = 129.5
+margin_bottom = 200.0
 custom_fonts/font = SubResource( 5 )
 
 [node name="duration" type="Label" parent="Info/Tile"]
 margin_left = -72.0
-margin_top = -100.0
+margin_top = 200.0
 margin_right = 128.0
-margin_bottom = -20.0
+margin_bottom = 280.0
 custom_fonts/font = SubResource( 6 )
 
 [node name="value" type="Label" parent="Info/Tile"]
 margin_left = -72.0
-margin_top = -20.0
+margin_top = 280.0
 margin_right = 128.0
-margin_bottom = 60.0
+margin_bottom = 360.0
 custom_fonts/font = SubResource( 7 )
 
 [node name="green" type="AnimatedSprite" parent="Info"]
@@ -237,3 +247,4 @@ visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 color = Color( 0.290196, 0.682353, 0.180392, 0.427451 )
+
