@@ -195,8 +195,7 @@ func spawn_dwarf(player_id, pos, parent_node):
 
 func redraw(turn, players, ropes):
 	_update_tile_info()
-	if (turn % Constants.NB_JOUEURS == 0):
-		$Info/Turn.text = str(turn / Constants.NB_JOUEURS - 1) + " / 100"
+	$Info/Turn.text = str((1 + turn) / Constants.NB_JOUEURS) + " / 100"
 	$"Info/Score 1".text = str(players[0].score)
 	$"Info/Score 2".text = str(players[1].score)
 

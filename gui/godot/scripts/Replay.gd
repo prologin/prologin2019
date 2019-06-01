@@ -28,7 +28,7 @@ func jump_turn(input_turn):
 	get_tree().paused = false
 
 func get_player_id():
-	return turn % Constants.NB_JOUEURS
+	return 1 - (turn % Constants.NB_JOUEURS)
 
 func finish_animating():
 	is_animating = false
@@ -73,7 +73,7 @@ func next_turn():
 		return
 	want_next_turn = false
 	pause = pause_init
-	if turn + 1 == Constants.NB_TOURS * Constants.NB_JOUEURS:
+	if turn == Constants.NB_TOURS * Constants.NB_JOUEURS:
 		return
 	turn += 1
 	if Global.spectator:
@@ -144,7 +144,7 @@ func _process(delta):
 		is_animating = $GameState.replay_action(actions.pop_front(), get_player_id())
 	if not is_animating:
 		if turn != 0 and not Global.spectator:
-			$GameState.check(DUMP_READER.parse_turn(dump[turn - 1]))
+			$GameState.check(DUMP_READER.parse_turn(dump[turn]))
 		if Global.spectator:
 			if not pause:
 				socket.put_utf8_string("NEXT")
