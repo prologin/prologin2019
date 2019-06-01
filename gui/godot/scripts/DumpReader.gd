@@ -15,7 +15,13 @@ static func parse_dump_js():
 	var text = JavaScript.eval("dump_value", true)
 	var rounds = []
 	for line in text.split("\n", false):
-		rounds.append(JSON.parse(line).result)
+		var json = JSON.parse(line).result
+		for player in json["joueurs"]:
+			var name = JavaScript.eval("players_value["+player["name"]+"]", true)
+			if name:
+				player["name"] = name
+		rounds.append(json)
+	JavaScript.eval("values_read = true", true)
 	return rounds
 
 static func parse_dump(filename):
@@ -86,10 +92,6 @@ static func parse_turn(json):
 		var node = p[1]
 		var player = PlayerStats.new()
 		player.name = node["name"]
-		if OS.has_feature("JavaScript"):
-			var name = JavaScript.eval("players_value["+player.name+"]", true)
-			if name:
-				player.name = name
 		player.score = node["score"]
 		for i in range(node["nains"].size()):
 			player.dwarfs.append(Dwarf.new())

@@ -74,6 +74,8 @@ func next_turn():
 	want_next_turn = false
 	pause = pause_init
 	if turn == Constants.NB_TOURS * Constants.NB_JOUEURS:
+		if OS.has_feature('JavaScript') and JavaScript.eval("replay_loop", true):
+			get_tree().change_scene("res://scenes/Replay.tscn")
 		return
 	turn += 1
 	if Global.spectator:
