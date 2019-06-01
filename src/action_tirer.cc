@@ -81,6 +81,17 @@ void ActionTirer::apply_on(GameState* st) const
                 action.fall = {curr_occupant, nain_id, destination};
                 st->add_to_internal_history(player_id_, action);
 
+                // Kill nain if on the opponent spawn
+                if (destination == st->map().get_spawn_point(1 - curr_occupant))
+                {
+                    const int butin =
+                        st->get_nain(curr_occupant, nain_id).butin;
+                    if (butin > 0)
+                        st->increase_score(1 - curr_occupant, nain.butin);
+                    st->reduce_pv(curr_occupant, nain_id, VIE_NAIN, player_id_);
+                    continue;
+                }
+
                 st->set_nain_position(curr_occupant, nain_id, destination);
             }
 

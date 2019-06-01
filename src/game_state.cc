@@ -243,12 +243,12 @@ void GameState::check_nain_gravity(position pos, int current_player)
             add_to_internal_history(current_player, action);
 
             // Kill nain if on the opponent spawn
-            if (dest == this->map().get_spawn_point(1 - player_id))
+            if (dest == map().get_spawn_point(1 - player_id))
             {
-                const nain nain = this->get_nain(player_id, nain_id);
+                const nain nain = get_nain(player_id, nain_id);
                 if (nain.butin > 0)
-                    this->increase_score(1 - player_id, nain.butin);
-                this->reduce_pv(player_id, nain_id, VIE_NAIN, player_id);
+                    increase_score(1 - player_id, nain.butin);
+                reduce_pv(player_id, nain_id, VIE_NAIN, player_id);
                 continue;
             }
 
@@ -351,12 +351,9 @@ void GameState::respawn(int player_id)
             add_to_internal_history(player_id, action);
 
             nains_[nain.first][nain.second] = {
-                target_pos /* pos */,
-                VIE_NAIN /* vie */,
-                NB_POINTS_ACTION /* pa */,
-                NB_POINTS_DEPLACEMENT /* pm */,
-                false /* accroche */,
-                0 /* butin */};
+                target_pos /* pos */,      VIE_NAIN /* vie */,
+                NB_POINTS_ACTION /* pa */, NB_POINTS_DEPLACEMENT /* pm */,
+                false /* accroche */,      0 /* butin */};
             map_.add_nain(nain.second, nains_[nain.first][nain.second].pos,
                           nain.first);
 
