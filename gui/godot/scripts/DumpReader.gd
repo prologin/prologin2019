@@ -87,9 +87,9 @@ static func parse_turn(json):
 		var player = PlayerStats.new()
 		player.name = node["name"]
 		if OS.has_feature("JavaScript"):
-			var names = JavaScript.eval("players_value", true)
-			if names and names[player.names]:
-				player.name = names[player.names]
+			var name = JavaScript.eval("players_value["+player.name+"]", true)
+			if name:
+				player.name = name
 		player.score = node["score"]
 		for i in range(node["nains"].size()):
 			player.dwarfs.append(Dwarf.new())
