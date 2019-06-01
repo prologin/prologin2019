@@ -3,7 +3,7 @@
 // Copyright 2019 Paul Guénézan
 // Copyright 2014-2018 Godot Engine contributors
 
-var dump_value = "the dump";
+var dump_value = "the dump", players_value = {};
 
 async function main() {
     $('#replay').html(`
@@ -30,13 +30,26 @@ async function main() {
 
     $('body').append($('<script/>').attr('src', '/static/js/godot.js'));
 
-    $.get("dump/")
-        .then((game_data) => {
-            dump_value = game_data;
-            godot_init(new Engine);
-        });
+    async function get_dump() {
+	const url = $('#replay').data('match-dump-url');
+        const r = await window.fetch(url);
+	dump_value = await r.text();
+    }
 
-    $.get("api/matches/s")
+    async function get_players() {
+	try { const url = $('#replay').data('match-info-url');
+        const r = await window.fetch(url);
+	const data = await r.json();
+        data.matchplayers.forEach(p => {
+	    players_value["" + p.id] = p.champion.name;
+	});
+	} catch(e) { console.error(e); }
+    }
+
+    Promise.all([get_dump(), get_players()]).then(function() {
+	console.log("got everything, launching godot", players_value);
+        godot_init(new Engine);
+    });
 }
 
 function godot_init(engine) {
