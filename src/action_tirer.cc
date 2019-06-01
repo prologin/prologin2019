@@ -65,7 +65,8 @@ void ActionTirer::apply_on(GameState* st) const
         const int curr_occupant = st->map().get_cell_occupant(curr_pos);
         const position destination = get_position_offset(curr_pos, sens_);
 
-        if (st->map().get_cell_occupant(destination) == 1 - curr_occupant)
+        if (inside_map(destination) &&
+            st->map().get_cell_occupant(destination) == 1 - curr_occupant)
         {
             curr_pos = get_position_offset(curr_pos, reverse_direction(sens_));
             continue;
