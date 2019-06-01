@@ -35,19 +35,19 @@ font_data = ExtResource( 3 )
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=5]
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=7]
 font_data = ExtResource( 3 )
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=8]
 animations = [ {
 "frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
 "loop": false,
@@ -60,7 +60,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=9]
 animations = [ {
 "frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ) ],
 "loop": false,
@@ -73,11 +73,11 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=10]
 size = 24
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=11]
 font_data = ExtResource( 3 )
 
 [node name="GameState" type="Node"]
@@ -152,35 +152,35 @@ margin_left = -72.0
 margin_top = -250.0
 margin_right = 128.0
 margin_bottom = -170.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="pos" type="Label" parent="Info/Tile"]
 margin_left = -72.0
 margin_top = -180.0
 margin_right = 128.0
 margin_bottom = -100.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 5 )
 
 [node name="duration" type="Label" parent="Info/Tile"]
 margin_left = -72.0
 margin_top = -100.0
 margin_right = 128.0
 margin_bottom = -20.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 6 )
 
 [node name="value" type="Label" parent="Info/Tile"]
 margin_left = -72.0
 margin_top = -20.0
 margin_right = 128.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 7 )
 
 [node name="green" type="AnimatedSprite" parent="Info"]
 visible = false
 show_behind_parent = true
 position = Vector2( 1065.28, 486.367 )
 z_index = 100
-frames = SubResource( 4 )
+frames = SubResource( 8 )
 animation = "win"
 flip_h = true
 
@@ -189,7 +189,7 @@ visible = false
 show_behind_parent = true
 position = Vector2( 193.71, 518.991 )
 z_index = 100
-frames = SubResource( 5 )
+frames = SubResource( 9 )
 animation = "die"
 
 [node name="Jump" type="Button" parent="Info"]
@@ -216,7 +216,7 @@ margin_left = 81.7047
 margin_top = 957.084
 margin_right = 460.705
 margin_bottom = 1079.08
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0.568627, 0.109804, 0.109804, 1 )
 
 [node name="End" type="Label" parent="Info/endnode"]
@@ -224,7 +224,7 @@ margin_left = 442.895
 margin_top = 443.22
 margin_right = 757.895
 margin_bottom = 554.22
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 11 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 24 )
@@ -237,4 +237,3 @@ visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 color = Color( 0.290196, 0.682353, 0.180392, 0.427451 )
-

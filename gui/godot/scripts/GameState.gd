@@ -129,7 +129,7 @@ func set_rope(action, player_id):
 	var dest = get_position_offset(dwarf.external_pos, int(action["dir"]))
 	dwarf.set_rope_to()
 	is_roping = dest
-	return false
+	return true
 
 func move(action, player_id):
 	var dwarf_id = int(action["id_nain"])

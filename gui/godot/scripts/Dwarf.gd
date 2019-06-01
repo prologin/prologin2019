@@ -88,6 +88,7 @@ func mine_to(external_to, map):
 
 func set_rope_to():
 	roping = true
+	$AnimatedSprite.play("pull")
 
 func pull():
 	#assert not pulling
