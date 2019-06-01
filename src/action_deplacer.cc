@@ -54,6 +54,7 @@ void ActionDeplacer::apply_on(GameState* st) const
     const nain nain = st->get_nain(player_id_, id_nain_);
     position dest = get_position_offset(nain.pos, dir_);
 
+    // Kill nain if on the opponent spawn
     if (dest == st->map().get_spawn_point(1 - player_id_))
     {
         if (nain.butin > 0)

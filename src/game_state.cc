@@ -235,12 +235,24 @@ void GameState::check_nain_gravity(position pos, int current_player)
             if (fall == 0)
                 continue;
 
+            dest = pos + (BAS * fall);
+
             internal_action action;
             action.type = 2;
-            action.fall = {player_id, nain_id, pos + (BAS * fall)};
+            action.fall = {player_id, nain_id, dest};
             add_to_internal_history(current_player, action);
 
-            set_nain_position(player_id, nain_id, pos + (BAS * fall));
+            // Kill nain if on the opponent spawn
+            if (dest == this->map().get_spawn_point(1 - player_id))
+            {
+                const nain nain = this->get_nain(player_id, nain_id);
+                if (nain.butin > 0)
+                    this->increase_score(1 - player_id, nain.butin);
+                this->reduce_pv(player_id, nain_id, VIE_NAIN, player_id);
+                continue;
+            }
+
+            set_nain_position(player_id, nain_id, dest);
 
             if (fall >= 4)
                 reduce_pv(player_id, nain_id, std::pow(2, fall - 4),
