@@ -474,3 +474,9 @@ void GameState::set_init(bool init)
 {
     init_ = init;
 }
+
+void GameState::sync_score()
+{
+    for (auto& player : player_info_)
+        player.sync_score();
+}

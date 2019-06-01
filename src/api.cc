@@ -316,6 +316,7 @@ bool Api::annuler()
 
     actions_.cancel();
     game_state_ = rules::cancel(game_state_);
+    game_state_->sync_score();
     return true;
 }
 

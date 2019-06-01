@@ -21,6 +21,7 @@ PlayerInfo::PlayerInfo(rules::Player_sptr player)
 {
     assert(player_);
     player_->score = 0;
+    score = 0;
 }
 
 int PlayerInfo::get_key() const
@@ -30,12 +31,18 @@ int PlayerInfo::get_key() const
 
 int PlayerInfo::get_score() const
 {
-    return player_->score;
+    return score;
+}
+
+void PlayerInfo::sync_score()
+{
+    player_->score = score;
 }
 
 void PlayerInfo::increase_score(int delta)
 {
-    player_->score += delta;
+    score += delta;
+    sync_score();
 }
 
 const std::string& PlayerInfo::get_name() const

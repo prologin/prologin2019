@@ -46,10 +46,12 @@ public:
     const std::vector<internal_action>& get_internal_history() const;
     void reset_internal_history();
     void add_internal_action(internal_action action);
+    void sync_score();
 
 private:
     rules::Player_sptr player_;
     std::vector<internal_action> internal_hist_;
+    int score;
 };
 
 #endif

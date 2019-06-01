@@ -72,7 +72,9 @@ public:
     void add_to_internal_history(int player_id, internal_action action);
 
     bool is_init() const;
-    void set_init(bool init); 
+    void set_init(bool init);
+
+    void sync_score();
 
 private:
     int get_fall_distance(int player_id, int nain_id) const;
