@@ -5,6 +5,11 @@ var is_end = 0
 func _ready():
 	$SpeedSlider/Speed.text = "Vitesse: " + str(Global.speed_factor)
 	$SpeedSlider.connect("value_changed", self, "_speed_slider")
+	if OS.has_feature('JavaScript'):
+		var speed = JavaScript.eval("speed_value", true)
+		if speed:
+			$SpeedSlider.hide()
+			Global.speed_factor = int(speed)
 
 func _speed_slider(value):
 	var v = 1 << int(value)
