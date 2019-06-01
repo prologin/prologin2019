@@ -341,6 +341,10 @@ std::vector<direction> Map::get_shortest_path(position start,
     if (start == dest)
         return {};
 
+    // If a dwarf is in the start cell, we assume we are asked a feasible
+    // path for that dwarf.
+    int id_occupant = get_cell_occupant(start);
+
     // Keep track of the predecessor of each cell in a shortest path from start
     // to any cell.
     std::array<std::array<direction, TAILLE_MINE>, TAILLE_MINE> predecessor;
@@ -373,6 +377,9 @@ std::vector<direction> Map::get_shortest_path(position start,
                 const position target =
                     get_position_offset(source, (direction)dir);
 
+                if (id_occupant != -1 &&
+                        spawn_point_[1-id_occupant] == target)
+                    continue; // Ennemy's tavern here
                 if (inside_map(target) &&
                     predecessor[target.ligne][target.colonne] ==
                         ERREUR_DIRECTION)
