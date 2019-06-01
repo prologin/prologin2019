@@ -18,9 +18,6 @@ int ActionTirer::check(const GameState* st) const
     if (nain.vie <= 0)
         return NAIN_MORT;
 
-    if (nain.accroche)
-        return DEJA_ACCROCHE;
-
     if (nain.pa < COUT_TIRER)
         return PA_INSUFFISANTS;
 
