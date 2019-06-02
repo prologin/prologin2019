@@ -1,11 +1,24 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
-// Copyright 2018 Sacha Delanoue
-// Copyright 2019 Paul Guénézan
-// Copyright 2014-2018 Godot Engine contributors
+// Says that the godot replay should be in "loop"/"spectate" mode
+const replay_loop = true;
+const speed_value = 128;
 
-var dump_value = "the dump", players_value = {};
+// Read by godot.
+var dump_value = "", players_value = {};
 
-async function main() {
+// Observe this to know then the next dump can be loaded.
+var values_read = false;
+
+var godot_is_loaded = false;
+
+const INIT = 1, GETTING_INTERESTING = 2, PLAYING = 3, DELAYING = 4;
+
+async function maybe_init_godot() {
+    // Only init godot on *first* load
+    if (godot_is_loaded) return;
+    godot_is_loaded = true;
+
+    console.log("initializing godot (once)");
+
     $('#replay').html(`
         <div id="container">
             <canvas id="canvas" oncontextmenu="event.preventDefault();" width="640" height="480">
@@ -27,32 +40,7 @@ async function main() {
                 <div id="status-notice" class="godot" style='display: none;'></div>
             </div>
         </div>`);
-
     $('body').append($('<script/>').attr('src', '/static/js/godot.js'));
-
-    async function get_dump() {
-	const url = $('#replay').data('match-dump-url');
-        const r = await window.fetch(url);
-	dump_value = await r.text();
-    }
-
-    async function get_players() {
-	try { const url = $('#replay').data('match-info-url');
-        const r = await window.fetch(url);
-	const data = await r.json();
-        data.matchplayers.forEach(p => {
-	    players_value["" + p.id] = p.champion.name;
-	});
-	} catch(e) { console.error(e); }
-    }
-
-    Promise.all([get_dump(), get_players()]).then(function() {
-	console.log("got everything, launching godot", players_value);
-        godot_init(new Engine);
-    });
-}
-
-function godot_init(engine) {
 
     const BASENAME = '/static/godot/prologin2019';
     const INDETERMINATE_STATUS_STEP_MS = 100;
@@ -69,6 +57,8 @@ function godot_init(engine) {
     var indeterminiateStatusAnimationId = 0;
 
     setStatusMode('indeterminate');
+
+    const engine = new Engine;
     engine.setCanvas(canvas);
 
     function setStatusMode(mode) {
@@ -169,11 +159,40 @@ function godot_init(engine) {
 
         canvas_el.setAttribute("width", width);
         canvas_el.setAttribute("height", height);
-    }, 100);
+    }, 500);
 }
 
-$(function () {
+async function load_next_interesting() {
+    console.log("downloading next interesting match");
+    const data = await (await window.fetch('/api/matches/interesting/')).json();
+
+    players_value = {};
+    data.matchplayers.forEach(p => {
+        players_value["" + p.id] = p.champion.name;
+    });
+    dump_value = await (await window.fetch(data.dump_url)).text();
+    console.log("done loading interesting match");
+}
+
+function godot_becomes_ready() {
+    return new Promise(function (resolve, reject) {
+        console.log("en attendant godot…");
+        setInterval(function() {
+            if (values_read) {
+                console.log("godot becomes ready");
+                values_read = false;
+                resolve();
+            }
+        }, 250);
+    });
+}
+
+$(function() {
     (async function () {
-        main();
+        while (true) {
+            await load_next_interesting();
+            maybe_init_godot();
+            await godot_becomes_ready();
+        }
     })();
 });
