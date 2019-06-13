@@ -6,18 +6,17 @@
 #define CHECK_CANCEL_HISTORY_SIZE(player, action)                              \
     {                                                                          \
         const int player_id__ =                                                \
-            player.api->game_state()->get_player_id(player.api->moi());        \
-        const size_t history_size = player.api->game_state()                   \
-                                        ->get_internal_history(player_id__)    \
-                                        .size();                               \
+            player.api->game_state().get_player_id(player.api->moi());         \
+        const size_t history_size =                                            \
+            player.api->game_state().get_internal_history(player_id__).size(); \
                                                                                \
         action;                                                                \
         EXPECT_NE(history_size, player.api->game_state()                       \
-                                    ->get_internal_history(player_id__)        \
+                                    .get_internal_history(player_id__)         \
                                     .size());                                  \
-        player.api->annuler();                                                 \
+        player.api->cancel();                                                  \
         EXPECT_EQ(history_size, player.api->game_state()                       \
-                                    ->get_internal_history(player_id__)        \
+                                    .get_internal_history(player_id__)         \
                                     .size());                                  \
     }
 
@@ -27,7 +26,7 @@
             player.api->info_nain(player.api->moi(), nain_id);                 \
                                                                                \
         action;                                                                \
-        EXPECT_EQ(true, player.api->annuler());                                \
+        EXPECT_EQ(true, player.api->cancel());                                 \
                                                                                \
         EXPECT_EQ(nain_before_.pos,                                            \
                   player.api->info_nain(player.api->moi(), nain_id).pos);      \
@@ -45,27 +44,27 @@
 
 #define CHECK_CANCEL_ON_MAP(player, action)                                    \
     {                                                                          \
-        const Map map_before_ = player.api->game_state()->map();               \
+        const Map map_before_ = player.api->game_state().map();                \
                                                                                \
         action;                                                                \
-        EXPECT_EQ(true, player.api->annuler());                                \
+        EXPECT_EQ(true, player.api->cancel());                                 \
                                                                                \
         for (int row = 0; row < TAILLE_MINE; row++)                            \
             for (int col = 0; col < TAILLE_MINE; col++)                        \
             {                                                                  \
                 EXPECT_EQ(map_before_.get_minerai_at({row, col}).resistance,   \
                           player.api->game_state()                             \
-                              ->map()                                          \
+                              .map()                                           \
                               .get_minerai_at({row, col})                      \
                               .resistance);                                    \
                 EXPECT_EQ(map_before_.get_minerai_at({row, col}).rendement,    \
                           player.api->game_state()                             \
-                              ->map()                                          \
+                              .map()                                           \
                               .get_minerai_at({row, col})                      \
                               .rendement);                                     \
-                EXPECT_EQ(map_before_.get_cell_type({row, col}),               \
-                          player.api->game_state()->map().get_cell_type(       \
-                              {row, col}));                                    \
+                EXPECT_EQ(                                                     \
+                    map_before_.get_cell_type({row, col}),                     \
+                    player.api->game_state().map().get_cell_type({row, col})); \
             }                                                                  \
     }
 
@@ -92,11 +91,11 @@ TEST_F(ApiTest, Annuler_EmptyHist)
             EXPECT_EQ(OK, player.api->deplacer(nain_id, dir));
             EXPECT_EQ(OK, player.api->deplacer(nain_id, dir));
 
-            EXPECT_EQ(true, player.api->annuler());
-            EXPECT_EQ(true, player.api->annuler());
-            EXPECT_EQ(true, player.api->annuler());
-            EXPECT_EQ(false, player.api->annuler());
-            EXPECT_EQ(false, player.api->annuler());
+            EXPECT_EQ(true, player.api->cancel());
+            EXPECT_EQ(true, player.api->cancel());
+            EXPECT_EQ(true, player.api->cancel());
+            EXPECT_EQ(false, player.api->cancel());
+            EXPECT_EQ(false, player.api->cancel());
         }
     }
 }
@@ -142,14 +141,14 @@ TEST_F(ApiTest, Annuler_Miner)
             // The bottom mineral has 5 hit points
             for (int i = 0; i < 5; i++)
             {
-                player.api->game_state()->reset_pa(
-                    player.api->game_state()->get_player_id(player_id));
+                player.api->game_state().reset_pa(
+                    player.api->game_state().get_player_id(player_id));
 
                 CHECK_CANCEL(player, player.api->miner(nain_id, BAS));
                 EXPECT_EQ(OK, player.api->miner(nain_id, BAS));
             }
 
-            while (player.api->annuler())
+            while (player.api->cancel())
                 ;
         }
     }
@@ -169,8 +168,8 @@ TEST_F(ApiTest, Annuler_Chute)
         for (int i = 0; i < 3; i++)
         {
             EXPECT_EQ(OK, player.api->miner(0, BAS));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
 
         // SECOND DWARF DO THE FLOP
@@ -180,8 +179,8 @@ TEST_F(ApiTest, Annuler_Chute)
         for (int i = 0; i < 10; i++)
         {
             EXPECT_EQ(OK, player.api->miner(0, BAS));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
 
         // SECOND DWARF DO THE (DEADLY) FLOP
@@ -200,8 +199,8 @@ TEST_F(ApiTest, Annuler_ActionsCorde)
         // The first dwarf digs a hole on right with a rope on it
         CHECK_CANCEL(player, player.api->poser_corde(0, dir));
         EXPECT_EQ(OK, player.api->poser_corde(0, dir));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->deplacer(0, dir));
 
@@ -209,35 +208,35 @@ TEST_F(ApiTest, Annuler_ActionsCorde)
         {
             CHECK_CANCEL(player, player.api->miner(0, BAS));
             EXPECT_EQ(OK, player.api->miner(0, BAS));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
 
         // The first dwarf extends the rope with another one
         EXPECT_EQ(OK, player.api->miner(0, dir));
         EXPECT_EQ(OK, player.api->deplacer(0, dir));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->miner(0, dir));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->miner(0, BAS));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->miner(0, BAS));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->miner(0, reverse_direction(dir)));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->poser_corde(0, reverse_direction(dir)));
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
 
         EXPECT_EQ(OK, player.api->deplacer(0, reverse_direction(dir)));
 
@@ -254,8 +253,8 @@ TEST_F(ApiTest, Annuler_ActionsCorde)
         {
             CHECK_CANCEL(player, player.api->tirer(1, dir, HAUT));
             EXPECT_EQ(OK, player.api->tirer(1, dir, HAUT));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
     }
 }
@@ -278,8 +277,8 @@ TEST_F(ApiTest, Cancel_HitAllie)
         {
             CHECK_CANCEL(player, player.api->miner(0, reverse_direction(dir)));
             EXPECT_EQ(OK, player.api->miner(0, reverse_direction(dir)));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
 
         EXPECT_EQ(PAS_DE_CIBLE, player.api->miner(0, reverse_direction(dir)));
@@ -297,8 +296,8 @@ TEST_F(ApiTest, Cancel_HitEnemie)
         for (int i = 0; i < TAILLE_MINE - 2; i++)
         {
             EXPECT_EQ(OK, player.api->deplacer(0, dir));
-            player.api->game_state()->reset_pm(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pm(
+                player.api->game_state().get_player_id(player_id));
         }
 
         EXPECT_EQ(OBSTACLE_NAIN, player.api->deplacer(0, dir));
@@ -311,8 +310,8 @@ TEST_F(ApiTest, Cancel_HitEnemie)
         {
             CHECK_CANCEL(player, player.api->miner(0, dir));
             EXPECT_EQ(OK, player.api->miner(0, dir));
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
         }
 
         EXPECT_EQ(PAS_DE_CIBLE, player.api->miner(0, reverse_direction(dir)));

@@ -2,9 +2,9 @@
 
 #include "position.hh"
 
-int ActionMiner::check(const GameState* st) const
+int ActionMiner::check(const GameState& st) const
 {
-    if (!st->is_init())
+    if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
     if (dir_ < 0 || dir_ >= 4)
@@ -14,7 +14,7 @@ int ActionMiner::check(const GameState* st) const
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 
-    const nain nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st.get_nain(player_id_, id_nain_);
     if (nain.vie <= 0)
         return NAIN_MORT;
 
@@ -27,12 +27,12 @@ int ActionMiner::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    case_type type = st->map().get_cell_type(dest);
+    case_type type = st.map().get_cell_type(dest);
 
     if (type == OBSIDIENNE)
         return OBSTACLE_MUR;
 
-    if (type == LIBRE && st->map().get_cell_occupant(dest) == -1)
+    if (type == LIBRE && st.map().get_cell_occupant(dest) == -1)
         return PAS_DE_CIBLE;
 
     return OK;

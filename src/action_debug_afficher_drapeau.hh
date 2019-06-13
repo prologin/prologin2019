@@ -19,7 +19,7 @@ public:
     }
     ActionDebugAfficherDrapeau() {} // for register_action()
 
-    int check(const GameState* st) const override;
+    int check(const GameState& st) const override;
     void apply_on(GameState* st) const override;
 
     void handle_buffer(utils::Buffer& buf) override

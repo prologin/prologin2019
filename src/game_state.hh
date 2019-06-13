@@ -16,8 +16,7 @@ class GameState : public rules::GameState
 {
 public:
     GameState(std::istream& map_stream, rules::Players_sptr players);
-    GameState(const GameState& st);
-    rules::GameState* copy() const override;
+    GameState* copy() const override;
 
     // Player ids manipulation
     int get_player_id(int player_key) const;
@@ -41,7 +40,7 @@ public:
 
     void check_rope_gravity(position pos, int current_player);
 
-    // Nain's ressources
+    // Nain's resources
     void reduce_pm(int player_id, int nain_id, int pm);
     void reset_pm(int player_id);
     void reduce_pa(int player_id, int nain_id, int pa);
@@ -61,7 +60,7 @@ public:
     int get_round() const;
     void increment_round();
 
-    // NOTE: usefull for the dumper
+    // NOTE: useful for the dumper
     const std::array<PlayerInfo, 2>& get_player_info() const;
 
     // History
@@ -77,6 +76,8 @@ public:
     void sync_score();
 
 private:
+    GameState(const GameState& st);
+
     int get_fall_distance(int player_id, int nain_id) const;
 
     std::array<PlayerInfo, 2> player_info_;

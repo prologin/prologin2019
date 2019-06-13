@@ -15,7 +15,7 @@ TEST_F(RulesTest, Rules_Finish)
         rules->start_of_player_turn(PLAYER_ID_2);
         rules->end_of_player_turn(PLAYER_ID_2);
 
-        EXPECT_EQ(round, rules->get_game_state()->get_round());
+        EXPECT_EQ(round, rules->get_game_state().get_round());
         rules->end_of_round();
 
         round++;

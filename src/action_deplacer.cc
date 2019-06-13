@@ -2,16 +2,16 @@
 
 #include "position.hh"
 
-int ActionDeplacer::check(const GameState* st) const
+int ActionDeplacer::check(const GameState& st) const
 {
-    if (!st->is_init())
+    if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
     // Check dwarf
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 
-    const nain nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st.get_nain(player_id_, id_nain_);
     if (nain.vie <= 0)
         return NAIN_MORT;
 
@@ -24,15 +24,15 @@ int ActionDeplacer::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->map().get_cell_type(dest) != LIBRE)
+    if (st.map().get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 
-    int dest_owner = st->map().get_cell_occupant(dest);
-    if (dest_owner == st->get_opponent_id(player_id_))
+    int dest_owner = st.map().get_cell_occupant(dest);
+    if (dest_owner == st.get_opponent_id(player_id_))
         return OBSTACLE_NAIN;
 
     // Check cost
-    int cost = st->get_movement_cost(player_id_, id_nain_, dir_);
+    int cost = st.get_movement_cost(player_id_, id_nain_, dir_);
 
     if (nain.pm < cost)
         return PM_INSUFFISANTS;

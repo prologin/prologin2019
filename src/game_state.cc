@@ -41,7 +41,7 @@ GameState::GameState(const GameState& st)
 {
 }
 
-rules::GameState* GameState::copy() const
+GameState* GameState::copy() const
 {
     return new GameState(*this);
 }

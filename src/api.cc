@@ -9,11 +9,11 @@
 **
 ** Copyright (C) 2019 Prologin
 */
+#include "api.hh"
 
 #include <stdlib.h>
 
 #include "actions.hh"
-#include "api.hh"
 
 // Little helpers
 inline bool dir_valid(direction dir)
@@ -34,9 +34,8 @@ inline bool player_valid(int player_id)
 // global used in interface.cc
 Api* api;
 
-Api::Api(GameState* game_state, rules::Player_sptr player)
-    : game_state_(game_state)
-    , player_(player)
+Api::Api(std::unique_ptr<GameState> game_state, rules::Player_sptr player)
+    : rules::Api<GameState, erreur>(std::move(game_state), player)
 {
     api = this;
 }
@@ -59,11 +58,12 @@ erreur Api::deplacer(int id_nain, direction dir)
     rules::IAction_sptr action(new ActionDeplacer(id_nain, dir, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -74,11 +74,12 @@ erreur Api::lacher(int id_nain)
     rules::IAction_sptr action(new ActionLacher(id_nain, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -89,11 +90,12 @@ erreur Api::agripper(int id_nain)
     rules::IAction_sptr action(new ActionAgripper(id_nain, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -105,11 +107,12 @@ erreur Api::miner(int id_nain, direction dir)
     rules::IAction_sptr action(new ActionMiner(id_nain, dir, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -121,11 +124,12 @@ erreur Api::tirer(int id_nain, direction dir_corde, direction sens)
         new ActionTirer(id_nain, dir_corde, sens, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -136,11 +140,12 @@ erreur Api::poser_corde(int id_nain, direction dir)
     rules::IAction_sptr action(new ActionPoserCorde(id_nain, dir, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -152,11 +157,12 @@ erreur Api::debug_afficher_drapeau(position pos, debug_drapeau drapeau)
         new ActionDebugAfficherDrapeau(pos, drapeau, player_id));
 
     erreur err;
-    if ((err = static_cast<erreur>(action->check(game_state_))) != OK)
+    if ((err = static_cast<erreur>(game_state_check(action))) != OK)
         return err;
 
     actions_.add(action);
-    game_state_set(action->apply(game_state_));
+    game_state_save();
+    game_state_apply(action);
     return OK;
 }
 
@@ -305,19 +311,6 @@ int Api::adversaire()
 {
     const int player_id = game_state_->get_player_id(moi());
     return game_state_->get_player_key(game_state_->get_opponent_id(player_id));
-}
-
-/// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à
-/// annuler ce tour ci.
-bool Api::annuler()
-{
-    if (!game_state_->can_cancel())
-        return false;
-
-    actions_.cancel();
-    game_state_ = rules::cancel(game_state_);
-    game_state_->sync_score();
-    return true;
 }
 
 /// Retourne le numéro du tour actuel.
