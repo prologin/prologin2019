@@ -39,16 +39,16 @@ TEST_F(ApiTest, ActionMiner_Recolte)
 
         for (int hit = 0; hit < 4; hit++)
         {
-            player.api->game_state()->reset_pa(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pa(
+                player.api->game_state().get_player_id(player_id));
             EXPECT_EQ(OK, player.api->miner(nain_id, BAS));
             EXPECT_EQ(0, player.api->info_nain(player_id, nain_id).butin);
             EXPECT_EQ(nain.pos, player.api->info_nain(player_id, nain_id).pos);
         }
 
         // Break mineral
-        player.api->game_state()->reset_pa(
-            player.api->game_state()->get_player_id(player_id));
+        player.api->game_state().reset_pa(
+            player.api->game_state().get_player_id(player_id));
         EXPECT_EQ(OK, player.api->miner(nain_id, BAS));
         EXPECT_EQ(BUTIN_MAX, player.api->info_nain(player_id, nain_id).butin);
         EXPECT_EQ(nain_initial.pos.ligne + 2,
@@ -73,8 +73,8 @@ TEST_F(ApiTest, ActionMiner_Damage)
             for (int nain_id = 0; nain_id < NB_WARIORS; nain_id++)
                 EXPECT_EQ(OK, player.api->deplacer(nain_id, dir));
 
-            player.api->game_state()->reset_pm(
-                player.api->game_state()->get_player_id(player_id));
+            player.api->game_state().reset_pm(
+                player.api->game_state().get_player_id(player_id));
         }
 
         for (int nain_id = 0; nain_id < NB_WARIORS; nain_id++)

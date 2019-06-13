@@ -14,10 +14,12 @@
 #define API_HH_
 
 #include <rules/actions.hh>
+#include <rules/api.hh>
 #include <rules/game-state.hh>
 #include <rules/player.hh>
 #include <vector>
 
+#include "actions.hh"
 #include "constant.hh"
 #include "game_state.hh"
 #include "position.hh"
@@ -26,31 +28,12 @@
 ** The methods of this class are exported through 'interface.cc'
 ** to be called by the clients
 */
-class Api
+class Api : public rules::Api<GameState, erreur>
 {
-
 public:
-    Api(GameState* game_state, rules::Player_sptr player);
+    Api(std::unique_ptr<GameState> game_state, rules::Player_sptr player);
     virtual ~Api() {}
 
-    const rules::Player_sptr player() const { return player_; }
-    void player_set(rules::Player_sptr player) { player_ = player; }
-
-    rules::Actions* actions() { return &actions_; }
-
-    const GameState* game_state() const { return game_state_; }
-    GameState* game_state() { return game_state_; }
-    void game_state_set(rules::GameState* gs)
-    {
-        game_state_ = dynamic_cast<GameState*>(gs);
-    }
-
-private:
-    GameState* game_state_;
-    rules::Player_sptr player_;
-    rules::Actions actions_;
-
-public:
     /// Renvoie le plus court chemin entre deux positions de la mine sous la
     /// forme d'une suite de direction à emprunter. Si la position est invalide
     /// ou que le chemin n'existe pas, le chemin renvoyé est vide.
@@ -134,10 +117,6 @@ public:
 
     /// Renvoie le numéro de joueur de votre adversaire.
     int adversaire();
-
-    /// Annule la dernière action. Renvoie faux quand il n'y a pas d'action à
-    /// annuler ce tour ci.
-    bool annuler();
 
     /// Retourne le numéro du tour actuel.
     int tour_actuel();

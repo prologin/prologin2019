@@ -24,8 +24,8 @@ Rules::Rules(const rules::Options opt)
     if (!ifs.is_open())
         FATAL("Cannot open file: %s", opt.map_file.c_str());
 
-    GameState* game_state = new GameState(ifs, opt.players);
-    api_ = std::make_unique<Api>(game_state, opt.player);
+    auto game_state = std::make_unique<GameState>(ifs, opt.players);
+    api_ = std::make_unique<Api>(std::move(game_state), opt.player);
     register_actions();
 }
 
@@ -69,20 +69,18 @@ void Rules::apply_action(const rules::IAction_sptr& action)
     // is valid. We recheck that for the current gamestate here to avoid weird
     // client/server desynchronizations and make sure the gamestate is always
     // consistent across the clients and the server.
-
-    int err = action->check(api_->game_state());
-
+    int err = api_->game_state_check(action);
     if (err)
         FATAL("Synchronization error: received action %d from player %d, but "
               "check() on current gamestate returned %d.",
               action->id(), action->player_id(), err);
 
-    api_->game_state_set(action->apply(api_->game_state()));
+    api_->game_state_apply(action);
 }
 
 bool Rules::is_finished()
 {
-    return api_->game_state()->is_finished();
+    return api_->game_state().is_finished();
 }
 
 void Rules::at_player_start(rules::ClientMessenger_sptr)
@@ -104,7 +102,7 @@ void Rules::at_spectator_start(rules::ClientMessenger_sptr)
 
 void Rules::at_player_end(rules::ClientMessenger_sptr)
 {
-    api_->game_state()->set_init(false);
+    api_->game_state().set_init(false);
     try
     {
         sandbox_.execute(champion_partie_fin_);
@@ -139,30 +137,30 @@ void Rules::spectator_turn()
 
 void Rules::start_of_player_turn(unsigned int player_key)
 {
-    const int player_id = api_->game_state()->get_player_id(player_key);
-    api_->game_state()->reset_pa(player_id);
-    api_->game_state()->reset_pm(player_id);
-    api_->game_state()->reset_internal_history(player_id);
-    api_->game_state()->respawn(player_id);
-    api_->game_state()->set_init(true);
+    const int player_id = api_->game_state().get_player_id(player_key);
+    api_->game_state().reset_pa(player_id);
+    api_->game_state().reset_pm(player_id);
+    api_->game_state().reset_internal_history(player_id);
+    api_->game_state().respawn(player_id);
+    api_->game_state().set_init(true);
 }
 
 void Rules::end_of_player_turn(unsigned int /* player_id */)
 {
-    // Clear the list of game states at the end of each turn (half-round)
-    // We need the linked list of game states only for undo and history,
-    // therefore old states are not needed anymore after the turn ends.
-    api_->game_state()->clear_old_version();
+    // Clear the previous game states at the end of each turn (half-round)
+    // We need the previous game states only for undo and history, therefore
+    // old states are not needed anymore after the turn ends.
+    api_->clear_old_game_states();
 }
 
 void Rules::start_of_round() {}
 
 void Rules::end_of_round()
 {
-    api_->game_state()->increment_round();
+    api_->game_state().increment_round();
 }
 
-GameState* Rules::get_game_state() const
+GameState& Rules::get_game_state() const
 {
     return api_->game_state();
 }

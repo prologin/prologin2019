@@ -532,7 +532,7 @@ extern "C" int api_adversaire()
 /// annuler ce tour ci.
 extern "C" bool api_annuler()
 {
-    return api->annuler();
+    return api->cancel();
 }
 
 /// Retourne le numéro du tour actuel.

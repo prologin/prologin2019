@@ -1,14 +1,14 @@
 #include "actions.hh"
 
-int ActionLacher::check(const GameState* st) const
+int ActionLacher::check(const GameState& st) const
 {
-    if (!st->is_init())
+    if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
     if (id_nain_ < 0 || id_nain_ >= NB_NAINS)
         return ID_NAIN_INVALIDE;
 
-    const nain nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st.get_nain(player_id_, id_nain_);
 
     if (nain.vie <= 0)
         return NAIN_MORT;

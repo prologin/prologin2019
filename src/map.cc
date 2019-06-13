@@ -378,7 +378,7 @@ std::vector<direction> Map::get_shortest_path(position start,
                     get_position_offset(source, (direction)dir);
 
                 if (id_occupant != -1 &&
-                        spawn_point_[1-id_occupant] == target)
+                    spawn_point_[1 - id_occupant] == target)
                     continue; // Ennemy's tavern here
                 if (inside_map(target) &&
                     predecessor[target.ligne][target.colonne] ==

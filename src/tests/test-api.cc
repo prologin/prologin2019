@@ -23,8 +23,10 @@ TEST_F(ApiTest, Api_TourActuel)
     for (int round = 0; round < NB_TOURS; round++)
     {
         for (auto& player : players)
+        {
             EXPECT_EQ(round, player.api->tour_actuel());
-        st->increment_round();
+            player.api->game_state().increment_round();
+        }
     }
 }
 
@@ -150,7 +152,7 @@ TEST_F(ApiTest, Api_annuler)
 {
     for (auto& player : players)
     {
-        EXPECT_EQ(player.api->annuler(), false);
+        EXPECT_EQ(player.api->cancel(), false);
     }
 }
 

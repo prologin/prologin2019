@@ -2,9 +2,9 @@
 
 #include "position.hh"
 
-int ActionDebugAfficherDrapeau::check(const GameState* st) const
+int ActionDebugAfficherDrapeau::check(const GameState& st) const
 {
-    if (!st->is_init())
+    if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
     if (!inside_map(pos_))

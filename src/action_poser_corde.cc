@@ -2,9 +2,9 @@
 
 #include "position.hh"
 
-int ActionPoserCorde::check(const GameState* st) const
+int ActionPoserCorde::check(const GameState& st) const
 {
-    if (!st->is_init())
+    if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
     if (dir_ < 0 || dir_ >= 4)
@@ -15,10 +15,10 @@ int ActionPoserCorde::check(const GameState* st) const
         return ID_NAIN_INVALIDE;
 
     for (int i = 0; i < NB_NAINS; ++i)
-        if (st->get_nain(player_id_, i).pa != NB_POINTS_ACTION)
+        if (st.get_nain(player_id_, i).pa != NB_POINTS_ACTION)
             return PA_INSUFFISANTS;
 
-    const nain nain = st->get_nain(player_id_, id_nain_);
+    const nain nain = st.get_nain(player_id_, id_nain_);
     if (nain.vie <= 0)
         return NAIN_MORT;
 
@@ -28,10 +28,10 @@ int ActionPoserCorde::check(const GameState* st) const
     if (!inside_map(dest))
         return HORS_LIMITES;
 
-    if (st->map().has_rope_at(dest))
+    if (st.map().has_rope_at(dest))
         return OBSTACLE_CORDE;
 
-    if (st->map().get_cell_type(dest) != LIBRE)
+    if (st.map().get_cell_type(dest) != LIBRE)
         return OBSTACLE_MUR;
 
     return OK;
