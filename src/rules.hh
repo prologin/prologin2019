@@ -25,7 +25,7 @@ public:
     virtual ~Rules() {}
 
     rules::Actions* get_actions() override;
-    void apply_action(const rules::IAction_sptr& action) override;
+    void apply_action(const rules::IAction& action) override;
     bool is_finished() override;
 
     void at_player_start(rules::ClientMessenger_sptr) override;

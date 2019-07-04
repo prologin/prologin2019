@@ -31,31 +31,30 @@ Rules::Rules(const rules::Options opt)
 
 void Rules::register_actions()
 {
-    api_->actions()->register_action(
-        ID_ACTION_DEPLACER,
-        []() -> rules::IAction* { return new ActionDeplacer(); });
-
-    api_->actions()->register_action(ID_ACTION_LACHER, []() -> rules::IAction* {
-        return new ActionLacher();
+    api_->actions()->register_action(ID_ACTION_DEPLACER, []() {
+        return std::make_unique<ActionDeplacer>();
     });
 
     api_->actions()->register_action(
-        ID_ACTION_AGRIPPER,
-        []() -> rules::IAction* { return new ActionAgripper(); });
+        ID_ACTION_LACHER, []() { return std::make_unique<ActionLacher>(); });
+
+    api_->actions()->register_action(ID_ACTION_AGRIPPER, []() {
+        return std::make_unique<ActionAgripper>();
+    });
 
     api_->actions()->register_action(
-        ID_ACTION_MINER, []() -> rules::IAction* { return new ActionMiner(); });
+        ID_ACTION_MINER, []() { return std::make_unique<ActionMiner>(); });
 
     api_->actions()->register_action(
-        ID_ACTION_TIRER, []() -> rules::IAction* { return new ActionTirer(); });
+        ID_ACTION_TIRER, []() { return std::make_unique<ActionTirer>(); });
 
-    api_->actions()->register_action(
-        ID_ACTION_POSER_CORDE,
-        []() -> rules::IAction* { return new ActionPoserCorde(); });
+    api_->actions()->register_action(ID_ACTION_POSER_CORDE, []() {
+        return std::make_unique<ActionPoserCorde>();
+    });
 
-    api_->actions()->register_action(
-        ID_ACTION_DEBUG_AFFICHER_DRAPEAU,
-        []() -> rules::IAction* { return new ActionDebugAfficherDrapeau(); });
+    api_->actions()->register_action(ID_ACTION_DEBUG_AFFICHER_DRAPEAU, []() {
+        return std::make_unique<ActionDebugAfficherDrapeau>();
+    });
 }
 
 rules::Actions* Rules::get_actions()
@@ -63,7 +62,7 @@ rules::Actions* Rules::get_actions()
     return api_->actions();
 }
 
-void Rules::apply_action(const rules::IAction_sptr& action)
+void Rules::apply_action(const rules::IAction& action)
 {
     // When receiving an action, the API should have already checked that it
     // is valid. We recheck that for the current gamestate here to avoid weird
@@ -73,7 +72,7 @@ void Rules::apply_action(const rules::IAction_sptr& action)
     if (err)
         FATAL("Synchronization error: received action %d from player %d, but "
               "check() on current gamestate returned %d.",
-              action->id(), action->player_id(), err);
+              action.id(), action.player_id(), err);
 
     api_->game_state_apply(action);
 }
