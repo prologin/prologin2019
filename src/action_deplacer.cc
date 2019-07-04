@@ -4,6 +4,8 @@
 
 int ActionDeplacer::check(const GameState& st) const
 {
+    auto player_id_ = st.get_player_id(this->player_id_);
+
     if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
@@ -46,6 +48,8 @@ int ActionDeplacer::check(const GameState& st) const
 
 void ActionDeplacer::apply_on(GameState* st) const
 {
+    auto player_id_ = st->get_player_id(this->player_id_);
+
     internal_action action;
     action.type = 1;
     action.action = {ACTION_DEPLACER, id_nain_, dir_, ERREUR_DIRECTION};

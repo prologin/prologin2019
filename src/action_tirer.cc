@@ -6,6 +6,8 @@
 
 int ActionTirer::check(const GameState& st) const
 {
+    auto player_id_ = st.get_player_id(this->player_id_);
+
     if (!st.is_init())
         FATAL("action: you cannot use action outside jouer_tour");
 
@@ -45,6 +47,8 @@ int ActionTirer::check(const GameState& st) const
 
 void ActionTirer::apply_on(GameState* st) const
 {
+    auto player_id_ = st->get_player_id(this->player_id_);
+
     internal_action action;
     action.type = 1;
     action.action = {ACTION_TIRER, id_nain_, dir_corde_, sens_};

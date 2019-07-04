@@ -18,6 +18,8 @@ int ActionDebugAfficherDrapeau::check(const GameState& st) const
 
 void ActionDebugAfficherDrapeau::apply_on(GameState* st) const
 {
+    auto player_id_ = st->get_player_id(this->player_id_);
+
     internal_action action;
     action.type = 0;
     action.debug_flag = {drapeau_, pos_};

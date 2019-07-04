@@ -41,27 +41,27 @@ public:
 
     /// Déplace le nain (standard) ``id_nain`` d'une case dans la direction
     /// choisie.
-    erreur deplacer(int id_nain, direction dir);
+    ApiActionFunc<ActionDeplacer> deplacer{this};
 
     /// Le nain (standard) ``id_nain`` lâche la paroi.
-    erreur lacher(int id_nain);
+    ApiActionFunc<ActionLacher> lacher{this};
 
     /// Le nain (standard) ``id_nain`` s'agrippe à la paroi.
-    erreur agripper(int id_nain);
+    ApiActionFunc<ActionAgripper> agripper{this};
 
     /// Le nain (standard) ``id_nain`` creuse ou mine le bloc ou le nain
     /// (standard) dans la direction indiquée.
-    erreur miner(int id_nain, direction dir);
+    ApiActionFunc<ActionMiner> miner{this};
 
     /// Le nain (standard) ``id_nain`` tire dans un sens sur la corde.
-    erreur tirer(int id_nain, direction dir_corde, direction sens);
+    ApiActionFunc<ActionTirer> tirer{this};
 
     /// Le nain (standard) ``id_nain`` pose une corde dans la direction
     /// indiquée.
-    erreur poser_corde(int id_nain, direction dir);
+    ApiActionFunc<ActionPoserCorde> poser_corde{this};
 
     /// Affiche le drapeau spécifié sur la case indiquée.
-    erreur debug_afficher_drapeau(position pos, debug_drapeau drapeau);
+    ApiActionFunc<ActionDebugAfficherDrapeau> debug_afficher_drapeau{this};
 
     /// Renvoie le type d'une case donnée.
     case_type type_case(position pos);
