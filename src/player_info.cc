@@ -16,8 +16,8 @@
 
 #include "player_info.hh"
 
-PlayerInfo::PlayerInfo(rules::Player_sptr player)
-    : player_(std::move(player))
+PlayerInfo::PlayerInfo(std::shared_ptr<rules::Player> player)
+    : player_(player)
 {
     assert(player_);
     player_->score = 0;

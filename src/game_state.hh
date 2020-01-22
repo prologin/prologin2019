@@ -15,7 +15,7 @@
 class GameState : public rules::GameState
 {
 public:
-    GameState(std::istream& map_stream, rules::Players_sptr players);
+    GameState(std::istream& map_stream, const rules::Players& players);
     GameState* copy() const override;
 
     // Player ids manipulation

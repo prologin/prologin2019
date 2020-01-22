@@ -34,7 +34,8 @@ inline bool player_valid(int player_id)
 // global used in interface.cc
 Api* api;
 
-Api::Api(std::unique_ptr<GameState> game_state, rules::Player_sptr player)
+Api::Api(std::unique_ptr<GameState> game_state,
+         std::shared_ptr<rules::Player> player)
     : rules::Api<GameState, erreur>(std::move(game_state), player)
 {
     api = this;
