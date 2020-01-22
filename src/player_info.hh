@@ -29,7 +29,7 @@
 class PlayerInfo
 {
 public:
-    PlayerInfo(rules::Player_sptr player);
+    PlayerInfo(std::shared_ptr<rules::Player> player);
 
     // Id
     int get_key() const;
@@ -49,7 +49,7 @@ public:
     void sync_score();
 
 private:
-    rules::Player_sptr player_;
+    std::shared_ptr<rules::Player> player_;
     std::vector<internal_action> internal_hist_;
     int score;
 };

@@ -5,15 +5,14 @@
 
 #include "position.hh"
 
-GameState::GameState(std::istream& map_stream, rules::Players_sptr players)
+GameState::GameState(std::istream& map_stream, const rules::Players& players)
     : rules::GameState()
-    , player_info_(
-          {PlayerInfo(players->players[0]), PlayerInfo(players->players[1])})
+    , player_info_({PlayerInfo(players[0]), PlayerInfo(players[1])})
     , map_(map_stream)
     , round_(0)
     , init_(false)
 {
-    if (players->players.size() > NB_JOUEURS)
+    if (players.size() > NB_JOUEURS)
         FATAL("This game does not support more than two players.");
 
     for (int player = 0; player < NB_JOUEURS; ++player)
